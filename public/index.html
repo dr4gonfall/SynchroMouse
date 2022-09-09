@@ -1,18 +1,74 @@
 <html>
     <head>
         <title>SynchroMouse</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" href="style.css">
     </head>
-    <body onload = "init()">
-        <div class="wrapper">
-            <div id="game">
+    <body>
+
+        <div id="start-screen" class="screen" style="display: block;">
+            <button onclick="startInstructions()">Begin</button>
+        </div>
+
+        <div id="select-mode-screen" class="screen" style="display: none;">
+            <button onclick="startGameHAT()">HAT</button>
+            <button onclick="startGameHumanTeam()">Human Team</button>
+        </div>
+
+
+
+        <div id="tutorial-screen" class="screen" style="display: none;">
+            <h1>SynchroMouse Experiment</h1>
+            <h2>Instructions</h2>
+            <p>These are going to be the instructions for participants.</p>
+            <p>The elements that need to be explained without the terminology are:</p>
+            <ol>
+                <li>Time Constraints:
+                    <ul>
+                        <li>Deadline: Get the higher score multiplier of 2x at 5 sec and then it will decrease until 10 sec with a 1x multiplier</li>
+                        <li>Target: Get a score multiplier if you finish your movements at 10 sec.</li>
+                    </ul>
+                </li>
+                <li>Workflow:
+                    <ul>
+                        <li>Leader-Follower:
+                            <ol>
+                                <li>Leader: If you are designated as the leader you should create creative movements along the space that you have.</li>
+                                <li>Follower: If you are designated as the follower you should follow to the best of your capacities the leader of your team.</li>
+                            </ol>
+                        </li>
+                    </ul>
+                </li>
+            </ol>
+            <button onclick="startGameMode()">Game Modes</button>
+            <!-- <button onclick="startTraining()">Start Training</button> -->
+        </div>
+
+        <div id="start-tutorial-screen" class="screen" style="display: none;">
+            <button onclick="startGame()">Begin</button>
+        </div>
+
+        <div id="wrapper-HAT" style="display: none;">
+            <h1>Synchromouse Experiment</h1>
+            <h2 id="objectCoords-HAT">Lore</h2>
+            <canvas id="canvas-HAT" style="cursor: none;"></canvas>
+        </div>
+
+
+        <div id="wrapper" style="display: none;">
+
+            <h1>SynchroMouse Experiment</h1>
+            <h2 id="objectCoords">Welcome</h2>
+            <canvas id="canvas" style="cursor: none;">
+                <div id="cursor"></div>
+            </canvas>
+            <!-- <div id="game">
                 <div id="cursor"></div>
                 <div id="info">
                     <p>Previous score: <span id="previous_score"></span></p>
                     <p>High score: <span id="high_score"></span></p>
                     <p>Next round begins in <span id="time">X</span> seconds</p>
                 </div>
-            </div>
+            </div> -->
         </div>
     </body>
     <script src="/socket.io/socket.io.js"></script>

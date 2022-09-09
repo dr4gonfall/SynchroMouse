@@ -1,3 +1,351 @@
+// const { request } = require("express");
+// import {Player} from './classes'
+
+
+
+function toggleScreen(id, toggle) {
+    let element = document.getElementById(id)
+    let display = (toggle) ? 'block': 'none';
+    element.style.display = display
+}
+
+function startInstructions() {
+    toggleScreen('start-screen', false)
+    toggleScreen('tutorial-screen', true)
+}
+
+function startGameMode() {
+    toggleScreen('tutorial-screen', false)
+    toggleScreen('select-mode-screen', true)
+}
+
+function startTutorial() {
+    
+}
+
+function startGameHumanTeam() {
+    toggleScreen('select-mode-screen', false)
+    toggleScreen('wrapper', true)
+    init()
+}
+
+function startGameHAT() {
+    toggleScreen('select-mode-screen', false)
+    toggleScreen('wrapper-HAT', true)
+    HATGame()
+}
+
+function HATGame() {
+    const canvas = document.getElementById("canvas-HAT");
+    // console.log(document.getElementById("canvas-HAT"))
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = 1024;
+    canvas.height = 576;
+
+    let xpos
+    let ypos
+
+    class Player {
+        constructor({ position, velocity, angle, maxVelocity, rotationVel, acceleration, color = "red" }) {
+          this.position = position;
+          this.velocity = velocity
+          this.angle = angle
+          this.maxVelocity =  maxVelocity
+          this.rotationVel = rotationVel
+          this.acceleration = acceleration
+        //   this.minVelocity = minVelocity;
+        //   this.maxVelocity = maxVelocity;
+        //   this.height = 150;
+        //   this.width = 50;
+          this.size = 15;
+        //   this.attackBox = {
+        //     position: {
+        //       x: this.position.x,
+        //       y: this.position.y,
+        //     },
+        //       offset,
+        //       width: 100,
+        //       height: 50,
+        //     };
+            this.color = color;
+        }
+          
+        draw() {
+            ctx.fillStyle = this.color;
+            // ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
+            // ctx.translate(this.position.x, this.position.y)
+            ctx.beginPath()
+            ctx.arc(this.position.x, this.position.y, this.size, 0, Math.PI * 2)
+            ctx.fill()
+            // ctx.restore()
+        }
+          
+        update() {
+            // ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+            this.draw();
+            
+            // this.position.x += this.minVelocity;
+            // this.position.y += this.minVelocity;
+            
+            // console.log(this.position.x + ', ' + this.position.y)
+
+            this.position.x += this.velocity.x * Math.sin(this.angle);
+            this.position.y += this.velocity.x * Math.cos(this.angle)
+
+            console.log('The position is: ' + this.position.x + " The velocity is: " + this.velocity.x)
+
+            // ctx.translate(this.position.x, this.position.y)
+            // this.position.y += this.velocity;
+
+            // Detect Side Walls
+            if (this.position.x + this.size > canvas.width) {
+                this.position.x = canvas.width - this.size
+            }
+    
+            if (this.position.x - this.size < 0) {
+                this.position.x = this.size
+            }
+
+    
+            // Detect top and bottom walls
+            if (this.position.y + this.size > canvas.height) {
+                this.position.y = canvas.height -this.size
+            }
+    
+            if (this.position.y - this.size < 0) {
+                this.position.y = this.size
+            }
+
+            
+          
+            // this.position.x += this.minVelocity;
+            // this.position.y += this.minVelocity;
+          
+            // if (this.position.y + this.height + this.velocity.y >= canvas.height -96) {
+            //  this.velocity.y = 0;
+            //  } else {
+            //  this.velocity.y += gravity;
+            //  }
+        }
+      }
+
+    const player = new Player({
+        position: {
+          x: 200,
+          y: 200,
+        },
+        maxVelocity: 5,
+        acceleration: 0.1,
+        rotationVel: 0.1,
+        // velocity: 0,
+        angle: 0,
+        // minVelocity: 5,
+        // maxVelocity:15,
+         velocity: {
+           x: 0,
+           y: 0,
+         },
+      });
+    console.log(player)
+    // MOUSE MOVEMENTS
+    // canvas.addEventListener('mousemove', function (event) {
+    //     let mouseX = event.pageX - canvas.offsetLeft
+    //     let mouseY = event.pageY - canvas.offsetTop
+    //     document.getElementById("objectCoords-HAT").innerHTML = mouseX  + ", " + mouseY;
+    //     xpos = mouseX
+    //     ypos = mouseY
+    //     return {
+    //         x: mouseX,
+    //         y: mouseY
+    //     }
+    // })
+    
+// EVENT LISTENERS FOR KEYS
+window.addEventListener("keydown", (event) => {
+    switch (event.key) {
+        case "d":
+            keys.d.pressed = true;
+            player.lastKey = "d";
+            break;
+        case "a":
+            keys.a.pressed = true;
+            player.lastKey = "a"
+            break;
+        case "s":
+            keys.s.pressed = true;
+            player.lastKey = "s"
+            break;
+        case "w":
+            keys.w.pressed = true;
+            player.lastKey = "w"
+            break;
+    }
+});
+
+window.addEventListener("keyup", (event) => {
+    // Player Key Press
+    switch (event.key) {
+        case "d":
+            keys.d.pressed = false;
+            break;
+        case "a":
+            keys.a.pressed = false;
+            break;
+        case "s":
+            keys.s.pressed = false;
+            break;
+        case "w":
+            keys.w.pressed = false;
+            break;
+        default:
+            break;
+    }
+})
+    const keys = {
+        d: {
+            pressed: false,
+        },
+        a: {
+            pressed: false,
+        },
+        w: {
+            pressed: false,
+        },
+        s: {
+            pressed: false,
+        },
+  };
+
+    // document.getElementById("objectCoords-HAT").innerHTML = xpos + ", " + ypos;
+
+    // const circle = {
+    //     x: 200,
+    //     y: 200,
+    //     size: 15,
+    // }
+
+    // function drawCircle() {
+    //     ctx.beginPath()
+    //     ctx.arc(circle.x, circle.y, circle.size, 0, Math.PI * 2)
+    //     ctx.fillStyle = "red"
+    //     ctx.fill()
+    // }
+
+    function animate() {
+
+        window.requestAnimationFrame(animate);
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // player.position.x = xpos + player.minVelocity
+        // player.position.y = ypos + player.minVelocity
+        player.update();
+        
+        // enemy.update();
+
+        // player.velocity = 0
+         // player.velocity.x = 0;
+         // player.velocity.y = 0;
+
+        console.log('The last key pressed was: ' + player.lastKey)
+
+        // Player Movement
+        if (keys.d.pressed) {
+            player.angle -= player.rotationVel
+            console.log('Angle: ' + player.angle)
+        } else if (keys.a.pressed) {
+            player.angle += player.rotationVel
+            console.log('Angle: ' + player.angle)
+        } else if (keys.s.pressed) {
+
+        } else if (keys.w.pressed) {
+            player.velocity.x = Math.min(player.velocity.x + player.acceleration, player.maxVelocity)
+            // console.log('Acceleration: ' + player.acceleration + ' Velocity: ' + player.velocity.x)
+        }
+
+        if (!keys.w.pressed) {
+            player.velocity.x = Math.max(player.velocity.x - player.acceleration, 0)
+            // console.log('Acceleration: ' + player.acceleration + ' Velocity: ' + player.velocity.x)
+        } 
+
+        // if (!keys.s.pressed) {
+        //     player.velocity.x = Math.min(player.velocity.x + player.acceleration, 0)
+        //     console.log('Acceleration: ' + player.acceleration + ' Velocity: ' + player.velocity.x)
+        // }
+        
+        // if (!keys.a.pressed) {
+        //     player.angle = Math.max(player.angle - player.rotationVel, 0)
+        // }
+
+        // if (!keys.d.pressed && player.lastKey == "d") {
+        //     player.angle = Math.min(player.angle + (player.rotationVel / 10), 0)
+        //     console.log('Angle not pressed Input d: ' + player.angle - player.rotationVel)
+        // }
+
+        // if (!keys.a.pressed && player.lastKey == "a") {
+        //     player.angle = Math.max(player.angle - (player.rotationVel / 10), 0)
+        //     console.log('Angle not pressed Input a: ' + player.angle - player.rotationVel)
+        // }
+
+        // player.velocity.x = 0;
+        // enemy.velocity.x = 0;
+
+        // Player Movement
+        // if (keys.a.pressed && player.lastKey === "a") {
+        //     player.velocity.x = -5;
+        // } else if (keys.d.pressed && player.lastKey === "d") {
+        //     player.velocity.x = 5;
+        // }
+
+
+
+        // ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+            
+        // drawCircle()
+        // // Change position
+        // circle.x = xpos;
+        // circle.y = ypos;
+
+        // // Detect Side Walls
+        // if (circle.x + circle.size > canvas.width) {
+        //     circle.x = canvas.width -circle.size
+        // }
+
+        // if (circle.x - circle.size < 0) {
+        //     circle.x = circle.size
+        // }
+
+        // // Detect top and bottom walls
+        // if (circle.y + circle.size > canvas.height) {
+        //     circle.y = canvas.height
+        // }
+
+        // if (circle.y - circle.size < 0) {
+        //     circle.y = circle.size
+        // }
+
+        // requestAnimationFrame(animate)
+    }
+
+    
+
+
+    animate()
+
+    
+
+
+}
+
+function getMousePos(canvas, event) {
+    let mouseX = event.pageX - canvas.offsetLeft
+    let mouseY = event.pageY - canvas.offsetTop
+    return {
+        x: mouseX,
+        y: mouseY
+    }
+}
+
 var init = function() {
     var socket = io();
     var room = '';
@@ -9,6 +357,92 @@ var init = function() {
     var hiscore = 0;
     var startTimer = undefined;
     var scaleFactor = 1.0;
+
+    // -------------------------CANVAS CREATION----------------
+    const canvas = document.querySelector("canvas")
+    const ctx = canvas.getContext("2d")
+
+    canvas.width = 1024
+    canvas.height = 576
+
+    function findObjCoords(mouseEvent) {
+        let obj = document.getElementById("canvas")
+        let obj_left = 0;
+        let obj_top = 0;
+        let xpos;
+        let ypos;
+
+        while (obj.offsetParent) {
+            obj_left += obj.offsetLeft
+            obj_top += obj.offsetTop
+            obj = obj.offsetParent
+        }
+
+        if (mouseEvent) {
+            // Firefox
+            xpos = mouseEvent.pageX
+            ypos = mouseEvent.pageY
+
+        } else {
+            //IE
+            xpos= window.event.x + document.body.scrollLeft - 2;
+            ypos = window.event.y + document.body.scrollTop - 2;
+        }
+        xpos -= obj_left;
+        ypos -= obj_top;
+
+        document.getElementById("objectCoords").innerHTML = xpos + ", " + ypos;
+
+        const circle = {
+            x: 200,
+            y: 200,
+            size: 15,
+        }
+
+        function drawCircle() {
+            ctx.beginPath()
+            ctx.arc(circle.x, circle.y, circle.size, 0, Math.PI * 2)
+            ctx.fillStyle = "red"
+            ctx.fill()
+        }
+
+        function update1() {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+            
+            drawCircle()
+
+            // Change position
+            circle.x = xpos;
+            circle.y = ypos;
+
+            // Detect Side Walls
+            if (circle.x + circle.size > canvas.width) {
+                circle.x = canvas.width -circle.size
+            }
+
+            if (circle.x - circle.size < 0) {
+                circle.x = circle.size
+            }
+
+            // Detect top and bottom walls
+            if (circle.y + circle.size > canvas.height) {
+                circle.y = canvas.height
+            }
+
+            if (circle.y - circle.size < 0) {
+                circle.y = circle.size
+            }
+
+            requestAnimationFrame(update1)
+        }
+
+        update1()
+
+
+        
+    }
+
+    ctx.canvas.onmousemove = findObjCoords
 
     socket.on('begin', function() {
         //Parsing the value of the room.

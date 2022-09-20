@@ -46,6 +46,55 @@ function HATGame() {
     let xpos
     let ypos
 
+    class Agent {
+        constructor({ position, velocity, angle, maxVelocity, rotationVel, acceleration, color = "blue" }) {
+            this.position = position;
+            this.velocity = velocity
+            this.angle = angle
+            this.maxVelocity =  maxVelocity
+            this.rotationVel = rotationVel
+            this.acceleration = acceleration
+            this.size = 15;
+            this.color = color;
+        }
+          
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath()
+            ctx.arc(this.position.x, this.position.y, this.size, 0, Math.PI * 2)
+            ctx.fill()
+        }
+          
+        update() {
+            this.draw();
+
+            this.position.x += this.velocity.x * Math.sin(this.angle);
+            this.position.y += this.velocity.x * Math.cos(this.angle)
+
+            console.log('The position of the agent is: ' + this.position.x + " The velocity of the agent is: " + this.velocity.x)
+
+
+            // Detect Side Walls
+            if (this.position.x + this.size > canvas.width) {
+                this.position.x = canvas.width - this.size
+            }
+    
+            if (this.position.x - this.size < 0) {
+                this.position.x = this.size
+            }
+
+    
+            // Detect top and bottom walls
+            if (this.position.y + this.size > canvas.height) {
+                this.position.y = canvas.height -this.size
+            }
+    
+            if (this.position.y - this.size < 0) {
+                this.position.y = this.size
+            }
+        }
+      }
+
     class Player {
         constructor({ position, velocity, angle, maxVelocity, rotationVel, acceleration, color = "red" }) {
           this.position = position;
@@ -147,6 +196,24 @@ function HATGame() {
            y: 0,
          },
       });
+      const agent = new Agent({
+        position: {
+          x: 500,
+          y: 200,
+        },
+        maxVelocity: 5,
+        acceleration: 0.1,
+        rotationVel: 0.1,
+        // velocity: 0,
+        angle: 0,
+        // minVelocity: 5,
+        // maxVelocity:15,
+         velocity: {
+           x: 0,
+           y: 0,
+         },
+      });
+    
     console.log(player)
     // MOUSE MOVEMENTS
     // canvas.addEventListener('mousemove', function (event) {
@@ -233,21 +300,31 @@ window.addEventListener("keyup", (event) => {
     // }
 
     function animate() {
-
+        let distance
+        
+        // Initialization
         window.requestAnimationFrame(animate);
         ctx.fillStyle = "white";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         // player.position.x = xpos + player.minVelocity
         // player.position.y = ypos + player.minVelocity
         player.update();
-        
+        agent.update()
         // enemy.update();
 
         // player.velocity = 0
          // player.velocity.x = 0;
          // player.velocity.y = 0;
 
-        console.log('The last key pressed was: ' + player.lastKey)
+        // console.log('The last key pressed was: ' + player.lastKey)
+
+        distance = Math.sqrt(((player.position.x - agent.position.x) ^ 2) + ((player.position.y - agent.position.y) ^2))
+        console.log("The distance is:" + distance)
+        if (distance !== 0) {
+            agent.angle = Math.atan2(player.position.y - agent.position.y, player.position.x - agent.position.x) * 180.0 / Math.PI
+
+            agent.velocity.x = Math.min(player.velocity.x + player.acceleration, agent.maxVelocity )
+        }
 
         // Player Movement
         if (keys.d.pressed) {
@@ -256,9 +333,9 @@ window.addEventListener("keyup", (event) => {
         } else if (keys.a.pressed) {
             player.angle += player.rotationVel
             console.log('Angle: ' + player.angle)
-        } else if (keys.s.pressed) {
-
-        } else if (keys.w.pressed) {
+        }
+        
+        if (keys.w.pressed) {
             player.velocity.x = Math.min(player.velocity.x + player.acceleration, player.maxVelocity)
             // console.log('Acceleration: ' + player.acceleration + ' Velocity: ' + player.velocity.x)
         }
@@ -290,41 +367,6 @@ window.addEventListener("keyup", (event) => {
         // player.velocity.x = 0;
         // enemy.velocity.x = 0;
 
-        // Player Movement
-        // if (keys.a.pressed && player.lastKey === "a") {
-        //     player.velocity.x = -5;
-        // } else if (keys.d.pressed && player.lastKey === "d") {
-        //     player.velocity.x = 5;
-        // }
-
-
-
-        // ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
-            
-        // drawCircle()
-        // // Change position
-        // circle.x = xpos;
-        // circle.y = ypos;
-
-        // // Detect Side Walls
-        // if (circle.x + circle.size > canvas.width) {
-        //     circle.x = canvas.width -circle.size
-        // }
-
-        // if (circle.x - circle.size < 0) {
-        //     circle.x = circle.size
-        // }
-
-        // // Detect top and bottom walls
-        // if (circle.y + circle.size > canvas.height) {
-        //     circle.y = canvas.height
-        // }
-
-        // if (circle.y - circle.size < 0) {
-        //     circle.y = circle.size
-        // }
-
-        // requestAnimationFrame(animate)
     }
 
     

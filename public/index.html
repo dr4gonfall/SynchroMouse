@@ -3,7 +3,130 @@
         <title>SynchroMouse</title>
         <link rel="stylesheet" type="text/css" href="style.css">
     </head>
-    <body onload = "init()">
+
+
+    <body>
+        <div id="start-screen" class="screen" style="display: block;">
+            <h1>Trust and Improvisation in Human-autonomous Teams</h1>
+            <div id="welcome-message">
+                <p>Welcome and thank you for your participation on this experiment. Please click the button down below when you are ready to begin.</p>
+            </div>
+            
+            <button id="main-menu-button">Begin</button>
+        </div>
+
+        <div id="mode-screen" class="screen" style="display: none;">
+            <h1>Please choose the game mode you want to play.</h1>
+            <!-- <div class="btn-group">
+                <button id="main-demo-button">Perfect Follower</button>
+                <button>Competent And Predictable</button>
+                <button>Competent And Unpredictable</button>
+                <button onclick="startDemoICP()">Incompetent And Predictable</button>
+                <button onclick="startDemoICUP()">Incompetent And UnPredictable</button>
+            </div> -->
+            <div class="container">
+                <div class="input-box-wrapper">
+                    <form id="form">
+                    <div class="box">
+                        <label for="speedOpt">Level of Speed</label>
+                        <select name="spdOpt" id="spdOptions" class="optionMenu">
+                            <option value="None">None</option>
+                            <!-- <option value="low">Low</option>
+                            <option value="high">High</option> -->
+                        </select>
+                    </div>
+                    <div class="box">
+                        <label for="competenceOpt">Level of Agent Competence</label>
+                        <select name="competenceOpt" id="competenceOptions" class="optionMenu">
+                            <option value="none">None</option>
+                            <option value="low">Low</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="box">
+                        <label for="predictabilityOpt">Level of Agent Predictability</label>
+                        <select name="predictabilityOpt" id="predictabilityOptions" class="optionMenu">
+                            <option value="none">None</option>
+                            <option value="low">Low</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="box">
+                        <label for="competenceMeasure">Measurement of Competence</label>
+                        <select name="competenceMeasure" id="measureCompetence" class="optionMenu">
+                            <option value="version1">Frechet Distance</option>
+                            <!-- <option value="low">Low</option>
+                            <option value="high">High</option> -->
+                        </select>
+                    </div>
+                    <div class="box">
+                        <label for="predictability">Measurement of Predictability</label>
+                        <select name="predictabilityMeasure" id="measurePredictability" class="optionMenu">
+                            <option value="version1">Frechet Distance</option>
+                            <!-- <option value="low">Low</option>
+                            <option value="high">High</option> -->
+                        </select>
+                    </div>
+                    <br><br>
+                    <input type="submit" value="Submit" id="submitGameMode">
+                </form>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="general-instructions" class="screen" style="display: none;">
+            <h1>General Game Instructions</h1>
+            <p>Welcome to this experiment. Today you are going to play the Mirror Game. The Mirror Game is an improvisation game
+                where the objective is for participants to synchronize between each other while creating a variety of movements.
+                The movements simulate dancing and the game is meant to be played using creative movements that are done making new
+                movements that use different trajectories within the game area.
+            </p>
+            <p>You will play this game with a teammate. There will be a score linked to how much of the screen you use to create movements,
+                how you and your teammate synchronize and complement each others' movements.
+            </p>
+        </div>
+
+        <div id="demo" class="screen" style="display: none;">
+            <div class="wrapper">
+                <h1>Synchromouse Experiment</h1>
+                <div class="row">
+                    <div class="column left">
+                        <h3 class="column" id="similarityMeasure">Similarity Measure:</h3>
+                    </div>
+                    <div class="column right">
+                        <h3 id="similarNoRotMeasure">Similarity No Rotation Measure:</h3>
+                    </div>    
+                </div>
+                
+                <div class="row">
+                    <h3 id="distanceMeasure">Distance Measure:</h3>
+                </div>
+                
+                <div class="row">
+                    <p class="column left">Next round begins in <span id="time">X</span> seconds</p>
+                    <p class="column right">Time remaining: <span id="timeRemaining">X</span> seconds</p>
+                </div>
+                <!-- <p id="modeRef">The agent is: </p> -->
+                <button id="startNow">START</button>
+                <button id="goBack">BACK</button>
+                <h2 id="objectCoords-HAT">ObjCoord:</h2>
+                <div id="gameExperiment"></div>
+                <canvas id="canvas-demo" style="cursor: none;"></canvas>
+            </div>
+            <!--<button>Back</button>-->
+        </div>
+
+        <div id="experiment" class="screen" style="display: none;">
+            <h1>Synchromouse Experiment</h1>
+            <div class="row">
+                <p class="column left">Next round begins in <span id="time">X</span> seconds</p>
+                <p class="column right">Time remaining: <span id="timeRemaining">X</span> seconds</p>
+            </div>
+            <canvas id="canvas-game" style="cursor: none;"></canvas>
+        </div>
+
+<!--
         <div class="wrapper">
             <div id="game">
                 <div id="cursor"></div>
@@ -13,9 +136,15 @@
                     <p>Next round begins in <span id="time">X</span> seconds</p>
                 </div>
             </div>
-        </div>
+        </div>-->
     </body>
     <script src="/socket.io/socket.io.js"></script>
     <script src="url-search-params.js"></script>
-    <script src="script.js"></script>
+    <script src='http://joeiddon.github.io/perlin/perlin.js'></script>
+    <!-- <script src="Classes.js"></script> -->
+    <script src="agent.js"></script>
+    <script src="player.js"></script>
+    <script src="Game.js"></script>
+    <script src="Functions.js"></script>
+    <script src="script.js" type="module"></script>
 </html>

@@ -22,7 +22,7 @@ class Player {
         // PREVIOUS ACCELERATION
         // this.dx = 0;
         // this.dy = 0;
-        this.maxSpeed = 10;
+        this.maxSpeed = 20;
         // this.maxForce = 100;
         this.movementCounter = 0;
         this.prevMoveDec = this.movementDecision;
@@ -173,13 +173,13 @@ class Player {
         context.fill();
         context.restore();
         context.stroke();
-        context.beginPath();
-        context.moveTo(this.collisionX, this.collisionY);
-        context.lineTo(this.game.mouse.x, this.game.mouse.y);
-        context.stroke()
+        // context.beginPath();
+        // context.moveTo(this.collisionX, this.collisionY);
+        // context.lineTo(this.game.mouse.x, this.game.mouse.y);
+        // context.stroke()
     }
 
-    update(){
+    update(moveX, moveY){
         // console.log(`The player collision in X: ${this.collisionX} and for Y: ${this.collisionY}`)
 
         this.prevMoveDec = this.movementDecision;
@@ -209,11 +209,7 @@ class Player {
 
         // console.log(`The timer is: ${this.timer}`)
 
-        let steering = this.arrive()
-
-        this.applyForce(steering)
-
-        // console.log(this.force)
+    	// console.log(this.force)
 
         // this.dx = this.game.mouse.x - this.collisionX 
         // this.dy = this.game.mouse.y - this.collisionY
@@ -228,42 +224,93 @@ class Player {
         // this.speedY = (this.dy) /20;
 
 
-        this.speedX += this.accX
-        this.speedY += this.accY
+        // let steering = this.arrive()    
 
-        this.prevAccX = this.accX
-        this.prevAccY = this.accY
+        // this.applyForce(steering)
 
-        if (this.game.mouse.x !== undefined) {
-            this.prevMouseX = this.game.mouse.x
+        // console.log(`The movement force in x: ${moveX} and in Y: ${moveY}`)
+
+        this.prevMouseX = this.collisionX;
+        this.prevMouseY = this.collisionY;
+
+        if (moveX <= 1 && moveX >=-1) {
+            moveX = 0;
+        }
+
+        if (moveY <= 1 && moveY >=-1) {
+            moveY = 0;
+        }
+
+        if (moveX >= this.maxSpeed) {
+            this.collisionX += this.maxSpeed  
+        } else if (moveX < - this.maxSpeed) {
+            this.collisionX += - this.maxSpeed
+        } else {
+            this.collisionX += moveX;
+        }
+
+        if (moveY > this.maxSpeed) {
+            this.collisionY += this.maxSpeed  
+        } else if (moveY < - this.maxSpeed) {
+            this.collisionY +=  - this.maxSpeed
+        } else {
+            this.collisionY += moveY;
+        }
+
+
+
+
+
+        // console.log(`The movement of the mouse in x: ${moveX} and in y: ${moveY}`)
+
+        this.speedX = this.collisionX - this.prevMouseX;
+        this.speedY = this.collisionY - this.prevMouseY;
+
+        // console.log(`The speed in X: ${this.collisionX - this.prevMouseX} and in Y: ${this.collisionY - this.prevMouseY}`)
+
+
+
+
+        // this.collisionX += e.movementX;
+        // this.collisionY += e.movementY;
+
+
+        // this.speedX += this.accX
+        // this.speedY += this.accY
+
+        // this.prevAccX = this.accX
+        // this.prevAccY = this.accY
+
+        // if (this.game.mouse.x !== undefined) {
+        //     this.prevMouseX = this.game.mouse.x
             
-        }
+        // }
 
-        if (this.game.mouse.y !== undefined) {
-            this.prevMouseY = this.game.mouse.y
-        }
+        // if (this.game.mouse.y !== undefined) {
+        //     this.prevMouseY = this.game.mouse.y
+        // }
         
 
         
-        if (this.speedX > this.maxSpeed) {
-            this.speedX = this.maxSpeed
-            // console.log('Entered in Speed X')
-        } else if (this.speedX < -this.maxSpeed){
-            this.speedX = -this.maxSpeed
-        }
+        // if (this.speedX > this.maxSpeed) {
+        //     this.speedX = this.maxSpeed
+        //     // console.log('Entered in Speed X')
+        // } else if (this.speedX < -this.maxSpeed){
+        //     this.speedX = -this.maxSpeed
+        // }
 
-        if (this.speedY > this.maxSpeed) {
-            this.speedY = this.maxSpeed
-            // console.log('Entered in Speed Y')
-        } else if (this.speedY < -this.maxSpeed){
-            this.speedY = -this.maxSpeed
-        }
+        // if (this.speedY > this.maxSpeed) {
+        //     this.speedY = this.maxSpeed
+        //     // console.log('Entered in Speed Y')
+        // } else if (this.speedY < -this.maxSpeed){
+        //     this.speedY = -this.maxSpeed
+        // }
 
-        this.collisionX += this.speedX;
-        this.collisionY += this.speedY;
+        // this.collisionX += this.speedX;
+        // this.collisionY += this.speedY;
 
-        this.accX = 0
-        this.accY = 0
+        // this.accX = 0
+        // this.accY = 0
 
         // console.log(`Speed in X is: ${this.speedX} and Speed in Y is: ${this.speedY}`)
         // this.collisionX += this.speedX;

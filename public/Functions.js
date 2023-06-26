@@ -23,3 +23,49 @@ function getNormallyDistributedRandomNumber(mean, stddev) {
     
     return z0 * stddev + mean;
 }
+
+function BezierCurveMovement(currentPosition, point1Bezier, point2Bezier, endPoint) {
+    let points = [
+        currentPosition,
+        point1Bezier,
+        point2Bezier,
+        endPoint 
+    ]
+    let [p0, p1, p2, p3] = points;
+    //Calculate the coefficients based on where the ball currently is in the animation
+    let cx = 3 * (p1.x - p0.x);
+    let bx = 3 * (p2.x - p1.x) - cx;
+    let ax = p3.x - p0.x - cx - bx;
+
+    let cy = 3 * (p1.y - p0.y);
+    let by = 3 * (p2.y - p1.y) - cy;
+    let ay = p3.y - p0.y - cy -by;
+
+    // this.percentagePosition += Math.hypot(this.collisionY, this.collisionX) / Math.hypot(p3.y, p3.x)
+    // this.percentagePositionX += this.speedX
+    // this.percentagePositionY += this.speedY
+    this.percentagePositionX += this.percentageSpeedX;
+    this.percentagePositionY += this.percentageSpeedY;
+    // let tX = this.speedX;
+    // let tY = this.speedY;
+
+    //Increment t value by speed
+    // ball.t += ball.speed;
+
+    //Calculate new X & Y positions of ball
+    // let xt = ax*(tX*tX*tX) + bx*(tX*tX) + cx*tX + p0.x;
+    // let yt = ay*(tY*tY*tY) + by*(tY*tY) + cy*tY + p0.y;
+
+    let xt = ax*(this.percentagePositionX * this.percentagePositionX * this.percentagePositionX) + bx*(this.percentagePositionX * this.percentagePositionX) + cx*this.percentagePositionX + p0.x;
+    let yt = ay*(this.percentagePositionY * this.percentagePositionY * this.percentagePositionY) + by*(this.percentagePositionY * this.percentagePositionY) + cy*this.percentagePositionY + p0.y;
+
+    // console.log(`The percentage of the movement in X is: ${this.percentagePositionX} and in Y: ${this.percentagePositionY}`)
+    // console.log(`The speed in X is: ${Math.abs(this.collisionX - xt)} and in Y: ${Math.abs(this.collisionY - yt)}`)
+
+    // this.collisionX = xt;
+    // this.collisionY = yt;
+
+    this.initialBezier.x = xt;
+    this.initialBezier.y = yt;
+
+}

@@ -6,10 +6,13 @@ class Agent {
         this.collisionX = this.game.width * 0.5;
         this.collisionY = this.game.height * 0.5;
         this.collisionRadius = 30;
+        this.frequency =  1;
         // Speed of the Agent (Changes depend on Competence).
         this.speedX = 0;
         this.speedY = 0;
-        this.maxSpeed = 5;
+        this.speedXPoint = 0;
+        this.speedYPoint = 0;
+        this.maxSpeed = 1;
         this.decSpeed = 0;
         // Acceleration of the Agent.
         this.accX = 0;
@@ -17,6 +20,10 @@ class Agent {
         this.prevAccX = this.accX
         this.prevAccY = this.accY
         this.maxAcceleration = 60;
+        this.accelerationProfile = []
+        this.deccelerationProfile = []
+        this.moveErrorX = 0;
+        this.moveErrorY = 0;
         // Forces of the Agent.
         this.force = 0;
         this.maxForce = 10.0;
@@ -24,10 +31,11 @@ class Agent {
         this.competence = 0;
         this.predictability = 0;
         // Bezier Curve Coordinates
-        this.initialBezier = {x: this.collisionX, y: this.collisionY};
+        this.initialBezier = {x:this.game.width * 0.5, y: this.game.height * 0.5};
+        this.initialBezier_zero = {x: this.collisionX, y: this.collisionY};
         this.p1Bezier = {x: 0, y: 0};
         this.p2Bezier = {x: 0, y: 0};
-        this.endBezier = {x: 0, y: 0};
+        this.endBezier = {x: 400, y: 500};
         this.percentagePositionX = 0;
         this.percentagePositionY = 0;
         this.percentageSpeedX  = 0;
@@ -87,7 +95,25 @@ class Agent {
         this.timerDecision = 0;
         this.movementCounter = 0;
 
+        this.degreeVel = 0;
+
         this.prevMoveDec = this.movementDecision;
+
+        this.velocityProfile = [];
+
+        // Second Order dynamics
+        // Previous Input
+        // this.xp = {x: 0, y: 0};
+        this.previousInput = {x: 0, y: 0};
+        // State Variables
+        // this.y = {x: 0, y: 0};
+        this.outputVectorY = {x:0, y:0};
+        // this.yd = {x: 0, y: 0};
+        this.outputVectorYVel = {x:0, y:0};
+        // Dynamics Constants
+        this.k1 = 0;
+        this.k2 = 0;
+        this.k3 = 0;
     }
     draw(context,targetX, targetY){
         context.beginPath();
@@ -281,7 +307,7 @@ class Agent {
             // console.log(`The initial angle is: ${this.initialAngle} The current angle is: ${this.currentAngle} The radians are: ${radians}`)
             let x =  this.center.x + this.radius * Math.cos(radians);
             let y = this.center.y + this.radius * Math.sin(radians);
-            console.log(`The point in x is: ${x} and the point in y: ${y}`)
+            // console.log(`The point in x is: ${x} and the point in y: ${y}`)
             // this.circlePoints.push({x: x, y: y});
             this.trajectoryMovement.push({x: x, y: y});
 
@@ -440,7 +466,7 @@ class Agent {
         // this.currentMovementDecision = this.movementOrder
 
         // this.currentMovementDecision = 1
-        this.currentMovementDecision = 2
+        this.currentMovementDecision = 0;
         // Decide the parameters depending on the movement desired.
 
         
@@ -448,7 +474,8 @@ class Agent {
 
             // Bezier Curve Parametrization
 
-            this.initialBezier = {x: this.collisionX, y: this.collisionY}
+            // this.initialBezier = {x: this.collisionX, y: this.collisionY}
+            // this.initialBezier = this.initialBezier_zero;
             this.trajectoryMovement.push(this.initialBezier)
             let times = 0;
             // Decide coordinates for the Bezier Curve based on a metric of length.
@@ -456,7 +483,10 @@ class Agent {
             // this.p2Bezier = {x:425, y:295}
             // this.endBezier = {x:750, y:300}
             // Random decision on where to place the coordinates for the Bezier curve
-            this.p1Bezier = {x: Math.floor(Math.random() * this.game.width), y: Math.floor(Math.random() * this.game.height)}
+            // this.p1Bezier = {x: Math.floor(Math.random() * this.game.width), y: Math.floor(Math.random() * this.game.height)}
+
+            this.p1Bezier ={x:Math.floor(this.game.width/4), y: Math.floor(this.game.height/2)}
+
             // while (this.p1Bezier.x + this.collisionRadius + 50 > this.game.width || this.p1Bezier.x - this.collisionRadius - 50 < 0) {
             //     this.p1Bezier.x = Math.floor(Math.random() * this.game.width)
             //     times ++;
@@ -466,7 +496,10 @@ class Agent {
             //     times ++;
             // }
 
-            this.p2Bezier = {x: Math.floor(Math.random() * this.game.width), y: Math.floor(Math.random() * this.game.height)}
+            // this.p2Bezier = {x: Math.floor(Math.random() * this.game.width), y: Math.floor(Math.random() * this.game.height)}
+            
+            this.p2Bezier = {x: Math.floor(this.game.width / 2), y: Math.floor(this.game.height /2)}
+            
             // while (this.p2Bezier.x + this.collisionRadius + 50 > this.game.width || this.p2Bezier.x - this.collisionRadius - 50 < 0) {
             //     this.p2Bezier.x = Math.floor(Math.random() * this.game.width)
             //     times ++;
@@ -476,7 +509,9 @@ class Agent {
             //     times ++;
             // }
 
-            this.endBezier = {x: Math.floor(Math.random() * this.game.width), y: Math.floor(Math.random() * this.game.height)}
+            // this.endBezier = {x: Math.floor(Math.random() * this.game.width), y: Math.floor(Math.random() * this.game.height)}
+
+            this.endBezier = {x: 100, y: 600};
 
             if (this.endBezier.x > this.game.width - this.collisionRadius - 20) {
                 this.endBezier.x = this.game.width - this.collisionRadius - 20
@@ -620,6 +655,7 @@ class Agent {
 
             }
             this.trajectoryMovement.shift()
+            this.initialBezier = {x:this.game.width * 0.5, y: this.game.height * 0.5};
             
             // console.log(this.trajectoryMovement)
     }
@@ -637,6 +673,47 @@ class Agent {
         if (m > 0) {
             return {x: x/m, y: y/m}
         }
+    }
+
+    // velocityProfile(){
+        
+
+
+
+    // }
+
+    accelerate() {
+        let force = {x: (this.target.x - this.collisionX), y: (this.target.y - this.collisionY)}
+        let accelerationRadius = 50;
+        let d = this.defineMagnitude(force.x, force.y);
+
+        if (d > accelerationRadius) {
+            let desiredSpeed = this.mapRange(0, d, accelerationRadius, 0, this.maxSpeed);
+            force = this.normalize(force.x, force.y);
+            force.x = force.x * desiredSpeed;
+            force.y = force.y * desiredSpeed;
+        } else {
+            force = this.normalize(force.x, force.y);
+            force.x = force.x * this.maxSpeed;
+            force.y = force.y * this.maxSpeed;
+        }
+
+        force = {x: force.x - this.speedX, y: force.y - this.speedY}
+
+        if (force.x > this.maxForce) {
+            force.x = this.maxForce
+        } else if (force.x < - this.maxForce) {
+            force.x = - this.maxForce
+        }
+
+        if (force.y > this.maxForce) {
+            force.y = this.maxForce
+        } else if (force.y < -this.maxForce) {
+            force.y = -this.maxForce
+        }
+
+        
+        return force;
     }
 
     arrive() {
@@ -687,32 +764,72 @@ class Agent {
 
         force = {x: force.x - this.speedX, y: force.y - this.speedY}
 
-        if (force.x >this.maxForce) {
+        if (force.x > this.maxForce) {
             force.x = this.maxForce
+        } else if (force.x < -this.maxForce) {
+            force.x = -this.maxForce
         }
 
         if (force.y > this.maxForce) {
             force.y = this.maxForce
+        } else if (force.y < -this.maxForce) {
+            force.y = - this.maxForce
         }
 
         return force;
 
     }
 
-    update(random, targetX, targetY){
+    SecondOrderDynamics(f, z, r, x0){
+        
+        // Compute constants
+        this.k1 = z / (Math.PI * f);
+        this.k2 = 1 / ((2 * Math.PI * f) * (2 * Math.PI * f));
+        this.k3 = r * z / (2 * Math.PI * f);
+        // Initialize Variables
+        this.previousInput = x0;
+        this.outputVectorY = x0;
+        this.outputVectorYVel = {x: 0, y: 0};
+    }
 
+
+
+    update(random, targetX, targetY, socket, room, slider){
+        // this.frequency = slider;
+        // console.log(this.movementDecision)
+        if (this.follower) {
+            
+        } else {
+
+        }
+
+        // socket.on('movementVelocityProfile', (speedAcc, speedDecc) => {
+        //     this.velocityProfile = speedAcc;
+        //     console.log(this.velocityProfile)
+        // })
+        // console.log(this.velocityProfile)
         this.prevMoveDec = this.movementDecision;
+        
         if (!this.movementDecision) {
+            console.log('ENTERED THE FUNCTION')
             // Choose a movement to do
             this.paintMovementDecision = true;
             this.decideMovement();
+            socket.emit('movementDecisionAgent', room, this.maxSpeed, this.trajectoryMovement.length - 1);
+            
             this.movementOrder ++
-            if (this.movementOrder >3) {
+            if (this.movementOrder > 3) {
                 this.movementOrder = 0
             }
             this.movementDecision = true;
             this.movementCounter ++
             this.target = this.trajectoryMovement[this.counterTarget]
+            if (this.velocityProfile[this.counterTarget] !== undefined) {
+                this.speedXPoint = this.velocityProfile[this.counterTarget]
+                this.speedYPoint = this.velocityProfile[this.counterTarget]
+                // console.log(`The speed at point X: ${this.speedXPoint} and Y: ${this.speedYPoint}`)
+            }
+            
             // console.log('Initial Target')
             // console.log(this.target)
         }
@@ -843,18 +960,72 @@ class Agent {
             this.counterTarget++
             if (this.counterTarget < this.trajectoryMovement.length) {
                 this.target = this.trajectoryMovement[this.counterTarget]
+                if (this.velocityProfile[this.counterTarget] !== undefined) {
+                    this.speedXPoint = this.velocityProfile[this.counterTarget].y
+                    this.speedYPoint = this.velocityProfile[this.counterTarget].y
+                }
+                // console.log(this.velocityProfile[this.counterTarget])
+                // this.speedXPoint = this.velocityProfile[this.counterTarget].y
+                // this.speedYPoint = this.velocityProfile[this.counterTarget].y
+                this.moveErrorX = Math.abs(getNormallyDistributedRandomNumber(0,1));
+                this.moveErrorY = Math.abs(getNormallyDistributedRandomNumber(0, 1));
             }
 
             if (this.counterTarget >= this.trajectoryMovement.length) {
                 this.counterTarget = 0;
                 this.movementDecision = false;
                 this.trajectoryMovement = []
+                this.speedXPoint = 0;
+                this.speedYPoint = 0;
+                this.velocityProfile = []
+                this.moveErrorX = Math.abs(getNormallyDistributedRandomNumber(0,1));
+                this.moveErrorY = Math.abs(getNormallyDistributedRandomNumber(0, 1));
             }
             // console.log(this.target)
             this.hasArrived = false
             // console.log('This should have entered')
             // console.log(this.hasArrived)  
         }
+        
+
+
+        let steering = this.seek()
+
+        this.applyForce(steering)
+
+        // this.frequency = value;
+
+        let currentInput = {x:this.seek().x, y: this.seek().y}
+        let nextInput = {x: this.seek().x + this.speedX, y: this.seek().y + this.speedY};
+        // if (nextInput == null) { // Estimate velocity
+            nextInput.x = (currentInput.x - this.previousInput.x)/16.66;
+            nextInput.y = (currentInput.y - this.previousInput.y)/16.66;
+            this.previousInput = currentInput;
+        // }
+        this.frequency = 10;
+        // console.log(value)
+        let sliderValue = slider;
+        // console.log(Number.isInteger(sliderValue))
+        // this.frequency = sliderValue;
+        console.log(`The value of the slider is: ${sliderValue}`)
+        this.SecondOrderDynamics(this.frequency, 7, 20, nextInput);
+
+        this.outputVectorY.x = this.outputVectorY.x + this.outputVectorYVel.x; // integrate position by velocity
+        this.outputVectorYVel.x = this.outputVectorYVel.x + (currentInput.x + this.k3 * nextInput.x - this.outputVectorY.x - this.k1 * this.outputVectorYVel.x) // Integrate velocity by acceleration
+
+        this.outputVectorY.y = this.outputVectorY.y + this.outputVectorYVel.y; // integrate position by velocity
+        this.outputVectorYVel.y = this.outputVectorYVel.y + (currentInput.y + this.k3*nextInput.y - this.outputVectorY.y - this.k1 * this.outputVectorYVel.y) // Integrate velocity by acceleration
+
+        // console.log(`The value is: ${this.outputVectorY.x} and ${this.outputVectorY.y}`)
+        // console.log(`The value of the speed is: ${this.outputVectorYVel.x} and ${this.outputVectorYVel.y}`)
+
+        // console.log(`The values of the constants are k1: ${this.k1} k2:${this.k2} k3:${this.k3}`)
+
+        this.previousInput.x = steering.x;
+        this.previousInput.y = steering.y;
+
+
+
         // console.log(this.hasArrived)
 
         // console.log(`The dx: ${this.collisionX - this.target.x} and dy: ${this.collisionY - this.target.y}`)
@@ -910,10 +1081,7 @@ class Agent {
         //     // console.log(`The movement was registered as a stop.`)
         // }
 
-
-        let steering = this.arrive()
-
-        this.applyForce(steering)
+        // console.log(steering)
 
         // console.log(`The acceleration in X is: ${this.accX} and in Y: ${this.accY}`)
         // this.accX = this.target.x - this.collisionX
@@ -941,8 +1109,19 @@ class Agent {
         //     this.accY = Math.floor(Math.random() * this.maxAcceleration)
         // }
 
-        this.speedX += this.accX
-        this.speedY += this.accY
+        this.speedX += this.accX + this.outputVectorY.x
+        this.speedY += this.accY + this.outputVectorY.y
+
+        // this.speedX += this.outputVectorY.x;
+        // this.speedY += this.outputVectorY.y;
+
+        // this.speedX = 1;
+        // this.speedY = 0;
+
+        // this.speedX += this.accX
+        // this.speedY += this.accY
+
+        // console.log(`The speed in x: ${this.outputVectorY.x} and in y: ${this.outputVectorY.y}`)
 
         this.prevAccX = this.accX
         this.prevAccY = this.accY
@@ -968,7 +1147,70 @@ class Agent {
         } else if (this.speedY < -this.maxSpeed){
             this.speedY = -this.maxSpeed
         }
+        
+        let distancePoints = this.defineMagnitude(this.target.x - this.collisionX, this.target.y - this.collisionY);
+
+        // if (distancePoints >= 200) {
+        //     this.moveErrorX = 0;
+        //     this.moveErrorY = 0;
+        // }
+        
+
+
+        // console.log(`The force is: ${steering.x} and in Y: ${steering.y}`)
+
+        if (steering.x < 0) {
+            this.speedXPoint = - this.speedXPoint;
+        } else {
+            this.speedXPoint = this.speedXPoint;
+        }
+
+        if (steering.y < 0) {
+            this.speedYPoint = - this.speedYPoint;
+        } else {
+            this.speedYPoint = this.speedYPoint;
+        }
+        
+
+        
+
+        // this.speedX += this.speedX * Math.cos(this.degreeVel);
+        // this.speedY += this.speedY * Math.sin(this.degreeVel);
+
+        // let error = getNormallyDistributedRandomNumber(0, 1)
+
+        // this.moveErrorX = getNormallyDistributedRandomNumber(0,1);
+        // this.moveErrorY = getNormallyDistributedRandomNumber(0,1);
+
+        this.moveErrorX = 0;
+        this.moveErrorY = 0;
+
+
+        // console.log(`The velocity in X is: ${this.speedXPoint} and Y: ${this.speedYPoint}`)
+
+        // this.speedX += this.speedX * this.moveErrorX;
+        // this.speedY += this.speedY * this.moveErrorY;
+        // console.log(this.velocityProfile[this.counterTarget])
+        // console.log(`The steering in X: ${steering.x} and Y: ${steering.y}`)
+        if (this.velocityProfile[this.counterTarget] !== undefined) {
+            // this.speedX += this.accX + this.speedX * (this.speedXPoint/this.maxSpeed)
+            // this.speedY += this.accY + this.speedY *  (this.speedYPoint/this.maxSpeed) 
+            // console.log(`The speed X: ${this.speedX} and speedY: ${this.speedY}`)
+            // console.log(`The speed in X: ${this.speedXPoint} and the speed in Y: ${this.speedYPoint}`)
+        }
+
+
+
+        // console.log(`The speed in X: ${this.speedX} and speed in Y: ${this.speedY} and max speed: ${this.maxSpeed}`)
+
+        // this.degreeVel += 0.1
+
+        // if (this.degreeVel > 1) {
+        //     this.degreeVel = 0;
+        // }
+
         // console.log(`Speed in X is: ${this.speedX} and Speed in Y is: ${this.speedY}`)
+
         this.collisionX += this.speedX;
         this.collisionY += this.speedY;
 

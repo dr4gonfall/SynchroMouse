@@ -4,10 +4,12 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 const fs = require('fs')
 const MongoClient = require('mongodb').MongoClient;
-const curveMatcher = require("curve-matcher")
+const Spline = require('cubic-spline');
+// const curveMatcher = require("curve-matcher")
 // const paper = require("paper")
-const smoothCurve = require("chaikin-smooth")
+// const smoothCurve = require("chaikin-smooth")
 // const {makeid} = require('./utils')
+let timesAgentDec = 0;
 let playPositions = []
 let speedXPlayer = []
 let speedYPlayer = []
@@ -91,6 +93,14 @@ var mongoClient = undefined;
 //     mongoClient = client;
 //     console.log("Connected to database");
 // });
+
+
+
+// for (let i = 0; i < 50; i++) {
+//     console.log(spline.at(i* 0.1));
+    
+// }
+// console.log(spline)
   
 
 
@@ -266,6 +276,10 @@ io.on('connection', (socket) => {
 
     });
 
+    // socket.on('movementDecisionAgent', (room) => {
+
+    // })
+
     // Definition of the location socket.
 
     socket.on('locationAgent', (room, x, y, rotation, speedX, speedY, accelX, accelY, jerkX, jerkY) => {
@@ -288,6 +302,46 @@ io.on('connection', (socket) => {
             
             
 
+        }
+    })
+
+    socket.on('movementDecisionAgent', (room, maxSpeed, points) => {
+        // io.to(room).emit('')
+        if (roundBeginning) {
+            const xs = [0, 2, maxSpeed];
+            const ys = [0, 1, maxSpeed];
+
+            const xs2 = [maxSpeed, 2, 0];
+            const ys2 = [maxSpeed, 1, 0];
+
+            const splineAccel = new Spline(xs, ys);
+            const splineDecc = new Spline(xs2, ys2);
+
+            let speedAcc = []
+            let speedDecc = []
+
+            // for (let i = 0; i < 50; i++) {
+            //     console.log(splineDecc.at(i* 0.1));
+                
+            // }
+
+            for (let i = 1; i < points + 1; i++) {
+               // console.log(spline.at(i* 0.1));
+                speedAcc.push({x: i-1, y: splineAccel.at(i * 1)})
+                // speedDecc.push({x: i, y: splineDecc.at(i * 0.8)})
+            }
+
+            // for (let index = 0; index < array.length; index++) {
+            //     const element = array[index];
+                
+            // }
+
+            // console.log('ENTERED')
+            // console.log(speedAcc)
+            timesAgentDec ++;
+            // console.log(timesAgentDec)
+            // console.log(speedAcc)
+            socket.emit('movementVelocityProfile', speedAcc, speedDecc)
         }
     })
 
@@ -360,6 +414,7 @@ io.on('connection', (socket) => {
             accelerationXPlayer: accelXPlayer,
             accelerationYPlayer: accelYPlayer,
             jerkXPlayer: jerkXPlayer,
+            jerkYPlayer: jerkYPlayer,
             curvaturePlayer: curvaturePlayer
            }
 
@@ -374,6 +429,7 @@ io.on('connection', (socket) => {
            accelYPlayer = []
            jerkXPlayer = []
            jerkYPlayer = []
+           curvaturePlayer = []
            
            
            amountSharpTurnsPlayer = 0

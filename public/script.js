@@ -13,6 +13,8 @@ let pred = false
 let versionPredictability
 let qualityCompetence
 let qualityPredictability
+let valueSlider = document.getElementById("demo");
+let slider = document.getElementById("myRange");
 const $mainMenu = document.querySelector('#main-menu-button') 
 // const $modeScreenButton = document.querySelector('#main-demo-button')
 const $submitGameMode = document.querySelector('#form')
@@ -161,6 +163,8 @@ let velocityPlayer
 let testLogic = false
 
 // BEGINNING OF THE NEW PROGRAM
+let timesProfile = 0
+let roundBeginningGame = false;
 let mode = 0;
 let prevMouseX
 let prevMouseY
@@ -415,6 +419,7 @@ function newGame() {
     room = urlParams.get('room')
     socket.emit('start', room)
     socket.on('beginGame', (roundBeginning) => {
+        
         if (!roundBeginning) {
             // console.log("The experiment will begin")
             document.getElementById('timeRemaining').innerHTML = 'X'
@@ -470,6 +475,60 @@ function demoGame() {
     ctx.fillStyle = 'black';
     ctx.lineWidth = 3;
     ctx.strokeStyle = 'black';
+    // valueSlider.innerHTML = slider.value;
+
+    // canvas.addEventListener("click", async () => {
+    //     if(!document.pointerLockElement) {
+    //       await canvas.requestPointerLock({
+    //         unadjustedMovement: true,
+    //       });
+    //     }
+    // });
+
+    if(!document.pointerLockElement) {
+        canvas.requestPointerLock({
+        unadjustedMovement: false,
+        });
+    }
+    // console.log(document.pointerLockElement)
+    
+             
+    // console.log(`The movement of mouse in x: ${movementX} and in Y: ${movementY}`)
+
+    document.addEventListener("pointerlockchange", lockChangeAlert, false);
+    function lockChangeAlert() {
+        if (document.pointerLockElement === canvas) {
+            console.log("The pointer lock status is now locked");
+
+        } else {
+            console.log("The player is outside the canvas")
+        }
+        
+    }
+
+    // function lockChangeAlert() {
+    // if (document.pointerLockElement === canvas) {
+    //     console.log("The pointer lock status is now locked");
+    //     document.addEventListener("mousemove", game.render(ctx,e), false);
+    // } else {
+    //     console.log("The pointer lock status is now unlocked");
+    //     document.removeEventListener("mousemove", game.render(ctx,e), false);
+    // }
+    // }
+
+    // document.addEventListener("pointerlockchange", lockChangeAlert, false);
+
+    // function lockChangeAlert() {
+    // if (document.pointerLockElement === canvas) {
+    //     console.log("The pointer lock status is now locked");
+    //     document.addEventListener("mousemove", updatePosition, false);
+    // } else {
+    //     console.log("The pointer lock status is now unlocked");
+    //     document.removeEventListener("mousemove", updatePosition, false);
+    // }
+    // }
+
+if(playing){
 
     // What happens when the human disconnects.
     socket.on('disconnected', function(socketId) {
@@ -488,6 +547,16 @@ function demoGame() {
         
     })
 
+    socket.on('movementVelocityProfile', (speedAcc, speedDecc)=> {
+        // console.log(speedAcc)
+        // timesProfile ++;
+        // console.log(timesProfile)
+        console.log(`ENTERED FUNCTION OF PROFILE`)
+        game.agent.velocityProfile = speedAcc;
+        // console.log(game.agent.velocityProfile)
+    })
+
+
 
     socket.on('end', function( finish) {
         if (finish) {
@@ -495,6 +564,12 @@ function demoGame() {
             console.log("The experiment is finished")
             document.getElementById('time').innerHTML = 'X'
             document.getElementById('timeRemaining').innerHTML = 'X'
+
+            // if(document.pointerLockElement) {
+            //     canvas.exitPointerLock();
+            // }
+
+
         } else {
             let seconds = 10
             document.getElementById('time').innerHTML = seconds
@@ -526,7 +601,7 @@ function demoGame() {
         testLogic = false
     }, 500);
 
-    const game = new Game(canvas);
+    const game = new Game(canvas, socket, room);
 
     if (game.mouse.x !== undefined && game.mouse.y !== undefined) {
         prevMoveX = game.mouse.x
@@ -538,42 +613,86 @@ function demoGame() {
     game.render(ctx);
     // console.log(game)
     function animate() {
-        ctx.clearRect(0,0, canvas.width, canvas.height)
-        game.render(ctx,random, targetX, targetY);
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+        // valueSlider.innerHTML = slider.value;
+        let valSlider = parseInt(slider.value);
+        game.render(ctx,random, targetX, targetY, valSlider);
+        // console.log(Number.isInteger(valSlider))
+        // slider.oninput = function () {
+        //     valueSlider.innerHTML = this.value;
+        // };
+        // console.log(slider.value)
+        // valueSlider.innerHTML = slider.value;
         requestAnimationFrame(animate);
-        speeds.push(game.player.speedX)
-        speeds2.push(game.player.speedY)
-        accelXPlayer.push(game.player.prevAccX)
-        accelYPlayer.push(game.player.prevAccY)
-        accelXAgent.push(game.agent.prevAccX)
-        accelYAgent.push(game.agent.prevAccY)
+        speeds.push(game.player.speedX);
+        speeds2.push(game.player.speedY);
+        // accelXPlayer.push(game.player.prevAccX)
+        // accelYPlayer.push(game.player.prevAccY)
+        // console.log(game.agent.prevAccX)
+        // console.log(game.agent.prevAccY)
+        accelXAgent.push(game.agent.prevAccX);
+        accelYAgent.push(game.agent.prevAccY);
         // mouseSpeedX.push((game.mouse.x - prevMoveX) / 17.77)
         // mouseSpeedY.push((game.mouse.y - prevMoveY) / 17.77)
 
         // mouseSpeedXMax.push(Math.abs((game.mouse.x - prevMoveX) / 17.77))
         // mouseSpeedYMax.push(Math.abs((game.mouse.y - prevMoveY) / 17.77))
 
+        // if (game.agent.movementDecision) {
+            
+        // }
+
+        // socket.emit('movementDecisionAgent', room, game.agent.maxSpeed, game.agent.trajectoryMovement.length - 1);
+
+        // socket.on('movementVelocityProfile', (speedAcc, speedDecc) => {
+        //     game.agent.velocityProfile = speedAcc;
+        //     console.log(speedAcc)
+        // })
+
+        
+        if (speeds.length >= 2) {
+            accelXPlayer.push(speeds[speeds.length -1] - speeds[speeds.length -2])
+            // console.log(`The acceleration of the player is: ${accelXPlayer[accelXPlayer.length - 1]}`)
+        }
+
+        // console.log(speeds)
+
+        if (speeds2.length >= 2) {
+            accelYPlayer.push(speeds2[speeds2.length - 1] - speeds2[speeds2.length - 2])
+            // console.log(`The acceleration of the player in Y is: ${accelYPlayer[accelXPlayer.length - 1]}`)
+        }
+
+        // console.log(`The acceleration in X: ${accelXPlayer[accelXPlayer.length - 1]} and in Y: ${accelYPlayer[accelYPlayer.length - 1]}`)
+
         if (accelXPlayer.length >= 2) {
             jerkXPlayer = accelXPlayer[accelXPlayer.length - 1] - accelXPlayer[accelXPlayer.length -2]
             jerksXPlayer.push(accelXPlayer[accelXPlayer.length - 1] - accelXPlayer[accelXPlayer.length -2])
+            // console.log(`The jerk X of the player: ${jerkXPlayer}`)
             
         }
 
         if (accelYPlayer.length >= 2) {
             jerkYPlayer = accelYPlayer[accelYPlayer.length - 1] - accelYPlayer[accelYPlayer.length -2]
             jerksYPlayer.push(accelYPlayer[accelYPlayer.length - 1] - accelYPlayer[accelYPlayer.length -2])
+            // console.log(`The jerk Y of the player: ${jerkYPlayer}`)
         }
 
         if (accelXAgent.length >= 2) {
             jerkXAgent = accelXAgent[accelXAgent.length - 1] - accelXAgent[accelXAgent.length -2]
             jerksXAgent.push(accelXAgent[accelXAgent.length - 1] - accelXAgent[accelXAgent.length -2])
+            // console.log(`The jerk of X is: ${jerkXAgent}`)
         }
 
         if (accelYAgent.length >= 2) {
             jerkYAgent = accelYAgent[accelYAgent.length - 1] - accelYAgent[accelYAgent.length -2]
             jerksYAgent.push(accelYAgent[accelYAgent.length - 1] - accelYAgent[accelYAgent.length -2])
+            // console.log(`The jerk of Y is: ${jerkYAgent}`)
+
+            // console.log(`The magnitude of jerk is: ${game.player.defineMagnitude(jerkXAgent, jerkYAgent)}`)
         }
 
+        // console.log(`The jerk in X: ${jerksXPlayer[jerksXPlayer.length - 1]} and in Y: ${jerksYPlayer[jerksYPlayer.length - 1]}`)
+        // console.log(`The jerk in X: ${jerksXAgent[jerksXAgent.length - 1]} and in Y: ${jerksYAgent[jerksYAgent.length - 1]}`)
 
         // if (game.agent.accX !== undefined) {
         //     jerkX = game.agent.accX - prevAccelerationX
@@ -596,10 +715,12 @@ function demoGame() {
         // curvaturePlayer = calculateCurvature(game.player.speedX)
 
 
-        if (game.player.prevAccX !== undefined && game.player.prevAccY !== undefined) {
+        if (accelXPlayer[accelXPlayer.length - 1] !== undefined && accelYPlayer[accelYPlayer.length - 1] !== undefined) {
             // if (game.player.speedX !== 0 || game.player.speedY !== 0) {
-                curvaturePlayer = calculateCurvature(game.player.speedX, game.player.speedY, game.player.prevAccX, game.player.prevAccY)
-                // console.log(`The speed X: ${game.player.speedX} speed Y: ${game.player.speedY} accelX: ${game.player.prevAccX} accelY: ${game.player.prevAccY} `)
+                // curvaturePlayer = calculateCurvature(game.player.speedX, game.player.speedY, game.player.prevAccX, game.player.prevAccY)
+                curvaturePlayer = calculateCurvature(game.player.speedX, game.player.speedY, accelXPlayer[accelXPlayer.length - 1], accelYPlayer[accelYPlayer.length - 1])
+                
+                // console.log(`The speed X: ${game.player.speedX} speed Y: ${game.player.speedY} accelX: ${accelXPlayer[accelXPlayer.length - 1]} accelY: ${accelYPlayer[accelYPlayer.length - 1]} and the curvature: ${curvaturePlayer} `)
                 
                 
                 // console.log(`The curvature is: ${curvaturePlayer}`)
@@ -614,13 +735,16 @@ function demoGame() {
                 // console.log(`The speed X: ${game.player.speedX} speed Y: ${game.player.speedY} accelX: ${game.player.prevAccX} accelY: ${game.player.prevAccY} `)
                 // console.log(`The curvature is: ${curvaturePlayer}`)
             // }
-            if (curvaturePlayer !== NaN) {
+            if (curvaturePlayer !== NaN && curvaturePlayer !== null) {
                 curvaturesPlayer.push(curvaturePlayer)
+                curvaturePlayer = 0;
             } else {
                 console.log(`The function is working`)
             }
 
             // console.log(curvaturePlayer !== NaN)
+
+            // console.log(curvaturesPlayer[curvaturesPlayer.length-1])
             
             // console.log(curvaturePlayer)
             // console.log(curvaturePlayer)
@@ -666,8 +790,8 @@ function demoGame() {
 
         socket.emit('locationAgent', room,  game.agent.collisionX, game.agent.collisionY, rotationAgent, game.agent.speedX, game.agent.speedY,
         game.agent.prevAccX, game.agent.prevAccY, jerkXAgent, jerkYAgent);
-        socket.emit('locationPlayer', room, game.player.collisionX, game.player.collisionY, rotation, game.player.speedX, game.player.speedY,
-        game.player.prevAccX, game.player.prevAccY, jerkXPlayer, jerkYPlayer);
+        socket.emit('locationPlayer', room, game.player.collisionX, game.player.collisionY, rotation, speeds[speeds.length -1], speeds2[speeds2.length -1],
+        accelXPlayer[accelXPlayer.length - 1], accelYPlayer[accelYPlayer.length - 1], jerkXPlayer, jerkYPlayer);
 
         // moveTextX.innerText = `Mouse Speed in X: ${game.mouse.x - prevMoveX}`
         // moveTextY.innerText = `Mouse Speed in Y: ${game.mouse.y - prevMoveY}`
@@ -723,7 +847,7 @@ function demoGame() {
     })
 
     
-
+}
 }
 
 

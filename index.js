@@ -170,9 +170,9 @@ io.on('connection', (socket) => {
             }
         }, 10000);
         // Amount of rounds a player will play the mirror game.
-        var times = 0;
-
-        var interval = setInterval(() => {
+        let times = 0;
+        // socket.emit('beginParameters', room);
+        let interval = setInterval(() => {
             if (mongoClient !== undefined) {
                 const db = mongoClient.db(dbName);
                 db.collection('room_scores').insert({time: new Date(), room: room, score: room_score[room],
@@ -197,6 +197,7 @@ io.on('connection', (socket) => {
                     db.collection('round_begin').insert({time: new Date(), room: room});
                 }
             }, 10000);
+
             times++;
             
         //     let counterTimeTotal = 0
@@ -214,7 +215,7 @@ io.on('connection', (socket) => {
         //      // console.log(agePositions)
         //  }, 1000);
             console.log("Times are: " + times)
-            if(times > 2) { //amount of rounds
+            if(times >= 2) { //amount of rounds
                 clearInterval(interval);
                 setTimeout(() => {
                     roundBeginning = false

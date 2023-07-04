@@ -193,10 +193,12 @@ class Player {
             this.movementDecision = true
         }
 
-        if (this.timerDecision >= 1) {
+        if (this.timerDecision >= 60) {
             this.movementDecision = false
             // console.log(`The movement was registered as a stop.`)
         }
+
+        // console.log(`This timer is: ${this.timerDecision}`)
 
 
         // if (!this.movementDecision && this.timerDecision == 2) {

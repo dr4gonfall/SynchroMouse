@@ -5,7 +5,8 @@
 // import { makeid } from './utils';
 const socket = io();
 let room;
-
+// VERSION OF THE GAME VARIABLES
+let version;
 // MAIN VARIABLES FOR GAME MODES
 let perfect = false
 let comp = false
@@ -15,7 +16,7 @@ let qualityCompetence
 let qualityPredictability
 let valueSlider = document.getElementById("demo");
 let slider = document.getElementById("myRange");
-const $mainMenu = document.querySelector('#main-menu-button') 
+const $mainMenu = document.querySelector('#main-menu-button')
 // const $modeScreenButton = document.querySelector('#main-demo-button')
 const $submitGameMode = document.querySelector('#form')
 const $startDemo = document.querySelector('#startNow')
@@ -419,11 +420,12 @@ function newGame() {
     room = urlParams.get('room')
     socket.emit('start', room)
     socket.on('beginGame', (roundBeginning) => {
-        
+        console.log(`The round is beginning: ${roundBeginning}`)
         if (!roundBeginning) {
             // console.log("The experiment will begin")
             document.getElementById('timeRemaining').innerHTML = 'X'
-        } else {
+            playing = false;
+        } else if (roundBeginning){
             gameStarted = true
             let timeRoundGame = 30
             document.getElementById('timeRemaining').innerHTML = timeRoundGame
@@ -435,13 +437,22 @@ function newGame() {
                 if (timeRoundGame <0) {
                     clearInterval(startTimerGame)
                     startTimerGame = undefined
+                    // demoGame();
+                    playing = false;
+                    gameStarted = false;
                 } else {
                      document.getElementById('timeRemaining').innerHTML = timeRoundGame
+                    // demoGame();
+                    // playing =  true;
                 }
             }, 1000);
         }
     })
-    playing = true
+    // playing = true
+    // if (playing) {
+    //     demoGame()
+    // }
+    // ddemoGame()
     demoGame()
 }
 
@@ -452,15 +463,50 @@ function calculateCurvature(speedX, speedY, accX, accY) {
     return curve
 }
 
+socket.on('end', function(finish) {
+    console.log(`The value of finish is: ${finish}`)
+    if (finish) {
+        gameStarted = false
+        console.log("The experiment is finished")
+        document.getElementById('time').innerHTML = 'X'
+        document.getElementById('timeRemaining').innerHTML = 'X'
+
+        // if(document.pointerLockElement) {
+        //     canvas.exitPointerLock();
+        // }
+
+
+    } else {
+        let seconds = 10
+        document.getElementById('time').innerHTML = seconds
+        if (startTimer !== undefined)  {
+         clearInterval(startTimer)   
+        }
+        startTimer = setInterval(() => {
+            seconds --
+            if (seconds <0) {
+                clearInterval(startTimer)
+                startTimer = undefined
+                playing = true;
+                demoGame();
+            } else {
+                 document.getElementById('time').innerHTML = seconds
+            } 
+        }, 1000);
+    }
+})
+
 
 
 function demoGame() {
+    console.log(`The demo is: ${playing}`)
     let mouseSpeedX = [];
     let mouseSpeedXMax = []
     let mouseSpeedYMax = []
     let mouseSpeedY = [];
     let speeds = [];
     let speeds2 = [];
+    let rounds = 0;
     let prevMoveX = 0;
     let prevMoveY = 0;
     let prevMoveAgentX = 0;
@@ -468,6 +514,13 @@ function demoGame() {
     let prevSpeedX = 0
     let prevSpeedY = 0
     let random = Math.random()
+
+    // Parameters for Experiment Conditions
+    // Player Controls
+    game.player.maxSpeed = 20;
+    // Agent Controls
+    game.agent.maxSpeed = 20;
+    
     // let average = 0;
     // let average2 = 0;
     let targetX = canvas.width / 2 + 50;
@@ -490,6 +543,10 @@ function demoGame() {
         unadjustedMovement: false,
         });
     }
+
+    // socket.on('beginParameters', function(times) {
+
+    // })
     // console.log(document.pointerLockElement)
     
              
@@ -527,6 +584,7 @@ function demoGame() {
     //     document.removeEventListener("mousemove", updatePosition, false);
     // }
     // }
+    
 
 if(playing){
 
@@ -558,35 +616,36 @@ if(playing){
 
 
 
-    socket.on('end', function( finish) {
-        if (finish) {
-            gameStarted = false
-            console.log("The experiment is finished")
-            document.getElementById('time').innerHTML = 'X'
-            document.getElementById('timeRemaining').innerHTML = 'X'
+    // socket.on('end', function( finish) {
+    //     if (finish) {
+    //         gameStarted = false
+    //         console.log("The experiment is finished")
+    //         document.getElementById('time').innerHTML = 'X'
+    //         document.getElementById('timeRemaining').innerHTML = 'X'
 
-            // if(document.pointerLockElement) {
-            //     canvas.exitPointerLock();
-            // }
+    //         // if(document.pointerLockElement) {
+    //         //     canvas.exitPointerLock();
+    //         // }
 
 
-        } else {
-            let seconds = 10
-            document.getElementById('time').innerHTML = seconds
-            if (startTimer !== undefined)  {
-             clearInterval(startTimer)   
-            }
-            startTimer = setInterval(() => {
-                seconds --
-                if (seconds <0) {
-                    clearInterval(startTimer)
-                    startTimer = undefined
-                } else {
-                     document.getElementById('time').innerHTML = seconds
-                } 
-            }, 1000);
-        }
-    })
+    //     } else {
+    //         let seconds = 10
+    //         document.getElementById('time').innerHTML = seconds
+    //         if (startTimer !== undefined)  {
+    //          clearInterval(startTimer)   
+    //         }
+    //         startTimer = setInterval(() => {
+    //             seconds --
+    //             if (seconds <0) {
+    //                 clearInterval(startTimer)
+    //                 startTimer = undefined
+    //                 playing = true;
+    //             } else {
+    //                  document.getElementById('time').innerHTML = seconds
+    //             } 
+    //         }, 1000);
+    //     }
+    // })
 
     
     
@@ -613,6 +672,7 @@ if(playing){
     game.render(ctx);
     // console.log(game)
     function animate() {
+        console.log(`The game is: ${playing}`)
         ctx.clearRect(0,0, canvas.width, canvas.height);
         // valueSlider.innerHTML = slider.value;
         let valSlider = parseInt(slider.value);
@@ -811,7 +871,10 @@ if(playing){
         // console.log(`The target of the agent is: ${targetX} and ${targetY}`)
 
     }
-    animate();
+    if (gameStarted) {
+        animate();
+    }
+    
 
     
     

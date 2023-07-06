@@ -19,7 +19,7 @@ body {
 
 .screen {
   position: absolute; /* or absolute */
-  top: 20%;
+  margin-top: 20px;
 }
 
 

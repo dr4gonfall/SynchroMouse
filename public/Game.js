@@ -53,6 +53,5 @@ class Game {
         this.agent.draw(context, targetX, targetY);
         this.agent.update(random,targetX,targetY, this.socket, this.room, slider);
         // console.log(`The target of the agent is: ${targetX} and ${targetY}`)
-
     } 
 }

@@ -7,12 +7,23 @@
 
     <body>
         <div id="start-screen" class="screen" style="display: block;">
-            <h1>Trust and Improvisation in Human-autonomous Teams</h1>
-            <div id="welcome-message">
+            <h1 class="main-message">Trust and Improvisation in Human-autonomous Teams</h1>
+            <div id="welcome-message" class="main-message">
                 <p>Welcome and thank you for your participation on this experiment. Please click the button down below when you are ready to begin.</p>
             </div>
             
             <button id="main-menu-button">Begin</button>
+        </div>
+
+        <div id="game-modes" class="screen" style="display: block;">
+            <h1>Select a mode of game to play</h1>
+
+            <div class="container">
+                <div class="input-box-wrapper">
+
+                </div>
+
+            </div>
         </div>
 
         <div id="mode-screen" class="screen" style="display: none;">
@@ -74,7 +85,7 @@
             </div>
         </div>
 
-        <div id="validation-intructions" class="screen" style="display: none;">
+        <div id="validation-intructions-en" class="screen" style="display: none;">
         
             <h1>Experiment Instructions</h1>
             <p>
@@ -88,6 +99,8 @@
                 We want to know which versions of the agents and controls are consistent with our own assessment of the agent. We want your honest opinion related to the agents behaviors
                 and the controls you used. The order of the versions will be random so do not panic if you feel there is no difference between the versions of the game you played.
             </p>
+
+            <button id="button-instructions-en">Continue</button>
 
         </div>
 
@@ -104,7 +117,36 @@
             a través de una encuesta que se les dará al terminar cada juego. Queremos sabe si hay consistencia entre nuestra opinión acerca del agente es consistente con la tuya como persona que jugó
             el juego y los controles que utilizamos. El ordén de las condiciones son aleatorias, por lo tanto, puede pasar que sientan que no hay diferencia entre dos versiones del agente seguidas.
         </p>
+
+        <button id="button-instructions-es">Continuar</button>
         </div>
+
+
+        <div id="instructions-training-session-follower-en" class="screen" style="display: none;">
+            <h1>Training Session</h1>
+            <div>
+                <p>
+                    In this session you will play with a the version of a follower in the Mirror Game. Remeber to make creative moves while the agent is trying to follow you.
+                    When you are ready please press the button continue to begin the game.
+                </p>
+            </div>
+        </div>
+
+        <div id="instructions-training-session-follower-es" class="screen" style="display: none;">
+            <h1>Sesión de entrenamiento</h1>
+            <div>
+                <p>
+                    En esta sesión jugarás con la versión del agente mientras juegan el "Juego del Espejo". Recuerda que tienes que realizar movimientos creativos mientras el agente te sigue.
+                </p>
+            </div>
+        </div>
+
+        <div id="training-session" class="screen" style="display: none;">
+            <div class="wrapper">
+                <canvas id="training"></canvas>
+            </div>
+        </div>
+
 
 
         <div id="general-instructions" class="screen" style="display: none;">

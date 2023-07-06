@@ -17,6 +17,10 @@ let qualityPredictability
 let valueSlider = document.getElementById("demo");
 let slider = document.getElementById("myRange");
 const $mainMenu = document.querySelector('#main-menu-button')
+const $instructionsEnglish =  document.getElementById('#validation-intructions')
+const $instructionsSpanish = document.getElementById('#validation-instructions-es')
+const $training = document.getElementById('#training-session')
+const canvasTraining = document.getElementById('#training')
 // const $modeScreenButton = document.querySelector('#main-demo-button')
 const $submitGameMode = document.querySelector('#form')
 const $startDemo = document.querySelector('#startNow')
@@ -235,6 +239,10 @@ function startMenu() {
     toggleScreen('mode-screen', true)
 
     // demoGame()
+}
+
+function startExperimentInstructions() {
+    toggleScreen('validation-instructions-en')
 }
 
 function startDemo() {
@@ -496,6 +504,10 @@ socket.on('end', function(finish) {
     }
 })
 
+function validationGame() {
+
+}
+
 
 
 function demoGame() {
@@ -517,10 +529,10 @@ function demoGame() {
 
     // Parameters for Experiment Conditions
     // Player Controls
-    game.player.maxSpeed = 20;
+    // game.player.maxSpeed = 20;
     // Agent Controls
-    game.agent.maxSpeed = 20;
-    
+    // game.agent.maxSpeed = 20;
+
     // let average = 0;
     // let average2 = 0;
     let targetX = canvas.width / 2 + 50;

@@ -4,7 +4,7 @@ var http = require("http").createServer(app);
 var io = require("socket.io")(http);
 const fs = require("fs");
 const MongoClient = require("mongodb").MongoClient;
-const Spline = require("cubic-spline");
+// const Spline = require("cubic-spline");
 
 // const curveMatcher = require("curve-matcher")
 // const paper = require("paper")
@@ -445,8 +445,8 @@ io.on("connection", (socket) => {
       const xs2 = [maxSpeed, 2, 0];
       const ys2 = [maxSpeed, 1, 0];
 
-      const splineAccel = new Spline(xs, ys);
-      const splineDecc = new Spline(xs2, ys2);
+      // const splineAccel = new Spline(xs, ys);
+      // const splineDecc = new Spline(xs2, ys2);
 
       let speedAcc = [];
       let speedDecc = [];

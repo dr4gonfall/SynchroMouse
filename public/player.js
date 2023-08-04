@@ -5,7 +5,7 @@ class Player {
         this.collisionY = this.game.height * 0.25;
         this.prevMouseX = this.collisionX;
         this.prevMouseY = this.collisionY;
-        this.collisionRadius = 30;
+        this.collisionRadius = 20;
         this.speedX = 0;
         this.speedY = 0;
         // Acceleration of the Agent.
@@ -13,7 +13,7 @@ class Player {
         this.accY = 0;
         this.prevAccX = this.accX
         this.prevAccY = this.accY
-        this.maxAcceleration = 10;
+        this.maxAcceleration = 5;
         // Forces of the Agent.
         this.force = 0;
         this.maxForce = 7.0;
@@ -22,7 +22,7 @@ class Player {
         // PREVIOUS ACCELERATION
         // this.dx = 0;
         // this.dy = 0;
-        this.maxSpeed = 20;
+        this.maxSpeed = 2;
         // this.maxForce = 100;
         this.movementCounter = 0;
         this.prevMoveDec = this.movementDecision;

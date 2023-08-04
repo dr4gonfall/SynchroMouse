@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+    <link rel="stylesheet" type="text/css" href="../CSS/style.css">
+</head>
+<body>
+    <div id="demo" class="screen" style="display: block;">
+        <div class="wrapper">
+            <h1>Synchromouse Experiment</h1>
+            <div class="row">
+                <div class="column left">
+                    <h3 class="column" id="similarityMeasure">Similarity Measure:</h3>
+                </div>
+                <div class="column right">
+                    <h3 id="similarNoRotMeasure">Similarity No Rotation Measure:</h3>
+                </div>    
+            </div>
+            
+            <div class="row">
+                <h3 id="distanceMeasure">Distance Measure:</h3>
+            </div>
+            
+            <div class="row">
+                <p class="column left">Next round begins in <span id="time">X</span> seconds</p>
+                <p class="column right">Time remaining: <span id="timeRemaining">X</span> seconds</p>
+            </div>
+            <!-- <p id="modeRef">The agent is: </p> -->
+            <button id="startNow">START</button>
+            <button id="goBack">BACK</button>
+            <h2 id="objectCoords-HAT">ObjCoord:</h2>
+            <div id="gameExperiment"></div>
+            <canvas id="canvas-demo" style="cursor: none;"></canvas>
+            <div class="slidecontainer">
+                
+                <div class="value-container">
+                    <span id="demo">0</span>
+                </div>
+                <input type="range" min="0" max="20" value="1" class="slider" id="myRange">
+            </div>
+        </div>
+        <!--<button>Back</button>-->
+    </div>
+</body>
+</html>

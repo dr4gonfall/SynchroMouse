@@ -1,7 +1,8 @@
 <html>
     <head>
         <title>SynchroMouse</title>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <base href=".">
+        <link rel="stylesheet" type="text/css" href="CSS/style.css">
     </head>
 
 
@@ -11,16 +12,18 @@
             <div id="welcome-message" class="main-message">
                 <p>Welcome and thank you for your participation on this experiment. Please click the button down below when you are ready to begin.</p>
             </div>
-            
-            <button id="main-menu-button">Begin</button>
+            <button id="main-menu-button">Begin Demo</button>
+            <button id="v-experiment-begin">Begin Experiment</button>
         </div>
 
-        <div id="game-modes" class="screen" style="display: block;">
+        <div id="game-modes" class="screen" style="display: none;">
             <h1>Select a mode of game to play</h1>
 
             <div class="container">
-                <div class="input-box-wrapper">
-
+                <div class="menu">
+                <button class="btn-menu selected">Demo</button>
+                <button class="btn-menu">Begin Validation Experiment</button>
+                <button class="btn-menu">Begin Experiment</button>
                 </div>
 
             </div>
@@ -85,23 +88,25 @@
             </div>
         </div>
 
-        <div id="validation-intructions-en" class="screen" style="display: none;">
-        
+        <div id="validation-instructions-en" class="screen" style="display: none;">
+
             <h1>Experiment Instructions</h1>
             <p>
-                Welcome to this experiment. In this experiment we want you to play the Mirror Game with an autonomous agent as your teammate to analyze trust and improvisation
-                while performing a creative task. The objective of the Mirror Game is to perform creative movements while synchronizing/complementing with the movements of your
-                teammate (i.e., an autonomous agent). In this experiment you will play the Leader-Follower version of the Mirror Game a total of 16 times.
-                In this version either you or the agent will be assigned the roles of the Leader or Follower at the beginning of each game. The Leader is the player who proposes
-                and performs movements while the follower complements and/or follows the movements of the leader while coordinating. For this experiment we are trying to analyze how 
-                competent/incompetent and predictable/unpredictable the agents are with some measurements and algorithms we have designed. We will present to you different versions 
-                of the agents and the velocity of both the player and the agent. To analyze the characteristics of the agent and the controls, we will ask you to fill a form after each game.
-                We want to know which versions of the agents and controls are consistent with our own assessment of the agent. We want your honest opinion related to the agents behaviors
-                and the controls you used. The order of the versions will be random so do not panic if you feel there is no difference between the versions of the game you played.
+                Welcome to this experiment and thanks for participating in this study. 
+                You will play a game called the Mirror Game with an autonomous agent. This is a game, not a competition, and the goal is 
+                simply to enjoy producing movements together. In this experiment you will play 16 rounds of the
+                Mirror Game.
+                In this version either you or the agent will be assigned the roles of the one who leads and the one who complements
+                the movements in the team.
+                The teammate who leads  will propose and perform movements while the other teammate complements the movements of the leader while
+                coordinating. After you finish each game, we will ask you to 
+                fill a form after each game. Before the game we will play two rounds of practice, one per type so that
+                you get used to the controls.
             </p>
+    
+            <button id="validation-instructions-button">Continue</button>
 
-            <button id="button-instructions-en">Continue</button>
-
+    
         </div>
 
         <div id="validation-instructions-es" class="screen" style="display: none;">
@@ -122,15 +127,64 @@
         </div>
 
 
-        <div id="instructions-training-session-follower-en" class="screen" style="display: none;">
+        <div id="instructions-training-session-en" class="screen" style="display: none;">
             <h1>Training Session</h1>
             <div>
                 <p>
-                    In this session you will play with a the version of a follower in the Mirror Game. Remeber to make creative moves while the agent is trying to follow you.
-                    When you are ready please press the button continue to begin the game.
+                    During this training session you will have two rounds to play the Mirror Game. 
+                    In the first round you will lead. For this version of the game
+                    you have to create synchronized and interesting movements while the agent complements those movements.
+                    In the second round you will be the one who complements the movements of the other teammate.
+                    Each round will last 30 sec. When you are ready please press the button continue to begin the game.
                 </p>
+
+                <button id="button-training-instructions-en">Begin Training</button>
             </div>
         </div>
+
+        
+
+        <div id="training-session" class="screen" style="display: none;">
+            <div class="wrapper">
+                <h2>Training Session:</h2>
+                <p>Your role is <span id="rolePlayer">X</span>. <span id="instructionsPlayer">...</span></p>
+                <div class="row">
+                    <p class="column left">Next round begins in <span id="time-training-prelim">X</span> seconds</p>
+                    <p class="column right">Time remaining: <span id="time-training-round">X</span> seconds</p>
+                </div>
+                <canvas id="training-game"></canvas>
+            </div>
+            <button id="button-training-session">Continue</button>
+        </div>
+
+        <div id="training-session-debrief" class="screen" style="display: none;">
+            <h1>Debriefing Session</h1>
+            <div>
+                <p>
+                    You saw two different versions of the Mirror Game being a the person who leads and the person who 
+                    complements the movements of the other. If you have any 
+                    questions please ask the experimenter. When you are ready for the experiment please press the button to
+                    begin the game.
+                </p>
+                <button id="button-begin-validation-experiment">Begin Experiment</button>
+            </div>
+        </div>
+
+
+        <div id="validation-experiment" class="screen" style="display: none;">
+            <h1>Synchromouse Validation Experiment</h1>
+            <div class="row">
+                <p class="column left">Next round begins in <span id="time-validation-prelim">X</span> seconds</p>
+                <p class="column right">Time remaining: <span id="time-validation-round">X</span> seconds</p>
+            </div>
+            <canvas id="canvas-validation-game" style="cursor: none;"></canvas>]
+            <button id="startValidationExperiment">START</button>
+        </div>
+
+
+
+
+
 
         <div id="instructions-training-session-follower-es" class="screen" style="display: none;">
             <h1>Sesión de entrenamiento</h1>
@@ -138,12 +192,6 @@
                 <p>
                     En esta sesión jugarás con la versión del agente mientras juegan el "Juego del Espejo". Recuerda que tienes que realizar movimientos creativos mientras el agente te sigue.
                 </p>
-            </div>
-        </div>
-
-        <div id="training-session" class="screen" style="display: none;">
-            <div class="wrapper">
-                <canvas id="training"></canvas>
             </div>
         </div>
 
@@ -189,10 +237,10 @@
                 <canvas id="canvas-demo" style="cursor: none;"></canvas>
                 <div class="slidecontainer">
                     
-                    <div class="value-container">
+                    <!-- <div class="value-container">
                         <span id="demo">0</span>
                     </div>
-                    <input type="range" min="0" max="20" value="1" class="slider" id="myRange">
+                    <input type="range" min="0" max="20" value="1" class="slider" id="myRange"> -->
                 </div>
             </div>
             <!--<button>Back</button>-->
@@ -223,10 +271,13 @@
     <script src="url-search-params.js"></script>
     <script src='http://joeiddon.github.io/perlin/perlin.js'></script>
     <!-- <script src="Classes.js"></script> -->
-    <script src="perlin.js"></script>
+    <!-- <script src="perlin.js"></script> -->
     <script src="agent.js"></script>
     <script src="player.js"></script>
     <script src="Game.js"></script>
     <script src="Functions.js"></script>
+    <script src="training_script.js"></script>
+    <script src="validation_script.js"></script>
+    <script src="page_selection.js"></script>
     <script src="script.js" type="module"></script>
 </html>

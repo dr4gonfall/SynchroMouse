@@ -1,6 +1,6 @@
+
 body {
     cursor: auto;
-    cursor: url(cursor.png);
     font-family: sans-serif;
     color: white;
     background-color: #333;
@@ -20,6 +20,10 @@ body {
 .screen {
   position: absolute; /* or absolute */
   margin-top: 20px;
+}
+
+.game-modes {
+  margin: auto;
 }
 
 
@@ -81,6 +85,16 @@ body {
 #canvas-demo {
     background: #f0f0f0 ;
     border-radius: 5px;
+}
+
+#training-game {
+  background: #f0f0f0;
+  border-radius: 2px;
+}
+
+#canvas-validation-game {
+  background: #f0f0f0;
+  border-radius: 5px;
 }
 
 button {

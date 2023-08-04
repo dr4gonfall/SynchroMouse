@@ -9,6 +9,9 @@ class Game {
         this.score = 0;
         this.player = new Player(this);
         this.agent = new Agent(this, this.player)
+        this.gameRound = 0;
+        this.frameRate = 30;
+        this.currentRound = 0;
         // this.agentTargetX = targetX;
         // this.agentTargetY = targetY;
         this.mouse = {
@@ -47,11 +50,12 @@ class Game {
 
     
 
-    render(context,random, targetX, targetY, slider){
+    render(context, random, targetX, targetY){
         this.player.draw(context);
         this.player.update(this.mouse.x, this.mouse.y);
-        this.agent.draw(context, targetX, targetY);
-        this.agent.update(random,targetX,targetY, this.socket, this.room, slider);
         // console.log(`The target of the agent is: ${targetX} and ${targetY}`)
+        this.agent.draw(context, targetX, targetY);
+        this.agent.update(random,targetX,targetY, this.socket, this.room);
+        
     } 
 }

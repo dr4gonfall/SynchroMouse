@@ -1,4 +1,8 @@
-
+// import { Agent, Player } from "./Classes";
+// const Player = require('./Classes')
+// import { frechetDistance, rebalanceCurve, procrustesNormalizeCurve, shapeSimilarity } from "curve-matcher";
+// import curveMatcher from "curve-matcher"
+// import { makeid } from './utils';
 const socket = io();
 let room;
 // VERSION OF THE GAME VARIABLES
@@ -10,56 +14,22 @@ let pred = false;
 let versionPredictability;
 let qualityCompetence;
 let qualityPredictability;
-
-// PAGE SELECTORS
+let valueSlider = document.getElementById("demo");
+let slider = document.getElementById("myRange");
 const $mainMenu = document.querySelector("#main-menu-button");
-
-
-// CANVAS VALIDATION EXPERIMENT SELECTION
-
-// Canvas Validation Experiment Definition
-const canvasValidation = document.getElementById("canvas-validation-game");
-const ctxValidation = canvasValidation.getContext("2d");
-// Canvas Validation Experiment Dimensions
-canvasValidation.width = 800;
-canvasValidation.height = 500;
-
-// Demo Canvas Definition
-const canvas = document.getElementById("canvas-demo");
-const ctx = canvas.getContext("2d");
-// Demo Canvas Dimensions
-canvas.width = 800;
-canvas.height = 500;
-
-// Timers Definition
-
-// Training Session Timers Definition
-let timerBetweenRoundsTraining = document.getElementById("time-training-prelim");
-let timerRoundsTraining = document.getElementById("time-training-round");
-// Training number of rounds
-let roundNumber = 0;
-// Validation Experiment Timers Definition
-let timerBetweenRoundsValidation = document.getElementById("time-validation-prelim");
-let timerRoundsValidation = document.getElementById("time-validation-round")
-
-
-// const $instructionsEnglish = document.getElementById("#validation-intructions");
-// const $instructionsSpanish = document.getElementById("#validation-instructions-es");
-// const $trainingInstructions = document.getElementById("#training-session");
-
-
-const $modeScreenButton = document.querySelector('#main-demo-button')
-
-// BUTTONS AND FORMS
-
-// Form that defines parameters for the demo.
+const $instructionsEnglish = document.getElementById("#validation-intructions");
+const $instructionsSpanish = document.getElementById(
+  "#validation-instructions-es"
+);
+const $training = document.getElementById("#training-session");
+const canvasTraining = document.getElementById("#training");
+// const $modeScreenButton = document.querySelector('#main-demo-button')
 const $submitGameMode = document.querySelector("#form");
 const $startDemo = document.querySelector("#startNow");
-const $backButton = document.querySelector("#goBack");
 const $similarityM = document.querySelector("#similarityMeasure");
 const $distanceM = document.querySelector("#distanceMeasure");
 const $similarNoRotM = document.querySelector("#similarNoRotMeasure");
-
+const $backButton = document.querySelector("#goBack");
 let roomName;
 
 let prevX;
@@ -136,6 +106,46 @@ let randomNumPred;
 let curvaturePlayer;
 
 let curvatureAgent;
+
+// const playerPositions = {
+//     X: [],
+//     Y: [],
+//     angle: [],
+// }
+// const agentPositions = {
+//     X: [],
+//     Y: [],
+//     angle: [],
+//     velocity: []
+// }
+
+const playerPositionsCompetence = {
+  X: [],
+  Y: [],
+  angle: [],
+};
+const agentPositionsCompetence = {
+  X: [],
+  Y: [],
+  angle: [],
+};
+
+const playerPositionsPredictability = {
+  X: [],
+  Y: [],
+  angle: [],
+};
+const agentPositionsPredictability = {
+  X: [],
+  Y: [],
+  angle: [],
+};
+
+const agentFinalPosition = {
+  X: [],
+  Y: [],
+  angle: [],
+};
 
 let timer = 0;
 
@@ -214,30 +224,85 @@ const agentPositions = {
   distance: [],
 };
 
-// COUNTER FOR THE NUMBER OF ROUNDS
-let numberOfRounds = 0;
-
-// CANVAS DEFINITION FOR GAMES
-
 // MENU
+
+function toggleScreen(id, toggle) {
+  let element = document.getElementById(id);
+  let display = toggle ? "block" : "none";
+  element.style.display = display;
+}
+
 function startMenu() {
   toggleScreen("start-screen", false);
   toggleScreen("mode-screen", true);
+
+  // demoGame()
 }
 
 function startExperimentInstructions() {
   toggleScreen("validation-instructions-en");
 }
 
-// GAME EXPERIMENT
+function startDemo() {
+  toggleScreen("mode-screen", false);
+  toggleScreen("demo", true);
+
+  socket.on("begin", function () {
+    urlParams = new URLSearchParams(window.location.search);
+
+    if (urlParams.has("room")) {
+      room = urlParams.get("room");
+      // Possibility of removing given new configuration.
+      // Is the user entering an admin or a player.
+      socket.emit("join_room", room);
+    }
+    // Tutorial page.
+    if (urlParams.has("playground")) {
+      // document.getElementById('info').style.opacity = '0';
+      // function windowSizeChanged() {
+      //     var width = document.getElementById('game').offsetWidth;
+      //     var height = document.getElementById('game').offsetHeight;
+      //     scaleFactor = Math.min(window.innerWidth / width, window.innerHeight / height);
+      //     document.getElementById('game').style.transform = 'scale(' + scaleFactor + ')';
+      //   }
+      //   window.onresize = windowSizeChanged;
+      //   windowSizeChanged();
+    }
+  });
+}
+
+function goBackMenu() {
+  toggleScreen("mode-screen", true);
+  toggleScreen("demo", false);
+}
+
+$backButton.addEventListener("click", goBackMenu);
+
+$mainMenu.addEventListener("click", (e) => {
+  startMenu();
+});
+
+
+
+// Measurement of velocities
+
+setInterval(() => {
+  // competencePlayer.push(player.acc.mag())
+}, 1000);
+
 // BEGINNING OF THE OLD PROGRAM
 
+const canvas = document.getElementById("canvas-demo");
+const ctx = canvas.getContext("2d");
 
-// $backButton.addEventListener("click", goBackMenu);
+canvas.width = 1024;
+canvas.height = 576;
 
-// $mainMenu.addEventListener("click", (e) => {
-//   startMenu();
-// });
+$backButton.addEventListener("click", goBackMenu);
+
+$mainMenu.addEventListener("click", (e) => {
+  startMenu();
+});
 
 let speedSelection = document.querySelector("#spdOptions");
 let levelCompetence = document.querySelector("#competenceOptions");
@@ -312,37 +377,6 @@ $submitGameMode.addEventListener("submit", (e) => {
   startDemo();
 });
 
-function startDemo() {
-  toggleScreen("mode-screen", false);
-  toggleScreen("demo", true);
-
-  socket.on("beginGame", function () {
-    urlParams = new URLSearchParams(window.location.search);
-
-    if (urlParams.has("room")) {
-      room = urlParams.get("room");
-      // Possibility of removing given new configuration.
-      // Is the user entering an admin or a player.
-      socket.emit("join_room", room);
-    }
-  });
-}
-
-function goBackMenu() {
-  toggleScreen("mode-screen", true);
-  toggleScreen("demo", false);
-}
-
-// BUTTON CLICKING FOR MENUS
-
-// DEMO SEQUENCE
-
-$backButton.addEventListener("click", goBackMenu);
-
-$mainMenu.addEventListener("click", (e) => {
-  startMenu();
-});
-
 $startDemo.addEventListener("click", () => {
   if (!document.pointerLockElement) {
     canvas.focus();
@@ -372,21 +406,12 @@ function baseVector(agent, player) {
 // let compMeasurementCounter = 0
 let compMeasurement = 0;
 let gameStarted = false;
-let gameStartedTraining = false;
-let gameStartedValidation = false;
 
 let playing = false;
-let playingTraining = false;
-let playingValidation = false;
 
-let currentRoundTraining = 0;
-let currentRoundValidation = 0;
 
-(new TrainingGame()).trainingScript(socket);
-(new PageSelection()).pageSelection(socket);
-(new ValidationScript()).validationScript(socket);
 
-socket.on("endGame", (finish) => {
+socket.on("end", (finish) => {
   console.log(`The value of finish is: ${finish}`);
   if (finish) {
     gameStarted = false;
@@ -417,11 +442,6 @@ socket.on("endGame", (finish) => {
   }
 });
 
-
-
-
-
-// Creation of a new demo game
 function newGame() {
   prevX = 200;
   prevY = 200;
@@ -434,7 +454,6 @@ function newGame() {
   urlParams = new URLSearchParams(window.location.search);
   room = urlParams.get("room");
   socket.emit("start", room);
-  socket.emit("health")
   socket.on("beginGame", (roundBeginning) => {
     console.log(`The round is beginning: ${roundBeginning}`);
     if (!roundBeginning) {
@@ -464,6 +483,7 @@ function newGame() {
   });
 }
 
+function validationGame() {}
 
 function demoGame() {
   console.log(`The demo is: ${playing}`);
@@ -563,14 +583,14 @@ function demoGame() {
       }
     );
 
-    // socket.on("movementVelocityProfile", (speedAcc, speedDecc) => {
-    //   // console.log(speedAcc)
-    //   // timesProfile ++;
-    //   // console.log(timesProfile)
-    //   console.log(`ENTERED FUNCTION OF PROFILE`);
-    //   game.agent.velocityProfile = speedAcc;
-    //   // console.log(game.agent.velocityProfile)
-    // });
+    socket.on("movementVelocityProfile", (speedAcc, speedDecc) => {
+      // console.log(speedAcc)
+      // timesProfile ++;
+      // console.log(timesProfile)
+      console.log(`ENTERED FUNCTION OF PROFILE`);
+      game.agent.velocityProfile = speedAcc;
+      // console.log(game.agent.velocityProfile)
+    });
 
     // socket.on('end', function( finish) {
     //     if (finish) {
@@ -626,8 +646,8 @@ function demoGame() {
       //console.log(`The game is: ${playing}`);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       // valueSlider.innerHTML = slider.value;
-      // let valSlider = parseInt(slider.value);
-      game.render(ctx, random, targetX, targetY);
+      let valSlider = parseInt(slider.value);
+      game.render(ctx, random, targetX, targetY, valSlider);
       // console.log(Number.isInteger(valSlider))
       // slider.oninput = function () {
       //     valueSlider.innerHTML = this.value;

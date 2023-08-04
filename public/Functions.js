@@ -69,3 +69,45 @@ function BezierCurveMovement(currentPosition, point1Bezier, point2Bezier, endPoi
     this.initialBezier.y = yt;
 
 }
+
+
+function calculateAverage(array) {
+    let total = 0;
+    let count = 0;
+  
+    array.forEach(function (item, index) {
+      total += item;
+      count++;
+    });
+  
+    return total / count;
+  }
+
+  function calculateCurvature(speedX, speedY, accX, accY) {
+    let curve =
+      Math.abs(speedX * accY - accX * speedY) /
+      (speedX ** 2 + speedY ** 2) ** (3 / 2);
+  
+    return curve;
+  }
+
+  function toggleScreen(id, toggle) {
+    let element = document.getElementById(id);
+    let display = toggle ? "block" : "none";
+    element.style.display = display;
+  }
+
+  function baseVector(agent, player) {
+    distance = Math.sqrt(
+      (player.position.x - agent.position.x) ** 2 +
+        (player.position.y - agent.position.y) ** 2
+    );
+  
+    if (distance !== 0) {
+      agent.angle = Math.atan2(
+        player.position.y - agent.position.y,
+        player.position.x - agent.position.x
+      );
+      agent.velocity = Math.min(distance, agent.maxVelocity);
+    }
+  }

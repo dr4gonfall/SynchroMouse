@@ -1292,3 +1292,1116 @@ var init = function() {
 
 
 // }
+
+
+
+
+ // Amount of rounds a player will play the mirror game.
+    // socket.emit('beginParameters', room);
+    /*let interval = setInterval(() => {
+      if (mongoClient !== undefined) {
+        const db = mongoClient.db(dbName);
+        db.collection("room_scores").insert({
+          time: new Date(),
+          room: room,
+          score: room_score[room],
+          competence: room_competence[room],
+          predictability: room_predictability[room],
+          integrity: room_integrity[room],
+        });
+      }
+      roundBeginning = false;
+      socket.emit("beginGame", roundBeginning);
+      socket.emit("end", false);
+      setTimeout(() => {
+        room_score[room] = 0;
+        // Finalization of scores.
+        room_predictability[room] = 0;
+        // room_integrity[room] = 0
+        room_competence[room] = 0;
+        // playPositions = []
+        // agePositions = []
+        roundBeginning = true;
+        socket.emit("beginGame", roundBeginning);
+        socket.emit("start");
+        if (mongoClient !== undefined) {
+          const db = mongoClient.db(dbName);
+          db.collection("round_begin").insert({ time: new Date(), room: room });
+        }
+      }, 10000);
+
+      times++;
+
+      //     let counterTimeTotal = 0
+      //     setInterval(() => {
+      //         console.log("The shape similarity (competence) is: " + curveMatcher.shapeSimilarity(agePositions,playPositions))
+      //         console.log("The frechet distance is: " + curveMatcher.frechetDistance(agePositions, playPositions))
+      //         counterTimeTotal ++
+      //         console.log("The amount of messages is: " + counterTimeTotal)
+      //         // room_competence[room] = curveMatcher.shapeSimilarity(agePositions,playPositions)
+      //         playPositions = []
+      //         agePositions = []
+      //     // console.log(playPositionsPrev)
+      //     // console.log(playPositions)
+
+      //      // console.log(agePositions)
+      //  }, 1000);
+      console.log("Times are: " + times);
+      if (times >= 2) {
+        //amount of rounds
+        clearInterval(interval);
+        setTimeout(() => {
+          roundBeginning = false;
+          socket.emit("beginGame", roundBeginning);
+          socket.emit("end", true);
+          console.log("We entered the end.");
+          // let data = JSON.stringify(scores)
+          let finalDataPlayer = JSON.stringify(dataPlayer);
+          // let textFile = 'scores'+ room + '.json'
+          let textFilePlayer = "scores_player_" + socket.id + ".json";
+          fs.writeFile(textFilePlayer, finalDataPlayer, (err) => {
+            if (err) {
+              throw err;
+            } else {
+              console.log("successful upload");
+            }
+            console.log("JSON data player is saved.");
+          });
+
+          let finalDataAgent = JSON.stringify(dataAgent);
+          // let textFile = 'scores'+ room + '.json'
+          let textFileAgent = "scores_agent_" + socket.id + ".json";
+          fs.writeFile(textFileAgent, finalDataAgent, (err) => {
+            if (err) {
+              throw err;
+            } else {
+              console.log("successful upload");
+            }
+            console.log("JSON data agent is saved.");
+          });
+
+          // let textFile
+          if (mongoClient !== undefined) {
+            const db = mongoClient.db(dbName);
+            db.collection("room_scores").insert({
+              time: new Date(),
+              room: room,
+              score: room_score[room],
+              competence: room_competence[room],
+              predictability: room_predictability[room],
+              integrity: room_integrity[room],
+            });
+          }
+        }, totalGameTime);
+      }
+    }, totalGameTime);*/
+
+    // setInterval(() => {
+    // console.log("The shape similarity (competence) is: " + curveMatcher.shapeSimilarity(agePositions,playPositions))
+    // console.log("The frechet distance is: " + curveMatcher.frechetDistance(agePositions, playPositions))
+    // counterTimeTotal ++
+    // console.log("The amount of messages is: " + counterTimeTotal)
+    // playPositions = []
+    // agePositions = []
+    // console.log(playPositionsPrev)
+    // console.log(playPositions)
+
+    // console.log(agePositions)
+    // }, 1000);
+
+    // let pathTest = new paper.Path({
+      //     segments: playPositions
+      // })
+      // let averageDistance= []
+      // let smooth = smoothCurve(playerPositionsTest)
+      // let smooth2 = smoothCurve(agentPositionsTest)
+      // console.log(smooth[10])
+      // console.log(playPositions[10])
+
+      // for (let i = 0; i < smooth.length-1; i++) {
+      //     averageDistance.push([playerPositionsTest[i][0]-smooth[i][0], playerPositionsTest[i][1]-smooth[i][1]])
+      // }
+      // console.log(averageDistance)
+      // console.log(`The length of the playerPositions is: ${playerPositionsTest.length} and the smooth curve is: ${smooth.length} `)
+      // console.log(smooth)
+      // if (!isNaN(playerPositionsTest)) {
+
+      // console.log(playerPositionsTest[10][0]- smooth[10][0])
+      // console.log(`Player Test position: ${playerPositionsTest[10][0]} and smooth curve: ${smooth[10][0]}`)
+      // }
+
+      // for (let index = 0; index < smooth.length-1; index++) {
+      //     smoothFinal.push({x: smooth[index][0], y: smooth[index][1]})
+      // }
+
+      // for (let index = 0; index < smooth2.length-1; index++) {
+      //     smoothAgentFinal.push({x: smooth2[index][0], y: smooth2[index][1]})
+
+      // }
+
+      // console.log(`First element of smooth: ${smooth[0]} versus ${smooth[0][0]} and ${smooth[0][1]}`)
+      // console.log(`The difference with first element is: ${playerPositionsTest[10]-playPositions[10]}`)
+
+      // let balancedCurved1 =curveMatcher.subdivideCurve(agePositions, {numPoints: 50})
+      // let balancedCurved11 = curveMatcher.subdivideCurve(agePositions2, {numPoints: 50})
+
+      // let balancedCurved2 =curveMatcher.subdivideCurve(playPositions, {numPoints: 50})
+
+      // let normalizedCurve1 = curveMatcher.procrustesNormalizeCurve(balancedCurved1)
+      // let normalizedCurve11 = curveMatcher.procrustesNormalizeCurve(balancedCurved11)
+
+      // let normalizedCurve2 = curveMatcher.procrustesNormalizeCurve(balancedCurved2)
+
+      // let dist = curveMatcher.frechetDistance(normalizedCurve1, normalizedCurve2)
+      // let dist2 = curveMatcher.frechetDistance(normalizedCurve11, normalizedCurve2)
+
+      // let curveLen1 = curveMatcher.curveLength(normalizedCurve1)
+      // let curveLen11 = curveMatcher.curveLength(normalizedCurve11)
+
+      // let curveLen2 = curveMatcher.curveLength(normalizedCurve2)
+
+      // let maxCurveLen = Math.max(curveLen1, curveLen2)
+      // let maxCurveLen2 = Math.max(curveLen11, curveLen2)
+
+      // let similarityNoRot = 1 - dist/ maxCurveLen
+      // let similarityNoRot2 = 1 - dist2/ maxCurveLen2
+
+      // let similarity = curveMatcher.shapeSimilarity(agePositions,playPositions)
+      // let similarity2 = curveMatcher.shapeSimilarity(agePositions2,playPositions)
+
+      // let distance = curveMatcher.frechetDistance(agePositions, playPositions)
+      // let distance2 = curveMatcher.frechetDistance(agePositions2, playPositions)
+
+      // if (isNaN(similarity)) {
+      //     similarity = 1
+      // }
+
+      // let balancedCurve1Sm = curveMatcher.subdivideCurve(playPositions, { numPoints: 50 });
+      // let balancedCurve2Sm = curveMatcher.subdivideCurve(smoothFinal, { numPoints: 50 });
+
+      // let normalizedCurve1Sm = curveMatcher.procrustesNormalizeCurve(balancedCurve1Sm);
+      // let normalizedCurve2Sm = curveMatcher.procrustesNormalizeCurve(balancedCurve2Sm);
+
+      // let distSm = curveMatcher.frechetDistance(normalizedCurve1Sm, normalizedCurve2Sm);
+
+      // let curveLen1Sm = curveMatcher.curveLength(normalizedCurve1Sm)
+      // let curveLen2Sm = curveMatcher.curveLength(normalizedCurve2Sm)
+      // let maxCurveLenSm = Math.max(curveLen1Sm, curveLen2Sm);
+
+      // similarity == 1 means the curves have identical shapes
+      // const similaritySm = 1 - distSm / maxCurveLenSm;
+
+      // console.log(`The similarity without rotation is: ${similaritySm} and the distance is: ${distSm}`)
+
+      // let similaritySmooth = curveMatcher.shapeSimilarity(smoothFinal,playPositions)
+      // console.log(similaritySmooth)
+      // if (isNaN(similaritySmooth)) {
+      //     similaritySmooth = 1
+      //     console.log("Entered NAN")
+      // }
+
+      // let similaritySmoothAgent = curveMatcher.shapeSimilarity(smoothFinal,playPositions)
+      // console.log(similaritySmoothAgent)
+      // if (isNaN(similaritySmoothAgent)) {
+      //     similaritySmoothAgent = 1
+      //     console.log("Entered NAN")
+      // }
+
+      // let competenceSmoothnessIdeal = amountSharpTurnsIdeal / rotDifferencesIdealAgent.length
+
+      // let predPerson
+      // let predAgent
+      // let predAgent2
+
+      //     if (prevPlayPositions.length !== 0 && prevAgePositions.length !== 0) {
+      //         predPerson = curveMatcher.shapeSimilarity(prevPlayPositions,playPositions)
+      //         predAgent = curveMatcher.shapeSimilarity(prevAgePositions, agePositions)
+      //    } else {
+      //        predPerson = 1
+      //        predAgent = 1
+      //    }
+
+      //    if (prevPlayPositions.length !== 0 && prevAgePositions2.length !== 0) {
+      //         // predPerson = curveMatcher.shapeSimilarity(prevPlayPositions,playPositions)
+      //         predAgent2 = curveMatcher.shapeSimilarity(prevAgePositions2, agePositions2)
+      //     } else {
+      //         // predPerson = 1
+      //         predAgent2 = 1
+      //     }
+
+      //    if (isNaN(predPerson)) {
+      //         predPerson = 1
+      //    }
+
+      //    if (isNaN(predAgent)) {
+      //         predAgent = 1
+      //    }
+
+      //    if (isNaN(predAgent2)) {
+      //         predAgent2 = 1
+      //    }
+
+      //    console.log(`The similarity is: ${similarity} and the distance is: ${distance}`)
+      //console.log(smooth)
+      // console.log(`The similarity with the smooth curve is: ${similaritySmooth} and agent is: ${similaritySmoothAgent}`)
+      // socket.emit('scoresSimilar', similarity.toFixed(3) , distance.toFixed(3), predPerson.toFixed(3), predAgent.toFixed(3), similarityNoRot.toFixed(3), dist.toFixed(3))
+      // score: room_score[room],
+        // shapeSimilarityNormRot: similarity.toFixed(3),
+        // shapeSimilarityNoRot: similarityNoRot.toFixed(3),
+        // predictabilityHuman: predPerson.toFixed(3),
+        // predictabilityAgent: predAgent.toFixed(3),
+        // competenceSmoothness: competenceSmoothPlayer.toFixed(3),
+        // competenceSmoothnessWaves: competenceSmoothWaveAgent.toFixed(3)
+        //    let scores2 = {
+      //     time: new Date(),
+      //     room: room,
+      //     shapeSimilarityNormRot: similarity2.toFixed(3),
+      //     shapeSImilarityNoRot: similarityNoRot2.toFixed(3),
+      //     // predictabilityHuman: predPerson.toFixed(3),
+      //     predictabilityAgent: predAgent2.toFixed(3),
+      //     competenceSmoothnessIdeal: competenceSmoothnessIdeal.toFixed(3)
+      //    }
+// setInterval(() => {
+  //     // console.log("The shape similarity (competence) is: " + curveMatcher.shapeSimilarity(agePositions,playPositions))
+  //     // console.log("The frechet distance is: " + curveMatcher.frechetDistance(agePositions, playPositions))
+  //     // counterTimeTotal ++
+  //     // console.log("The amount of messages is: " + counterTimeTotal)
+  //     socket.to(room).emit('scoresSimilar', room, curveMatcher.shapeSimilarity(agePositions,playPositions), curveMatcher.frechetDistance(agePositions, playPositions) )
+  //     playPositions = []
+  //     agePositions = []
+  //    // console.log(playPositionsPrev)
+  //    // console.log(playPositions)
+
+  //    // console.log(agePositions)
+  // }, 1000);
+
+  //Calculation of points in a set period of time.
+//calculate points every 100 ms
+// setInterval(() => {
+//      console.log("The shape similarity (competence) is: " + curveMatcher.shapeSimilarity(agePositions,playPositions))
+//      console.log("The frechet distance is: " + curveMatcher.frechetDistance(agePositions, playPositions))
+//      // playPositions = []
+//      // agePositions = []
+//     // console.log(playPositionsPrev)
+//     // console.log(playPositions)
+
+//     // console.log(agePositions)
+// }, 10000);
+
+// setInterval(() => {
+//     // console.log("The shape similarity (competence) is: " + curveMatcher.shapeSimilarity(agePositions,playPositions))
+//     // console.log("The frechet distance is: " + curveMatcher.frechetDistance(agePositions, playPositions))
+//     // counterTimeTotal ++
+//     // console.log("The amount of messages is: " + counterTimeTotal)
+//     io.to(room).emit('scoresSimilar', curveMatcher.shapeSimilarity(agePositions,playPositions), curveMatcher.frechetDistance(agePositions, playPositions) )
+//     playPositions = []
+//     agePositions = []
+//    // console.log(playPositionsPrev)
+//    // console.log(playPositions)
+
+//    // console.log(agePositions)
+// }, 1000);
+
+
+
+// Tutorial page.
+    // if (urlParams.has("playground")) {
+    //   // document.getElementById('info').style.opacity = '0';
+    //   // function windowSizeChanged() {
+    //   //     var width = document.getElementById('game').offsetWidth;
+    //   //     var height = document.getElementById('game').offsetHeight;
+    //   //     scaleFactor = Math.min(window.innerWidth / width, window.innerHeight / height);
+    //   //     document.getElementById('game').style.transform = 'scale(' + scaleFactor + ')';
+    //   //   }
+    //   //   window.onresize = windowSizeChanged;
+    //   //   windowSizeChanged();
+    // }
+
+
+    // INNER PART UPDATE AGENT
+
+
+    //     let steering = this.seek()
+
+      //     this.applyForce(steering)
+
+      //     // this.frequency = value;
+
+      //     let currentInput = {x:this.seek().x, y: this.seek().y}
+      //     let nextInput = {x: this.seek().x + this.speedX, y: this.seek().y + this.speedY};
+      // // if (nextInput == null) { // Estimate velocity
+      //     nextInput.x = (currentInput.x - this.previousInput.x)/16.66;
+      //     nextInput.y = (currentInput.y - this.previousInput.y)/16.66;
+      //     this.previousInput = currentInput;
+      // // }
+      //     this.frequency = 10;
+      //     // console.log(value)
+      //     let sliderValue = slider;
+      //     // console.log(Number.isInteger(sliderValue))
+      //     // this.frequency = sliderValue;
+      //     console.log(`The value of the slider is: ${sliderValue}`)
+      //     this.SecondOrderDynamics(this.frequency, 7, 20, nextInput);
+
+      //     this.outputVectorY.x = this.outputVectorY.x + this.outputVectorYVel.x; // integrate position by velocity
+      //     this.outputVectorYVel.x = this.outputVectorYVel.x + (currentInput.x + this.k3 * nextInput.x - this.outputVectorY.x - this.k1 * this.outputVectorYVel.x) // Integrate velocity by acceleration
+
+      //     this.outputVectorY.y = this.outputVectorY.y + this.outputVectorYVel.y; // integrate position by velocity
+      //     this.outputVectorYVel.y = this.outputVectorYVel.y + (currentInput.y + this.k3*nextInput.y - this.outputVectorY.y - this.k1 * this.outputVectorYVel.y) // Integrate velocity by acceleration
+
+      //     // console.log(`The value is: ${this.outputVectorY.x} and ${this.outputVectorY.y}`)
+      //     // console.log(`The value of the speed is: ${this.outputVectorYVel.x} and ${this.outputVectorYVel.y}`)
+
+      //     // console.log(`The values of the constants are k1: ${this.k1} k2:${this.k2} k3:${this.k3}`)
+
+      //     this.previousInput.x = steering.x;
+      //     this.previousInput.y = steering.y;
+
+      //     // console.log(this.hasArrived)
+
+      //     // console.log(`The dx: ${this.collisionX - this.target.x} and dy: ${this.collisionY - this.target.y}`)
+
+      //     // let force = this.seek(target)
+      //     // console.log(`The steering force is: ${force.x} and ${force.y}`)
+      //     // this.applyForce(force)
+
+      //     // let force = {x: this.target.x - this.collisionX, y: this.target.y - this.collisionY}
+
+      //     // let desiredSpeed = this.maxSpeed
+
+      //     // let desiredSpeed = {x: 0, y: 0}
+
+      //     // let slowRadius = 100
+
+      //     // let distance =  Math.hypot(force.x, force.y)
+
+      //     // if (distance < slowRadius) {
+      //         // desiredSpeed = {x: this.mapRange(distance, 0, slowRadius, 0, this.maxSpeed), y: this.mapRange(distance, 0, slowRadius, 0, this.maxSpeed)}
+      //     //    desiredSpeed = this.mapRange(distance, 0, slowRadius, 0, this.maxSpeed)
+      //     // } else {
+      //     //     desiredSpeed = 1
+      //     // }
+
+      //     // console.log(` The desired speed is ${desiredSpeed.x} and ${desiredSpeed.y}`)
+      //     // let variable = this.mapRange(distance, 0, slowRadius, 0, this.maxSpeed)
+      //     // console.log(variable)
+
+      //     // let lengthVector = Math.sqrt(((force.x ** 2) - 0) + ((force.y ** 2) - 0))
+      //     // let lengthVector =  Math.hypot(force.x, force.y)
+      //     // force.x = force.x / lengthVector;
+      //     // force.y = force.y / lengthVector;
+
+      //     // force.x = force.x * desiredSpeed;
+      //     // force.y = force.y * desiredSpeed;
+
+      //     // console.log(`The force in x is: ${force.x} and in y: ${force.y}`)
+
+      //     // if (this.speedX === 0 && this.speedY === 0) {
+      //     //     this.timerDecision ++
+      //     // }
+
+      //     // if (this.speedX !== 0 || this.speedY !== 0) {
+      //     //     this.timerDecision = 0
+      //     //     this.movementDecision = true
+      //     // }
+
+      //     // if (this.timerDecision >= 1) {
+      //     //     this.movementDecision = false
+      //     //     // console.log(`The movement was registered as a stop.`)
+      //     // }
+
+      // // console.log(steering)
+
+      // // console.log(`The acceleration in X is: ${this.accX} and in Y: ${this.accY}`)
+      // // this.accX = this.target.x - this.collisionX
+      // // this.accY = this.target.y - this.collisionY
+
+      // // if (this.accX > this.maxAcceleration) {
+      // //     this.accX = this.maxAcceleration;
+      // // } else if (this.accX < -this.maxAcceleration) {
+      // //     this.accX = - this.maxAcceleration;
+      // // }
+      // // if (this.accY > this.maxAcceleration) {
+      // //     this.accY = this.maxAcceleration;
+      // // } else if (this.accY < -this.maxAcceleration) {
+      // //     this.accY = - this.maxAcceleration;
+      // // }
+
+      // // if (this.accX > this.maxAcceleration) {
+      // //     this.accX = Math.floor(Math.random() * this.maxAcceleration)
+      // // }
+
+      // // if (this.accY > this.maxAcceleration) {
+      // //     this.accY = Math.floor(Math.random() * this.maxAcceleration)
+      // // }
+
+      // this.speedX += this.accX + this.outputVectorY.x
+      // this.speedY += this.accY + this.outputVectorY.y
+
+      // // this.speedX += this.outputVectorY.x;
+      // // this.speedY += this.outputVectorY.y;
+
+      // // this.speedX = 1;
+      // // this.speedY = 0;
+
+      // // this.speedX += this.accX
+      // // this.speedY += this.accY
+
+      // // console.log(`The speed in x: ${this.outputVectorY.x} and in y: ${this.outputVectorY.y}`)
+
+      // this.prevAccX = this.accX
+      // this.prevAccY = this.accY
+
+      // // this.speedX = this.target.x - this.collisionX
+      // // this.speedY = this.target.y - this.collisionY
+
+      // // this.speedX = this.speedX / 20
+      // // this.speedY = this.speedY / 20
+
+      // if (this.speedX > this.maxSpeed) {
+      //     this.speedX = this.maxSpeed
+      //     // console.log('Entered in Speed X')
+      // } else if (this.speedX < -this.maxSpeed){
+      //     this.speedX = -this.maxSpeed
+      // }
+
+      // if (this.speedY > this.maxSpeed) {
+      //     this.speedY = this.maxSpeed
+      //     // console.log('Entered in Speed Y')
+      // } else if (this.speedY < -this.maxSpeed){
+      //     this.speedY = -this.maxSpeed
+      // }
+
+      // let distancePoints = this.defineMagnitude(this.target.x - this.collisionX, this.target.y - this.collisionY);
+
+      // // if (distancePoints >= 200) {
+      // //     this.moveErrorX = 0;
+      // //     this.moveErrorY = 0;
+      // // }
+
+      // // console.log(`The force is: ${steering.x} and in Y: ${steering.y}`)
+
+      // if (steering.x < 0) {
+      //     this.speedXPoint = - this.speedXPoint;
+      // } else {
+      //     this.speedXPoint = this.speedXPoint;
+      // }
+
+      // if (steering.y < 0) {
+      //     this.speedYPoint = - this.speedYPoint;
+      // } else {
+      //     this.speedYPoint = this.speedYPoint;
+      // }
+
+
+
+
+    //  OUTER PART UPDATE AGENT
+
+    // socket.on('movementVelocityProfile', (speedAcc, speedDecc) => {
+    //     this.velocityProfile = speedAcc;
+    //     console.log(this.velocityProfile)
+    // })
+    // console.log(this.velocityProfile)
+    // this.prevMoveDec = this.movementDecision;
+
+    // if (!this.movementDecision) {
+    //     // console.log('ENTERED THE FUNCTION')
+    //     // Choose a movement to do
+    //     this.paintMovementDecision = true;
+    //     this.decideMovement();
+    //     socket.emit('movementDecisionAgent', room, this.maxSpeed, this.trajectoryMovement.length - 1);
+
+    //     this.movementOrder ++
+    //     if (this.movementOrder > 3) {
+    //         this.movementOrder = 0
+    //     }
+    //     this.movementDecision = true;
+    //     this.movementCounter ++
+    //     this.target = this.trajectoryMovement[this.counterTarget]
+    //     if (this.velocityProfile[this.counterTarget] !== undefined) {
+    //         this.speedXPoint = this.velocityProfile[this.counterTarget]
+    //         this.speedYPoint = this.velocityProfile[this.counterTarget]
+    //         // console.log(`The speed at point X: ${this.speedXPoint} and Y: ${this.speedYPoint}`)
+    //     }
+
+    //     // console.log('Initial Target')
+    //     // console.log(this.target)
+    // }
+
+    // // console.log(`The points are: ${this.collisionX} and ${this.collisionY}`)
+
+    // // Algorithm for following the targets defined by the path.
+
+    // // if (this.currentMovementDecision == 0) {
+
+    //     // this.bezierMoveExecution()
+    //     // if (this.movementDecision) {
+    //     //     // this.speedX = 0.1;
+    //     //     // this.speedY = 0.1;
+    //     //     this.percentageSpeedX = 0.12;
+    //     //     this.percentageSpeedY = 0.12;
+    //     //     // console.log(`The speed of X: ${this.speedX} and of Y: ${this.speedY}`)
+    //     //     // console.log(`The coordinates of the agent are in X: ${this.collisionX} and Y: ${this.collisionY}`)
+    //     //     this.BezierCurveMovement(this.initialBezier, this.p1Bezier, this.p2Bezier, this.endBezier)
+    //     //     this.trajectoryMovement.push({x:this.initialBezier.x, y: this.initialBezier.y})
+    //     //     // console.log(`The current position in X: ${this.collisionX} and in Y: ${this.collisionY}`)
+    //     //     if (this.percentagePositionX >= 1 || this.percentagePositionY >= 1) {
+    //     //         this.currentMovementDecision = 3;
+    //     //         this.percentagePositionX = 0;
+    //     //         this.percentagePositionY = 0;
+    //     //         this.movementDecision = true;
+    //     //         this.percentageSpeedX = 0;
+    //     //         this.percentageSpeedY = 0;
+    //     //         // console.log(this.points)
+    //     //     }
+
+    //     // }
+
+    // // } else if (this.currentMovementDecision == 1) {
+
+    // //     if (this.movementDecision) {
+    //         // this.percentageSpeedX = 0.12;
+    //         // this.percentageSpeedY = 0.12;
+    //         // if (this.currentSide < this.numberSides) {
+    //         //     this.polygonMovement(this.currentSide)
+    //         //     this.currentSide++;
+    //         //     // console.log(this.currentSide)
+    //         // } else {
+    //         //     this.currentSide = 0;
+    //         //     this.currentMovementDecision = 3;
+    //         //     this.movementDecision = true;
+    //         //     // console.log(this.trajectoryMovementPolygon)
+    //         //     // console.log(this.totalAngle)
+    //         //     console.log(this.trajectoryMovementPolygon)
+    //         // }
+    //         // this.polygonMovement()
+    //         // console.log(this.trajectoryMovementPolygon)
+    //         // this.currentMovementDecision = 3;
+    //         // this.movementDecision = true;
+
+    //     // }
+
+    // // } else if (this.currentMovementDecision == 2) {
+    //      // this.circlePoints.push(this.circleMovement());
+    //      // console.log(this.currentAngle)
+
+    //     //  if (this.currentAngle >= 20) {
+    //         // this.currentMovementDecision = 3;
+    //     //  }
+    // // }
+    // // console.log(`The Width of the game is: ${this.game.width} and the height is: ${this.game.height}`)
+    // // let targetxdim = targetX
+    // // let targetydim = targetY
+    // // console.log(`The target of the agent is: ${targetX} and ${targetY}`)
+    // // console.log(`The collision in X is: ${this.collisionX} and in Y: ${this.collisionY}`)
+    // // console.log(`The dx is: ${targetX - this.collisionX} and dy: ${targetY - this.collisionY}`)
+    // // console.log(`The dx is: ${this.dx} and dy: ${this.dy}`)
+    // // this.dx = targetxdim - this.collisionX
+    // // this.dx = targetydim - this.collisionY
+    // // this.dy++
+
+    // //Mirroring and not the player
+    // // if (random >= 0.5) {
+    // //     this.dx = -this.player.dx
+    // //     this.dy =  -this.player.dy
+    // // } else {
+    // //     this.dx = this.player.dx
+    // //     this.dy =  this.player.dy
+    // // }
+
+    // // this.collisionX = 200
+    // // this.collisionY = 200
+    // // this.dx = random
+    // // this.dy = random
+    // // this.dx = targetX
+
+    // // this.dx = this.player.dx;
+    // // this.dy = this.player.dy;
+    // // this.dx = (targetX) - this.collisionX;
+    // // this.dy = (targetY) - this.collisionY;
+    // // console.log(this.collisionX)
+    //  // console.log(`The value of the dx is: ${this.dx} and of dy is: ${this.dy}`)
+    // // Constant speed
+    // // const distance = Math.hypot(this.dy, this.dx);
+    // // this.speedX = this.dx/distance || 0;
+    // // this.speedY = this.dy/distance || 0;
+
+    // // Create a Curve with a movement
+
+    // // let target = {x: 300, y: 300}
+    // // console.log(this.counterTarget)
+
+    // // console.log(`The current target in X: ${this.target.x} and in Y: ${this.target.y}`)
+    // // console.log(`The center of the movement in X: ${this.starCenter.x} and in Y: ${this.starCenter.y}`)
+
+    // if (Math.abs(Math.floor(this.collisionX) - Math.floor(this.target.x)) <= 20 && Math.abs(Math.floor(this.collisionY) - Math.floor(this.target.y)) <= 20) {
+    //     this.hasArrived = true;
+    //     // console.log('Is the same position as target')
+    // }
+
+    // // if (Math.floor(this.collisionX) + 10 == Math.floor(this.target.x) || Math.floor(this.collisionX) - 10 == Math.floor(this.target.x)  &&
+    // // (Math.floor(this.collisionY) + 10 == Math.floor(this.target.y) || Math.floor(this.collisionY) - 10 == Math.floor(this.target.y))) {
+    // //     this.hasArrived = true;
+    // //     console.log('Is the same position as target')
+    // // }
+
+    // if (this.hasArrived === true) {
+    //     this.counterTarget++
+    //     if (this.counterTarget < this.trajectoryMovement.length) {
+    //         this.target = this.trajectoryMovement[this.counterTarget]
+    //         if (this.velocityProfile[this.counterTarget] !== undefined) {
+    //             this.speedXPoint = this.velocityProfile[this.counterTarget].y
+    //             this.speedYPoint = this.velocityProfile[this.counterTarget].y
+    //         }
+    //         // console.log(this.velocityProfile[this.counterTarget])
+    //         // this.speedXPoint = this.velocityProfile[this.counterTarget].y
+    //         // this.speedYPoint = this.velocityProfile[this.counterTarget].y
+    //         this.moveErrorX = Math.abs(getNormallyDistributedRandomNumber(0,1));
+    //         this.moveErrorY = Math.abs(getNormallyDistributedRandomNumber(0, 1));
+    //     }
+
+    //     if (this.counterTarget >= this.trajectoryMovement.length) {
+    //         this.counterTarget = 0;
+    //         this.movementDecision = false;
+    //         this.trajectoryMovement = []
+    //         this.speedXPoint = 0;
+    //         this.speedYPoint = 0;
+    //         this.velocityProfile = []
+    //         this.moveErrorX = Math.abs(getNormallyDistributedRandomNumber(0,1));
+    //         this.moveErrorY = Math.abs(getNormallyDistributedRandomNumber(0, 1));
+    //     }
+    //     // console.log(this.target)
+    //     this.hasArrived = false
+    //     // console.log('This should have entered')
+    //     // console.log(this.hasArrived)
+    // }
+
+    // let steering = this.seek()
+
+    // this.applyForce(steering)
+
+    // // this.frequency = value;
+
+    // let currentInput = {x:this.seek().x, y: this.seek().y}
+    // let nextInput = {x: this.seek().x + this.speedX, y: this.seek().y + this.speedY};
+    // // if (nextInput == null) { // Estimate velocity
+    //     nextInput.x = (currentInput.x - this.previousInput.x)/16.66;
+    //     nextInput.y = (currentInput.y - this.previousInput.y)/16.66;
+    //     this.previousInput = currentInput;
+    // // }
+    // this.frequency = 10;
+    // // console.log(value)
+    // let sliderValue = slider;
+    // // console.log(Number.isInteger(sliderValue))
+    // // this.frequency = sliderValue;
+    // console.log(`The value of the slider is: ${sliderValue}`)
+    // this.SecondOrderDynamics(this.frequency, 7, 20, nextInput);
+
+    // this.outputVectorY.x = this.outputVectorY.x + this.outputVectorYVel.x; // integrate position by velocity
+    // this.outputVectorYVel.x = this.outputVectorYVel.x + (currentInput.x + this.k3 * nextInput.x - this.outputVectorY.x - this.k1 * this.outputVectorYVel.x) // Integrate velocity by acceleration
+
+    // this.outputVectorY.y = this.outputVectorY.y + this.outputVectorYVel.y; // integrate position by velocity
+    // this.outputVectorYVel.y = this.outputVectorYVel.y + (currentInput.y + this.k3*nextInput.y - this.outputVectorY.y - this.k1 * this.outputVectorYVel.y) // Integrate velocity by acceleration
+
+    // // console.log(`The value is: ${this.outputVectorY.x} and ${this.outputVectorY.y}`)
+    // // console.log(`The value of the speed is: ${this.outputVectorYVel.x} and ${this.outputVectorYVel.y}`)
+
+    // // console.log(`The values of the constants are k1: ${this.k1} k2:${this.k2} k3:${this.k3}`)
+
+    // this.previousInput.x = steering.x;
+    // this.previousInput.y = steering.y;
+
+    // // console.log(this.hasArrived)
+
+    // // console.log(`The dx: ${this.collisionX - this.target.x} and dy: ${this.collisionY - this.target.y}`)
+
+    // // let force = this.seek(target)
+    // // console.log(`The steering force is: ${force.x} and ${force.y}`)
+    // // this.applyForce(force)
+
+    // // let force = {x: this.target.x - this.collisionX, y: this.target.y - this.collisionY}
+
+    // // let desiredSpeed = this.maxSpeed
+
+    // // let desiredSpeed = {x: 0, y: 0}
+
+    // // let slowRadius = 100
+
+    // // let distance =  Math.hypot(force.x, force.y)
+
+    // // if (distance < slowRadius) {
+    //     // desiredSpeed = {x: this.mapRange(distance, 0, slowRadius, 0, this.maxSpeed), y: this.mapRange(distance, 0, slowRadius, 0, this.maxSpeed)}
+    // //    desiredSpeed = this.mapRange(distance, 0, slowRadius, 0, this.maxSpeed)
+    // // } else {
+    // //     desiredSpeed = 1
+    // // }
+
+    // // console.log(` The desired speed is ${desiredSpeed.x} and ${desiredSpeed.y}`)
+    // // let variable = this.mapRange(distance, 0, slowRadius, 0, this.maxSpeed)
+    // // console.log(variable)
+
+    // // let lengthVector = Math.sqrt(((force.x ** 2) - 0) + ((force.y ** 2) - 0))
+    // // let lengthVector =  Math.hypot(force.x, force.y)
+    // // force.x = force.x / lengthVector;
+    // // force.y = force.y / lengthVector;
+
+    // // force.x = force.x * desiredSpeed;
+    // // force.y = force.y * desiredSpeed;
+
+    // // console.log(`The force in x is: ${force.x} and in y: ${force.y}`)
+
+    // // if (this.speedX === 0 && this.speedY === 0) {
+    // //     this.timerDecision ++
+    // // }
+
+    // // if (this.speedX !== 0 || this.speedY !== 0) {
+    // //     this.timerDecision = 0
+    // //     this.movementDecision = true
+    // // }
+
+    // // if (this.timerDecision >= 1) {
+    // //     this.movementDecision = false
+    // //     // console.log(`The movement was registered as a stop.`)
+    // // }
+
+    // // console.log(steering)
+
+    // // console.log(`The acceleration in X is: ${this.accX} and in Y: ${this.accY}`)
+    // // this.accX = this.target.x - this.collisionX
+    // // this.accY = this.target.y - this.collisionY
+
+    // // if (this.accX > this.maxAcceleration) {
+    // //     this.accX = this.maxAcceleration;
+    // // } else if (this.accX < -this.maxAcceleration) {
+    // //     this.accX = - this.maxAcceleration;
+    // // }
+    // // if (this.accY > this.maxAcceleration) {
+    // //     this.accY = this.maxAcceleration;
+    // // } else if (this.accY < -this.maxAcceleration) {
+    // //     this.accY = - this.maxAcceleration;
+    // // }
+
+    // // if (this.accX > this.maxAcceleration) {
+    // //     this.accX = Math.floor(Math.random() * this.maxAcceleration)
+    // // }
+
+    // // if (this.accY > this.maxAcceleration) {
+    // //     this.accY = Math.floor(Math.random() * this.maxAcceleration)
+    // // }
+
+    // this.speedX += this.accX + this.outputVectorY.x
+    // this.speedY += this.accY + this.outputVectorY.y
+
+    // // this.speedX += this.outputVectorY.x;
+    // // this.speedY += this.outputVectorY.y;
+
+    // // this.speedX = 1;
+    // // this.speedY = 0;
+
+    // // this.speedX += this.accX
+    // // this.speedY += this.accY
+
+    // // console.log(`The speed in x: ${this.outputVectorY.x} and in y: ${this.outputVectorY.y}`)
+
+    // this.prevAccX = this.accX
+    // this.prevAccY = this.accY
+
+    // // this.speedX = this.target.x - this.collisionX
+    // // this.speedY = this.target.y - this.collisionY
+
+    // // this.speedX = this.speedX / 20
+    // // this.speedY = this.speedY / 20
+
+    // if (this.speedX > this.maxSpeed) {
+    //     this.speedX = this.maxSpeed
+    //     // console.log('Entered in Speed X')
+    // } else if (this.speedX < -this.maxSpeed){
+    //     this.speedX = -this.maxSpeed
+    // }
+
+    // if (this.speedY > this.maxSpeed) {
+    //     this.speedY = this.maxSpeed
+    //     // console.log('Entered in Speed Y')
+    // } else if (this.speedY < -this.maxSpeed){
+    //     this.speedY = -this.maxSpeed
+    // }
+
+    // let distancePoints = this.defineMagnitude(this.target.x - this.collisionX, this.target.y - this.collisionY);
+
+    // // if (distancePoints >= 200) {
+    // //     this.moveErrorX = 0;
+    // //     this.moveErrorY = 0;
+    // // }
+
+    // // console.log(`The force is: ${steering.x} and in Y: ${steering.y}`)
+
+    // if (steering.x < 0) {
+    //     this.speedXPoint = - this.speedXPoint;
+    // } else {
+    //     this.speedXPoint = this.speedXPoint;
+    // }
+
+    // if (steering.y < 0) {
+    //     this.speedYPoint = - this.speedYPoint;
+    // } else {
+    //     this.speedYPoint = this.speedYPoint;
+    // }
+
+    // // this.speedX += this.speedX * Math.cos(this.degreeVel);
+    // // this.speedY += this.speedY * Math.sin(this.degreeVel);
+
+    // // let error = getNormallyDistributedRandomNumber(0, 1)
+
+    // // this.moveErrorX = getNormallyDistributedRandomNumber(0,1);
+    // // this.moveErrorY = getNormallyDistributedRandomNumber(0,1);
+
+    // this.moveErrorX = 0;
+    // this.moveErrorY = 0;
+
+    // // console.log(`The velocity in X is: ${this.speedXPoint} and Y: ${this.speedYPoint}`)
+
+    // // this.speedX += this.speedX * this.moveErrorX;
+    // // this.speedY += this.speedY * this.moveErrorY;
+    // // console.log(this.velocityProfile[this.counterTarget])
+    // // console.log(`The steering in X: ${steering.x} and Y: ${steering.y}`)
+    // if (this.velocityProfile[this.counterTarget] !== undefined) {
+    //     // this.speedX += this.accX + this.speedX * (this.speedXPoint/this.maxSpeed)
+    //     // this.speedY += this.accY + this.speedY *  (this.speedYPoint/this.maxSpeed)
+    //     // console.log(`The speed X: ${this.speedX} and speedY: ${this.speedY}`)
+    //     // console.log(`The speed in X: ${this.speedXPoint} and the speed in Y: ${this.speedYPoint}`)
+    // }
+
+    // // console.log(`The speed in X: ${this.speedX} and speed in Y: ${this.speedY} and max speed: ${this.maxSpeed}`)
+
+    // // this.degreeVel += 0.1
+
+    // // if (this.degreeVel > 1) {
+    // //     this.degreeVel = 0;
+    // // }
+
+    // // console.log(`Speed in X is: ${this.speedX} and Speed in Y is: ${this.speedY}`)
+
+    // this.collisionX += this.speedX;
+    // this.collisionY += this.speedY;
+
+    // // console.log(`The acceleration in X:  ${this.accX} and Y: ${this.accY}`)
+
+    // this.accX = 0
+    // this.accY = 0
+
+    // // console.log(`The position in X: ${this.collisionX} and in Y: ${this.collisionY}`)
+
+    // // Speed proportional to the distance between mouse and center of circle.
+    // // this.speedX = (this.dx) /20;
+    // // this.speedY = (this.dy) /20;
+
+    // // if (this.speedX > this.maxSpeed) {
+    // //     this.speedX = this.maxSpeed
+    // //     // console.log('Entered in Speed X')
+    // // } else if (this.speedX < -this.maxSpeed){
+    // //     this.speedX = -this.maxSpeed
+    // // }
+
+    // // if (this.speedY > this.maxSpeed) {
+    // //     this.speedY = this.maxSpeed
+    // //     // console.log('Entered in Speed Y')
+    // // } else if (this.speedY < -this.maxSpeed){
+    // //     this.speedY = -this.maxSpeed
+    // // }
+    // // console.log(`Speed in X is: ${this.speedX} and Speed in Y is: ${this.speedY}`)
+    // // this.collisionX += this.speedX;
+    // // this.collisionY += this.speedY;
+
+    // }
+
+
+       // if (this.speedX > this.maxSpeed) {
+    //   this.speedX = this.maxSpeed;
+    //   // console.log('Entered in Speed X')
+    // } else if (this.speedX < -this.maxSpeed) {
+    //   this.speedX = -this.maxSpeed;
+    // }
+
+    // if (this.speedY > this.maxSpeed) {
+    //   this.speedY = this.maxSpeed;
+    //   // console.log('Entered in Speed Y')
+    // } else if (this.speedY < -this.maxSpeed) {
+    //   this.speedY = -this.maxSpeed;
+    // }
+
+    // let distancePoints = this.defineMagnitude(
+    //   this.target.x - this.collisionX,
+    //   this.target.y - this.collisionY
+    // );
+
+    // if (steering.x < 0) {
+    //   this.speedXPoint = -this.speedXPoint;
+    // } else {
+    //   this.speedXPoint = this.speedXPoint;
+    // }
+
+    // if (steering.y < 0) {
+    //   this.speedYPoint = -this.speedYPoint;
+    // } else {
+    //   this.speedYPoint = this.speedYPoint;
+    // }
+
+    // let newForce = this.secondOrderForces();
+    // console.log(`The forces are: X ${newForce.x} Y: ${newForce.y}`)
+
+    let currentInput = { x: this.seek().x, y: this.seek().y };
+    let nextInput = {
+      x: this.seek().x + this.speedX,
+      y: this.seek().y + this.speedY,
+    };
+    // if (nextInput == null) { // Estimate velocity
+    nextInput.x = (currentInput.x - this.previousInput.x) / this.deltaTime;
+    nextInput.y = (currentInput.y - this.previousInput.y) / this.deltaTime;
+    this.previousInput = currentInput;
+    // }
+    // this.frequency = 30;
+    // console.log(value)
+    // console.log(Number.isInteger(sliderValue))
+    // this.frequency = sliderValue;
+    // console.log(`The value of the slider is: ${sliderValue}`)
+    // this.SecondOrderDynamics(this.frequency, 6, 20, nextInput);
+
+    // this.outputVectorY.x = this.outputVectorY.x + this.outputVectorYVel.x; // integrate position by velocity
+    // this.outputVectorYVel.x =
+    //   this.outputVectorYVel.x +
+    //   (currentInput.x +
+    //     this.k3 * nextInput.x -
+    //     this.outputVectorY.x -
+    //     this.k1 * this.outputVectorYVel.x); // Integrate velocity by acceleration
+
+    // this.outputVectorY.y = this.outputVectorY.y + this.outputVectorYVel.y; // integrate position by velocity
+    // this.outputVectorYVel.y =
+    //   this.outputVectorYVel.y +
+    //   (currentInput.y +
+    //     this.k3 * nextInput.y -
+    //     this.outputVectorY.y -
+    //     this.k1 * this.outputVectorYVel.y); // Integrate velocity by acceleration
+
+    // console.log(`The value is: ${this.outputVectorY.x} and ${this.outputVectorY.y}`)
+    // console.log(`The value of the speed is: ${this.outputVectorYVel.x} and ${this.outputVectorYVel.y}`)
+
+    // console.log(`The values of the constants are k1: ${this.k1} k2:${this.k2} k3:${this.k3}`)
+
+      // let upperDifferenceX = this.maxSpeed - (this.speedX + this.accX)
+      // let upperDifferenceY = this.maxSpeed - (this.speedY + this.accy)
+      // let lowerDifferenceX = (this.speedX + this.accX) - this.minSpeed;
+      // let lowerDifferenceY = (this.speedY + this.accY) - this.minSpeed;
+      // let signDifferenceX = Math.random();
+      // if (upperDifferenceX === lowerDifferenceX && signDifferenceX > 0.5) {
+      //   this.moveErrorX = - Math.random() * upperDifferenceX;
+      // } else if (upperDifferenceX === lowerDifferenceX && signDifferenceX <= 0.5) {
+      //   this.moveErrorX = Math.random() * upperDifferenceX;
+      // } else if (upperDifferenceX > lowerDifferenceX && this.competence) {
+      //   this.moveErrorX = - Math.random() * lowerDifferenceX;
+      // } else if (upperDifferenceX > lowerDifferenceX && !this.competence) {
+      //   this.moveErrorX = Math.random() * upperDifferenceX;
+      // }
+
+      // let signDifferenceY = Math.random();
+      // if (upperDifferenceY === lowerDifferenceY && signDifferenceY > 0.5) {
+      //   this.moveErrorY = - Math.random() * upperDifferenceY;
+      // } else if (upperDifferenceY === lowerDifferenceY && signDifferenceY <= 0.5) {
+      //   this.moveErrorY = Math.random() * upperDifferenceY;
+      // } else if (upperDifferenceY > lowerDifferenceY && this.competence) {
+      //   this.moveErrorY = - Math.random() * lowerDifferenceY;
+      // } else if (upperDifferenceY > lowerDifferenceY && !this.competence) {
+      //   this.moveErrorY = Math.random() * upperDifferenceY;
+      // }
+
+      // Definition of the First Parameter of Bezier Curve
+      // this.p1Bezier = {
+      //   x: Math.floor(this.game.width / 4),
+      //   y: Math.floor(this.game.height / 2),
+      // };
+
+      // while (this.p1Bezier.x + this.collisionRadius + 50 > this.game.width || this.p1Bezier.x - this.collisionRadius - 50 < 0) {
+      //     this.p1Bezier.x = Math.floor(Math.random() * this.game.width)
+      //     times ++;
+      // }
+      // while (this.p1Bezier.y + this.collisionRadius + 50 > this.game.height || this.p1Bezier.y - this.collisionRadius - 50 < 0) {
+      //     this.p1Bezier.y = Math.floor(Math.random() * this.game.height)
+      //     times ++;
+      // }
+
+      // this.p2Bezier = {x: Math.floor(Math.random() * this.game.width), y: Math.floor(Math.random() * this.game.height)}
+
+      // Definition of the Second Parameter of Bezier Curve
+      // this.p2Bezier = {
+      //   x: Math.floor(this.game.width / 2),
+      //   y: Math.floor(this.game.height / 2),
+      // };
+
+      // while (this.p2Bezier.x + this.collisionRadius + 50 > this.game.width || this.p2Bezier.x - this.collisionRadius - 50 < 0) {
+      //     this.p2Bezier.x = Math.floor(Math.random() * this.game.width)
+      //     times ++;
+      // }
+      // while (this.p2Bezier.y + this.collisionRadius + 50> this.game.height || this.p2Bezier.y - this.collisionRadius - 50 < 0) {
+      //     this.p1Bezier.y = Math.floor(Math.random() * this.game.height)
+      //     times ++;
+      // }
+
+      // this.endBezier = {x: Math.floor(Math.random() * this.game.width), y: Math.floor(Math.random() * this.game.height)}
+   // for (let i = 0; i < this.trajectoryMovementPolygon.length ; i++) {
+    //     context.beginPath()
+    //     context.arc(this.trajectoryMovementPolygon[i].x, this.trajectoryMovementPolygon[i].y, 5, 0 , Math.PI * 2)
+    //     context.save();
+    //     // context.globalAlpha = 0.5;
+    //     context.fillStyle = 'red'
+    //     context.fill();
+    //     context.restore();
+    //     context.stroke()
+
+    // }
+
+    // for (let i = 0; i < this.circlePoints.length; i++) {
+    //     context.beginPath()
+    //     context.arc(this.circlePoints[i].x, this.circlePoints[i].y, 5, 0 , Math.PI * 2)
+    //     context.save();
+    //     // context.globalAlpha = 0.5;
+    //     context.fillStyle = 'purple'
+    //     context.fill();
+    //     context.restore();
+    //     context.stroke()
+
+    // }
+
+    // this.game.context.beginPath()
+    // console.log(this.trajectoryMov.length)
+    // for (let i = this.trajectoryMov.length- 1; i > 0; i--) {
+    //     this.game.context.arc(this.trajectoryMov[i].x, this.trajectoryMov[i].y, 5, 0, Math.PI * 2)
+
+    // }
+    // this.game.context.closePath()
+    // this.game.context.stroke()
+
+    // for (let i = 15; i !== 0; i--) {
+    //     let r = radius * (i % 2 + 1) /2
+    //     var omega = alpha * i;
+    //     // this.game.context.lineTo((r * Math.sin(omega)) + starXY[0], (r * Math.cos(omega)) + starXY[1]);
+    //     if (isPolygon) {
+    //         if(i % 2 !== 0) {
+    //             this.game.context.arc((r * Math.sin(omega)) + starCenter[0], (r * Math.cos(omega)) + starCenter[1], 5, 0 , Math.PI * 2)
+    //             this.trajectoryMov.push({x: (r * Math.sin(omega)) + starCenter[0], y: (r * Math.cos(omega)) + starCenter[1]})
+    //         }
+    //     } else if (!isPolygon) {
+    //         this.game.context.arc((r * Math.sin(omega)) + starCenter.x, (r * Math.cos(omega)) + starCenter.y, 5, 0 , Math.PI * 2)
+    //     }
+
+    //     // this.game.context.arc((r * Math.sin(omega)) + starXY[0], (r * Math.cos(omega)) + starXY[1], 5, 0 , Math.PI * 2)
+    //     // this.game.context.save();
+    //     // context.globalAlpha = 0.5;
+    //     // this.game.context.fillStyle = 'blue'
+    //     // context.fill();
+    //     // this.game.context.restore();
+    //     // this.game.context.stroke()
+
+    // }
+    // this.game.context.closePath()
+    // this.game.context.stroke()
+
+    // this.starMovement()

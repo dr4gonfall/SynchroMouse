@@ -42,6 +42,11 @@ let roundNumber = 0;
 let timerBetweenRoundsValidation = document.getElementById("time-validation-prelim");
 let timerRoundsValidation = document.getElementById("time-validation-round")
 
+// Role of the player
+
+let rolePlayer = document.getElementById("rolePlayer");
+let instructionPlayer = document.getElementById("instructionsPlayer");
+
 
 // const $instructionsEnglish = document.getElementById("#validation-intructions");
 // const $instructionsSpanish = document.getElementById("#validation-instructions-es");
@@ -382,9 +387,9 @@ let playingValidation = false;
 let currentRoundTraining = 0;
 let currentRoundValidation = 0;
 
-(new TrainingGame()).trainingScript(socket);
+(new TrainingGame()).trainingScript(socket, currentRoundTraining);
 (new PageSelection()).pageSelection(socket);
-(new ValidationScript()).validationScript(socket);
+(new ValidationScript()).validationScript(socket, currentRoundValidation);
 
 socket.on("endGame", (finish) => {
   console.log(`The value of finish is: ${finish}`);

@@ -53,6 +53,7 @@ let amountSharpTurnsPlayer = 0;
 // let prevPlayPositions = []
 let roundBeginning = false;
 let roundBeginningTraining = false;
+let roundBeginningValidation = false;
 let totalGameTime = 30000;
 // let playing = false
 // let playerPositionsTest = []
@@ -80,14 +81,16 @@ let times = 0;
 const totalRoundTimes = 2;
 
 // Total amount of Rounds for the training
-const totalRoundTimesTraining = 2;
+const totalRoundTimesTraining = 4;
 
 // Total amount of Rounds for the validation
-const totalRoundTimesValidation = 2;
+const totalRoundTimesValidation = 1;
 // Current amount of rounds for the training
 let currentRoundTraining = 0;
+let currentRoundTrainingTotal = 0;
 
 let currentRoundValidation = 0;
+let currentRoundValidationTotal = 0;
 let numberUsers = 0;
 // let smoothFinal = []
 // let smoothAgentFinal = []
@@ -149,6 +152,7 @@ io.on("connection", (socket) => {
   const startValidationServer = (room) => {
     console.log("The validation begins in room " + room);
     socket.emit("endValidation", false);
+    console.log(`The current round for test is: ${currentRoundValidation}`)
     socket.emit("currentRoundValidation", currentRoundValidation);
   }
 
@@ -188,74 +192,13 @@ io.on("connection", (socket) => {
   
   // When the validation begins.
 
-  socket.on("start-validation", (room)=> startValidationServer(room));
 
-  socket.on("rest_end_validation", (room) => {
-    roundBeginningValidation = true;
-    socket.emit("beginGameValidation", roundBeginningValidation);
-    socket.to(room).emit("startValidation");
-    if (mongoClient !== undefined) {
-      const db = mongoClient.db(dbName);
-      db.collection("round_begin").insert({ time: new Date(), room: room});
-    }
-  })
-  // FUNCTION THAT DEFINES WHAT HAPPENS AT THE END OF THE VALIDATION ROUND
 
-  socket.on("round_end_validation", (room) => {
-    currentRoundValidation++;
-    console.log(`The current round in the validation is: ${currentRoundValidation}`)
-    socket.emit("currentRoundValidation", currentRoundValidation)
-    if (currentRoundValidation >= totalRoundTimesValidation) {
-      roundBeginningValidation = false;
-      socket.emit("beginGameValidation", roundBeginningValidation);
-      socket.emit("endValidation", true);
-      console.log("We entered the end of the validation.");
-
-      // WRITE THE SCORES OF THE PLAYER IN A JSON FILE.
-      let finalDataPlayer = JSON.stringify(dataPlayer);
-      let textFilePlayer = "scores_player_validation" + socket.id + ".json";
-      fs.writeFile(textFilePlayer, finalDataPlayer, (err) => {
-        if (err) {
-          throw err;
-        } else {
-          console.log("successful upload");
-        }
-        console.log("JSON data training player is saved.");
-      });
-
-      // WRITE THE SCORES OF THE AGENT IN A JSON FILE.
-      let finalDataAgent = JSON.stringify(dataAgent);
-      let textFileAgent = "scores_agent_validation" + socket.id + ".json";
-      fs.writeFile(textFileAgent, finalDataAgent, (err) => {
-        if (err) {
-          throw err;
-        } else {
-          console.log("successful upload");
-        }
-        console.log("JSON data training agent is saved.");
-      });
-
-      // let textFile
-      // if (mongoClient !== undefined) {
-      //   const db = mongoClient.db(dbName);
-      //   db.collection("room_scores").insert({
-      //     time: new Date(),
-      //     room: room,
-      //     score: room_score[room],
-      //     competence: room_competence[room],
-      //     predictability: room_predictability[room],
-      //     integrity: room_integrity[room],
-      //   });
-      // }
-    } else {
-      roundBeginningValidation = false;
-      socket.emit("beginGameValidation", roundBeginningValidation);
-      socket.emit("endValidation", false);
-    }
-  })
+  
 
   // When the training begins.
   socket.on("start-training", (room)=> startTrainingServer(room));
+  socket.on("start-validation", (room)=> startValidationServer(room));
 
   socket.on("rest_end_training", (room) => {
     roundBeginningTraining = true;
@@ -267,10 +210,21 @@ io.on("connection", (socket) => {
     }
   })
 
+  socket.on("rest_end_validation", (room) => {
+    roundBeginningValidation = true;
+    socket.emit("beginGameValidation", roundBeginningValidation);
+    socket.to(room).emit("startValidation");
+    if (mongoClient !== undefined) {
+      const db = mongoClient.db(dbName);
+      db.collection("round_begin").insert({ time: new Date(), room: room});
+    }
+  })
+
   // FUNCTION THAT DEFINES WHAT HAPPENS AT THE END OF THE TRAINING ROUND
 
   socket.on("round_end_training", (room) => {
     currentRoundTraining++;
+    currentRoundTrainingTotal ++;
     console.log(currentRoundTraining)
     socket.emit("currentRoundTraining", currentRoundTraining)
     if (currentRoundTraining >= totalRoundTimesTraining) {
@@ -281,7 +235,7 @@ io.on("connection", (socket) => {
 
       // WRITE THE SCORES OF THE PLAYER IN A JSON FILE.
       let finalDataPlayer = JSON.stringify(dataPlayer);
-      let textFilePlayer = "scores_player_training" + socket.id + ".json";
+      let textFilePlayer = "scores_player_training" + socket.id + "_Round" + currentRoundTrainingTotal + ".json";
       fs.writeFile(textFilePlayer, finalDataPlayer, (err) => {
         if (err) {
           throw err;
@@ -322,7 +276,62 @@ io.on("connection", (socket) => {
     }
   })
 
+// FUNCTION THAT DEFINES WHAT HAPPENS AT THE END OF THE VALIDATION ROUND
 
+socket.on("round_end_validation", (room) => {
+  currentRoundValidation++;
+  currentRoundValidationTotal++;
+  console.log(`The current round in the validation is: ${currentRoundValidation}`)
+  socket.emit("currentRoundValidation", currentRoundValidation)
+  if (currentRoundValidation >= totalRoundTimesValidation) {
+    roundBeginningValidation = false;
+    socket.emit("beginGameValidation", roundBeginningValidation);
+    socket.emit("endValidation", true);
+    console.log("We entered the end of the validation.");
+    currentRoundValidation = 0;
+
+    // WRITE THE SCORES OF THE PLAYER IN A JSON FILE.
+    let finalDataPlayer = JSON.stringify(dataPlayer);
+    let textFilePlayer = "scores_player_validation" +  socket.id + "_Round" + currentRoundValidationTotal + ".json";
+    fs.writeFile(textFilePlayer, finalDataPlayer, (err) => {
+      if (err) {
+        throw err;
+      } else {
+        console.log("successful upload");
+      }
+      console.log("JSON data training player is saved.");
+    });
+
+    // WRITE THE SCORES OF THE AGENT IN A JSON FILE.
+    let finalDataAgent = JSON.stringify(dataAgent);
+    let textFileAgent = "scores_agent_validation" + socket.id + ".json";
+    fs.writeFile(textFileAgent, finalDataAgent, (err) => {
+      if (err) {
+        throw err;
+      } else {
+        console.log("successful upload");
+      }
+      console.log("JSON data training agent is saved.");
+    });
+
+    // let textFile
+    // if (mongoClient !== undefined) {
+    //   const db = mongoClient.db(dbName);
+    //   db.collection("room_scores").insert({
+    //     time: new Date(),
+    //     room: room,
+    //     score: room_score[room],
+    //     competence: room_competence[room],
+    //     predictability: room_predictability[room],
+    //     integrity: room_integrity[room],
+    //   });
+    // }
+  } else {
+    roundBeginningValidation = false;
+    socket.emit("beginGameValidation", roundBeginningValidation);
+    socket.emit("endValidation", false);
+  }
+})
 
 
 
@@ -411,7 +420,7 @@ io.on("connection", (socket) => {
   // FUNCTION THAT GATHERS THE DATA OF THE AGENT EVERY FRAME
   socket.on("locationAgent",
     (room, x, y, rotation, speedX, speedY, accelX, accelY, jerkX, jerkY) => {
-      if (roundBeginning) {
+      if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
         socket.to(room).emit("location", socket.id, x, y);
         // Positions data structure
         curvatureAgent.push(
@@ -458,7 +467,7 @@ io.on("connection", (socket) => {
 
       for (let i = 1; i < points + 1; i++) {
         // console.log(spline.at(i* 0.1));
-        speedAcc.push({ x: i - 1, y: splineAccel.at(i * 1) });
+        // speedAcc.push({ x: i - 1, y: splineAccel.at(i * 1) });
         // speedDecc.push({x: i, y: splineDecc.at(i * 0.8)})
       }
 
@@ -484,7 +493,7 @@ io.on("connection", (socket) => {
       // console.log("The position in x is: " + x)
       // console.log(`The registered position in x: ${x} and Position in Y: ${y}`)
 
-      if (roundBeginning) {
+      if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
         socket.to(room).emit("location", socket.id, x, y);
         // Positions data structure
         curvaturePlayer.push(
@@ -538,7 +547,7 @@ io.on("connection", (socket) => {
   // FUNCTION TO CALCULATE THE MEASURES FOR EACH PLAYER
 
   socket.on("calculateMeasuresPlayer", (room) => {
-    if (roundBeginning) {
+    if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
       // let predictabilityPlayerTurns =  amountSharpTurnsPlayer / rotDifferencesPlayer.length
       console.log("POR FAVOR SALVENME!!!")
       // WRITE THE JSON FILE
@@ -574,7 +583,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("calculateMeasuresAgent", (room) => {
-    if (roundBeginning) {
+    if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
       let predictabilityAgentTurns =
         amountSharpTurnsAgent / rotationAgent.length;
 

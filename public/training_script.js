@@ -1,6 +1,6 @@
 class TrainingGame {
   
-  trainingScript(socket) {
+  trainingScript(socket, roundNumber) {
 
     let room;
     // VERSION OF THE GAME VARIABLES
@@ -38,7 +38,12 @@ class TrainingGame {
     let timerBetweenRoundsTraining = document.getElementById("time-training-prelim");
     let timerRoundsTraining = document.getElementById("time-training-round");
     // Training number of rounds
-    let roundNumber = 0;
+    // let roundNumber = 0;
+
+    // Role of the player
+
+  let rolePlayerTraining = document.getElementById("rolePlayer");
+  let instructionPlayerTraining = document.getElementById("instructionsPlayer");
 
     // BUTTONS AND FORMS
 
@@ -253,21 +258,22 @@ class TrainingGame {
       startTrainingSession()
     })
 
-    socket.on('health', () =>{
-      console.log("hola")
-    })
 
     // LOGIC FOR FINISHING THE TRAINING SESSION
     socket.on("endTraining", (finish) => {
       console.log(`The value of finish is: ${finish}`);
       if (finish) {
         gameStartedTraining = false;
-        console.log("The experiment is finished");
+        console.log("The training is finished");
         timerBetweenRoundsTraining.innerHTML = "X";
         timerRoundsTraining.innerHTML = "X";
+        rolePlayerTraining.innerHTML = "X";
+        instructionPlayerTraining = "...";
         startTrainingDebrief()
       } else {
         let seconds = 10;
+        roundNumber++;
+        console.log(`The round is: ${roundNumber}`)
         timerBetweenRoundsTraining.innerHTML = seconds;
         if (restIntervalId !== undefined) {
           clearInterval(restIntervalId);
@@ -291,8 +297,6 @@ class TrainingGame {
     function newTraining() {
       prevX = 200;
       prevY = 200;
-
-
       urlParams = new URLSearchParams(window.location.search);
       room = urlParams.get("room");
       socket.emit("start-training", room);
@@ -318,12 +322,6 @@ class TrainingGame {
               playingTraining = false;
               gameStartedTraining = false;
               socket.emit("round_end_training");
-              // socket.on("currentRound", (currentRound) => {
-              //   currentRoundTraining = currentRound;
-              // } )
-              // console.log(`The current round is: ${currentRoundTraining}`)
-              // DEFINE A VARIABLE TO KEEP TRACK OF THE NUMBER OF TIMES
-
             }
           }, 1000);
         }
@@ -382,8 +380,35 @@ class TrainingGame {
 
 
         const gameTraining = new Game(canvasTraining, socket, room);
+        if (roundNumber === 1) {
+          gameTraining.agent.follower = false;
+          gameTraining.agent.competence = true;
+          gameTraining.agent.predictability = true;
+        } else if (roundNumber === 2) {
+          gameTraining.agent.follower = true;
+          gameTraining.agent.competence = true;
+          gameTraining.agent.predictability = true;
+        } else if (roundNumber === 3) {
+          gameTraining.agent.follower = false;
+          gameTraining.agent.competence = true;
+          gameTraining.agent.predictability = false;
+        } else if (roundNumber === 4) {
+          gameTraining.agent.follower = true;
+          gameTraining.agent.competence = false;
+          gameTraining.agent.predictability = true;
+        }
 
-        gameTraining.gameRound++
+        // console.log(rolePlayerTraining)
+        // console.log(gameTraining);
+        if (gameTraining.agent.follower) {
+          rolePlayerTraining.innerHTML= "leader";
+          instructionPlayerTraining.innerHTML = "Create novel and interesting moves and have fun. The agent will follow you."
+        } else {
+          rolePlayerTraining.innerHTML = "follower";
+          instructionPlayerTraining.innerHTML = "Complement the movements of the agent and have fun."
+        }
+
+        // gameTraining.gameRound++
 
         if (gameTraining.mouse.x !== undefined && gameTraining.mouse.y !== undefined) {
           prevMoveX = gameTraining.mouse.x;

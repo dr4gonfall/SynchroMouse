@@ -31,13 +31,13 @@ class Game {
         //     this.mouse.y = e.offsetY;
         //     this.mouse.pressed = false;
         // })
-        canvas.addEventListener('mousemove', (e) => {
-            // this.mouse.x = e.offsetX;
-            // this.mouse.y = e.offsetY;
-            this.mouse.x = e.movementX;
-            this.mouse.y = e.movementY;
+        // canvas.addEventListener('mousemove', (e) => {
+        //     // this.mouse.x = e.offsetX;
+        //     // this.mouse.y = e.offsetY;
+        //     this.mouse.x = e.movementX;
+        //     this.mouse.y = e.movementY;
 
-        })
+        // })
         // canvas.addEventListener('click', async () => {
         //     if (!document.pointerLockElement) {
         //         await canvas.requestPointerLock({
@@ -50,9 +50,15 @@ class Game {
 
     
 
-    render(context, random, targetX, targetY){
+    render(context, random, targetX, targetY, moveMouseX, moveMouseY){
+        this.mouse.x = moveMouseX
+        this.mouse.y = moveMouseY
         this.player.draw(context);
-        this.player.update(this.mouse.x, this.mouse.y);
+        // this.canvas.addEventListener('mousemove', (e) => {
+            // this.player.update(e.movementX, e.movementY, dt)
+        // })
+        this.player.update(moveMouseX, moveMouseY);
+        // console.log(`The movement of the mouse is: ${moveMouseX} and ${moveMouseY }`)
         // console.log(`The target of the agent is: ${targetX} and ${targetY}`)
         this.agent.draw(context, targetX, targetY);
         this.agent.update(random,targetX,targetY, this.socket, this.room);

@@ -2405,3 +2405,38 @@ var init = function() {
     // this.game.context.stroke()
 
     // this.starMovement()
+
+
+    // console.log(`This timer is: ${this.timerDecision}`)
+
+
+        // if (!this.movementDecision && this.timerDecision == 2) {
+        //     console.log(`ENTERED FUNCTION`)
+        // }
+
+        // console.log(`The timer is: ${this.timerDecision} with decision: ${this.movementDecision}`)
+        // console.log(`The speed in X: ${this.speedX}, Y: ${this.speedY}`)
+        // console.log(`The movement counter is in: ${this.movementCounter}`)
+
+        // console.log(`The timer is: ${this.timer}`)
+
+    	// console.log(this.force)
+
+        // this.dx = this.game.mouse.x - this.collisionX 
+        // this.dy = this.game.mouse.y - this.collisionY
+
+        // Constant speed
+        // const distance = Math.hypot(this.dy, this.dx);
+        // this.speedX = this.dx/distance || 0;
+        // this.speedY = this.dy/distance || 0;
+
+        // Speed proportional to the distance between mouse and center of circle.
+        // this.speedX = (this.dx) /20;
+        // this.speedY = (this.dy) /20;
+
+
+        // let steering = this.arrive()    
+
+        // this.applyForce(steering)
+
+        // console.log(`The movement force in x: ${moveX} and in Y: ${moveY}`)

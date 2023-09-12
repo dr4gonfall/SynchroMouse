@@ -22,10 +22,16 @@ class Player {
         // PREVIOUS ACCELERATION
         // this.dx = 0;
         // this.dy = 0;
-        this.maxSpeed = 2;
+        this.maxSpeed = 5;
+        this.overSpeedX = 0;
+        this.overSpeedY = 0;
         // this.maxForce = 100;
         this.movementCounter = 0;
         this.prevMoveDec = this.movementDecision;
+        this.rawMouseMoveX = 0;
+        this.rawMouseMoveY = 0;
+        this.forcePlayerX = 0;
+        this.forcePlayerY = 0;
     }
 
     applyForce(force) {
@@ -179,9 +185,19 @@ class Player {
         // context.stroke()
     }
 
+    // linearly maps value from the range (a..b) to (c..d)
+  mapRange(value, a, b, c, d) {
+    // first map value from (a..b) to (0..1)
+    value = (value - a) / (b - a);
+    // then map it from (0..1) to (c..d) and return it
+    return c + value * (d - c);
+  }
+
     update(moveX, moveY){
         // console.log(`The player collision in X: ${this.collisionX} and for Y: ${this.collisionY}`)
-
+        this.rawMouseMoveX = moveX;
+        this.rawMouseMoveY = moveY;
+        
         this.prevMoveDec = this.movementDecision;
 
         if (this.speedX === 0 && this.speedY === 0) {
@@ -198,66 +214,102 @@ class Player {
             // console.log(`The movement was registered as a stop.`)
         }
 
-        // console.log(`This timer is: ${this.timerDecision}`)
-
-
-        // if (!this.movementDecision && this.timerDecision == 2) {
-        //     console.log(`ENTERED FUNCTION`)
-        // }
-
-        // console.log(`The timer is: ${this.timerDecision} with decision: ${this.movementDecision}`)
-        // console.log(`The speed in X: ${this.speedX}, Y: ${this.speedY}`)
-        // console.log(`The movement counter is in: ${this.movementCounter}`)
-
-        // console.log(`The timer is: ${this.timer}`)
-
-    	// console.log(this.force)
-
-        // this.dx = this.game.mouse.x - this.collisionX 
-        // this.dy = this.game.mouse.y - this.collisionY
-
-        // Constant speed
-        // const distance = Math.hypot(this.dy, this.dx);
-        // this.speedX = this.dx/distance || 0;
-        // this.speedY = this.dy/distance || 0;
-
-        // Speed proportional to the distance between mouse and center of circle.
-        // this.speedX = (this.dx) /20;
-        // this.speedY = (this.dy) /20;
-
-
-        // let steering = this.arrive()    
-
-        // this.applyForce(steering)
-
-        // console.log(`The movement force in x: ${moveX} and in Y: ${moveY}`)
-
         this.prevMouseX = this.collisionX;
         this.prevMouseY = this.collisionY;
+        // console.log(`The collision in X: ${Math.round(this.collisionX + moveX * dt)} and Y: ${Math.round(this.collisionY + moveY * dt)}`)
+        this.forcePlayerX = linearInterpolation(0, 20, Math.abs(moveX) / 300);
+        this.forcePlayerY = linearInterpolation(0, 20, Math.abs(moveY) / 300);
+        
+        let forceX = linearInterpolation(0, 20, Math.abs(moveX)/300)
+        let forceY = linearInterpolation(0, 20, Math.abs(moveY)/300)
 
-        if (moveX <= 1 && moveX >=-1) {
-            moveX = 0;
+        // if (forceX > 20 || forceX < -20) {
+        //     this.overSpeedX++
+        // }
+        // if (forceY > 20 || forceX < -20) {
+        //     this.overSpeedY++
+        // }
+
+        // console.log(`The amount of times it went over speed is: ${this.overSpeedX} and ${this.overSpeedY}`)
+
+        if (moveX < 0) {
+            forceX = - forceX;
+            this.forcePlayerX = - this.forcePlayerX;
         }
 
-        if (moveY <= 1 && moveY >=-1) {
-            moveY = 0;
+        if (moveY < 0) {
+            forceY = - forceY;
+            this.forcePlayerY = - this.forcePlayerY;
         }
 
-        if (moveX >= this.maxSpeed) {
-            this.collisionX += this.maxSpeed  
-        } else if (moveX < - this.maxSpeed) {
-            this.collisionX += - this.maxSpeed
-        } else {
-            this.collisionX += moveX;
+        if (forceX > 20) {
+            forceX = 20;
+            this.forcePlayerX = 20;
+
+        } else if (forceX < -20) {
+            forceX = -20;
+            this.forcePlayerX = -20;
         }
 
-        if (moveY > this.maxSpeed) {
-            this.collisionY += this.maxSpeed  
-        } else if (moveY < - this.maxSpeed) {
-            this.collisionY +=  - this.maxSpeed
-        } else {
-            this.collisionY += moveY;
+        if (forceY > 20) {
+            forceY = 20;
+            this.forcePlayerY = 20;
+        } else if (forceY < -20){
+            forceY = -20;
+            this.forcePlayerY = 20;
         }
+
+        // console.log(`The forces are in X: ${forceX} and Y: ${forceY}`)
+
+        // this.collisionX += moveX;
+        // this.collisionY += moveY;
+        this.collisionX += forceX
+        this.collisionY += forceY
+        // this.collisionX = Math.round(this.collisionX + moveX * dt);
+        // this.collisionY = Math.round(this.collisionY + moveY * dt);
+        // if (moveX !== 0) {
+        //     this.collisionX += moveX * dt
+        // } else if (moveX === NaN) {
+        //     this.collisionX = 200
+        //     console.log(`Entered Function NaN in X`)
+        // }
+
+        // if (moveY !== 0) {
+        //     this.collisionY += moveY * dt
+        // } else if (moveY === NaN) {
+        //     this.collisionY = 200
+        //     console.log(`Entered Function NaN in Y`)
+        // }
+        
+
+        // this.collisionX += moveX * dt
+        // this.collisionY += moveY * dt
+
+        // this.collisionX += moveX * dt
+        // this.collisionY += moveY * dt
+        // if (moveX <=1 && moveX >=-1) {
+        //     moveX = 0;
+        // }
+
+        // if (moveY <= 1 && moveY >=-1) {
+        //     moveY = 0;
+        // }
+
+        // if (moveX >= this.maxSpeed) {
+        //     this.collisionX += this.maxSpeed  
+        // } else if (moveX < - this.maxSpeed) {
+        //     this.collisionX += - this.maxSpeed
+        // } else {
+        //     this.collisionX += moveX * dt;
+        // }
+
+        // if (moveY > this.maxSpeed) {
+        //     this.collisionY += this.maxSpeed  
+        // } else if (moveY < - this.maxSpeed) {
+        //     this.collisionY +=  - this.maxSpeed
+        // } else {
+        //     this.collisionY += moveY * dt;
+        // }
 
 
 

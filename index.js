@@ -14,6 +14,7 @@ const MongoClient = require("mongodb").MongoClient;
 
 let timesAgentDec = 0;
 let playPositions = [];
+let positionData = [];
 let speedXPlayer = [];
 let speedYPlayer = [];
 let accelXPlayer = [];
@@ -60,7 +61,9 @@ let totalGameTime = 30000;
 // let agentPositionsTest = []
 // let agent2PositionsTest= []
 let dataPlayer = [];
+let dataPlayerPosition = [];
 let dataAgent = [];
+let dataAgentPosition = [];
 
 const port = process.env.PORT || 3000;
 
@@ -235,6 +238,8 @@ io.on("connection", (socket) => {
 
       // WRITE THE SCORES OF THE PLAYER IN A JSON FILE.
       let finalDataPlayer = JSON.stringify(dataPlayer);
+      let finalDataPlayerPosition = JSON.stringify(dataPlayerPosition);
+      let textFilePlayerPosition = "scores_player_training_position" + socket.id + "_Round" + currentRoundTrainingTotal + ".json"
       let textFilePlayer = "scores_player_training" + socket.id + "_Round" + currentRoundTrainingTotal + ".json";
       fs.writeFile(textFilePlayer, finalDataPlayer, (err) => {
         if (err) {
@@ -244,11 +249,29 @@ io.on("connection", (socket) => {
         }
         console.log("JSON data training player is saved.");
       });
+      fs.writeFile(textFilePlayerPosition, finalDataPlayerPosition, (err) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log("successful upload")
+        }
+        console.log("JSON data training player is saved.");
+      })
 
       // WRITE THE SCORES OF THE AGENT IN A JSON FILE.
       let finalDataAgent = JSON.stringify(dataAgent);
-      let textFileAgent = "scores_agent_training" + socket.id + ".json";
+      let finalDataAgentPosition = JSON.stringify(dataAgentPosition);
+      let textFileAgentPosition = "scores_agent_training_position_" + socket.id + "_Round" + currentRoundTrainingTotal + ".json";
+      let textFileAgent = "scores_agent_training" + socket.id + "_Round" + currentRoundTrainingTotal + ".json";
       fs.writeFile(textFileAgent, finalDataAgent, (err) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log("successful upload");
+        }
+        console.log("JSON data training agent is saved.");
+      });
+      fs.writeFile(textFileAgentPosition, finalDataAgentPosition, (err) => {
         if (err) {
           throw err;
         } else {
@@ -304,7 +327,7 @@ socket.on("round_end_validation", (room) => {
 
     // WRITE THE SCORES OF THE AGENT IN A JSON FILE.
     let finalDataAgent = JSON.stringify(dataAgent);
-    let textFileAgent = "scores_agent_validation" + socket.id + ".json";
+    let textFileAgent = "scores_agent_validation" +  socket.id + "_Round" + currentRoundValidationTotal + ".json";
     fs.writeFile(textFileAgent, finalDataAgent, (err) => {
       if (err) {
         throw err;
@@ -439,6 +462,17 @@ socket.on("round_end_validation", (room) => {
         if (Math.abs(rotation) >= 90) {
           amountSharpTurnsAgent++;
         }
+
+
+        let metricsAgent = {
+          time: new Date(),
+          nano: performance.now(),
+          room: room,
+          x: x,
+          y: y,
+          rotation: rotation,
+        }
+        dataAgentPosition.push(metricsAgent);
       }
     }
   );
@@ -488,7 +522,7 @@ socket.on("round_end_validation", (room) => {
   // FUNCTION TO TAKE THE VALUES OF THE PLAYER EVERY FRAME
   socket.on(
     "locationPlayer",
-    (room, x, y, rotation, speedX, speedY, accelX, accelY, jerkX, jerkY) => {
+    (room, x, y, rawX, rawY, rotation, forceX, forceY, speedX, speedY, accelX, accelY, jerkX, jerkY) => {
       io.to(room).emit("locationPlayer", socket.id, x, y, rotation);
       // console.log("The position in x is: " + x)
       // console.log(`The registered position in x: ${x} and Position in Y: ${y}`)
@@ -512,6 +546,19 @@ socket.on("round_end_validation", (room) => {
         if (Math.abs(rotation) >= 90) {
           amountSharpTurnsAgent++;
         }
+        let metricsPlayer = {
+          time: new Date(),
+          nano: performance.now(),
+          room: room,
+          x: x,
+          y: y,
+          rawX: rawX,
+          rawY: rawY,
+          rotation: rotation,
+          forceX: forceX,
+          forceY: forceY,
+        }
+        dataPlayerPosition.push(metricsPlayer);
       }
 
       if (!(room in rooms)) {
@@ -543,6 +590,19 @@ socket.on("round_end_validation", (room) => {
       }
     }
   );
+
+  // ALTERNATIVE FUNCTION TO CALCULATE ONLY THE POSITION
+
+  socket.on("position", (room)=> {
+    if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
+      let metricsPlayer = {
+        time: new Date(),
+        nano: performance.now(),
+        room: room,
+
+      }
+    }
+  })
 
   // FUNCTION TO CALCULATE THE MEASURES FOR EACH PLAYER
 

@@ -60,6 +60,7 @@ class TrainingGame {
     let prevX;
     let prevY;
     let rotation = 0;
+    let rotationPlayer = 0;
 
     let agentIdealPrevX;
     let agentIdealPrevY;
@@ -80,6 +81,8 @@ class TrainingGame {
 
     let restIntervalId = undefined;
     let gameIntervalId = undefined;
+    // Agent samples the position of the player at a given time interval
+    let positionPlayerIntervalId = undefined;
 
     // SOURCES OF NOISE
     let perlinNoise = false;
@@ -348,6 +351,12 @@ class TrainingGame {
       let prevSpeedY = 0;
       let random = Math.random();
 
+      let mouseMoveX = 0;
+      let mouseMoveY = 0;
+
+      // Time for the frames
+      let currentTime = performance.now();
+
       // Parameters for Experiment Conditions
       // Player Controls
       // game.player.maxSpeed = 20;
@@ -372,7 +381,19 @@ class TrainingGame {
         }
       }
 
+      canvasTraining.addEventListener('mousemove', (e) => {
+        // this.mouse.x = e.offsetX;
+        // this.mouse.y = e.offsetY;
+       mouseMoveX = e.movementX;
+       mouseMoveY = e.movementY;
+       // console.log(`The mouse change is X: ${e.movementX} and Y: ${e.movementY}`)
+       // console.log(`The movements are: ${mouseMoveX} and ${mouseMoveY}`)
+
+   })
+
       if (playingTraining) {
+
+
         // What happens when the human disconnects.
         socket.on("disconnected", function (socketId) { });
 
@@ -382,7 +403,7 @@ class TrainingGame {
         const gameTraining = new Game(canvasTraining, socket, room);
         if (roundNumber === 1) {
           gameTraining.agent.follower = false;
-          gameTraining.agent.competence = true;
+          gameTraining.agent.competence = false;
           gameTraining.agent.predictability = true;
         } else if (roundNumber === 2) {
           gameTraining.agent.follower = true;
@@ -395,7 +416,7 @@ class TrainingGame {
         } else if (roundNumber === 4) {
           gameTraining.agent.follower = true;
           gameTraining.agent.competence = false;
-          gameTraining.agent.predictability = true;
+          gameTraining.agent.predictability = false;
         }
 
         // console.log(rolePlayerTraining)
@@ -417,12 +438,29 @@ class TrainingGame {
 
         let valSlider = 0;
 
-        gameTraining.render(ctxTraining, random, targetX, targetY);
+        positionPlayerIntervalId = setInterval(() => {
+          gameTraining.agent.getTargetValuesPlayer()
+        }, 100)
+        
+
+        
+
+        // console.log(`The values for the movements are in X: ${mouseMoveX} and Y: ${mouseMoveY}`)
+        gameTraining.render(ctxTraining, random, targetX, targetY, mouseMoveX, mouseMoveY);
         let animationId = undefined;
 
         function animate() {
+
+          // console.log(`The movements are: ${mouseMoveX} and ${mouseMoveY}`)
           ctxTraining.clearRect(0, 0, canvasTraining.width, canvasTraining.height);
-          gameTraining.render(ctxTraining, random, targetX, targetY);
+          const newTime = performance.now();
+          const frameRate = 60;
+          // const dt = (newTime - currentTime) / 1000; // Convert to seconds
+          // const dt = 1 / frameRate;
+          // console.log(`The difference in time ${typeof dt}`)
+          // console.log(`The time is ${dt}`)
+          currentTime = newTime;
+          gameTraining.render(ctxTraining, random, targetX, targetY, mouseMoveX, mouseMoveY);
           if (playingTraining) {
             animationId = requestAnimationFrame(animate);
             speeds.push(gameTraining.player.speedX);
@@ -492,6 +530,7 @@ class TrainingGame {
               ) *
                 180.0) /
               Math.PI;
+              // console.log(`The rotation of the agent is: ${rotationAgent}`)
             rotation =
               (Math.atan2(gameTraining.mouse.y - prevMoveY, gameTraining.mouse.x, prevMouseX) *
                 180.0) /
@@ -528,8 +567,8 @@ class TrainingGame {
               );
               curvaturesAgent.push(curvatureAgent);
             }
-            console.log(!gameTraining.player.movementDecision &&
-              gameTraining.player.prevMoveDec !== gameTraining.player.movementDecision, gameTraining.player.movementDecision, gameTraining.player.prevMoveDec, gameTraining.player.movementDecision)
+            // console.log(!gameTraining.player.movementDecision &&
+            //   gameTraining.player.prevMoveDec !== gameTraining.player.movementDecision, gameTraining.player.movementDecision, gameTraining.player.prevMoveDec, gameTraining.player.movementDecision)
             if (
               !gameTraining.player.movementDecision &&
               gameTraining.player.prevMoveDec !== gameTraining.player.movementDecision
@@ -563,7 +602,11 @@ class TrainingGame {
               room,
               gameTraining.player.collisionX,
               gameTraining.player.collisionY,
+              gameTraining.player.rawMouseMoveX,
+              gameTraining.player.rawMouseMoveY,
               rotation,
+              gameTraining.player.forcePlayerX,
+              gameTraining.player.forcePlayerY,
               speeds[speeds.length - 1],
               speeds2[speeds2.length - 1],
               accelXPlayer[accelXPlayer.length - 1],
@@ -591,12 +634,16 @@ class TrainingGame {
 
         // MOUSE MOVEMENTS
         canvasTraining.addEventListener("mousemove", function (event) {
-          let mouseX = event.pageX - canvasTraining.offsetLeft;
-          let mouseY = event.pageY - canvasTraining.offsetTop;
+          // let mouseX = event.pageX - canvasTraining.offsetLeft;
+          // let mouseY = event.pageY - canvasTraining.offsetTop;
+          let mouseX = gameTraining.player.collisionX;
+          let mouseY = gameTraining.player.collisionY;
           // document.getElementById("objectCoords-HAT").innerHTML =
           //   "Object Coordinates: " + mouseX + ", " + mouseY;
           xpos = mouseX;
           ypos = mouseY;
+          prevX = gameTraining.player.prevMouseX;
+          prevY = gameTraining.player.prevMouseY;
 
 
           let rot = (Math.atan2(mouseY - prevY, mouseX - prevX) * 180.0) / Math.PI;
@@ -605,13 +652,19 @@ class TrainingGame {
           );
           var smooth = Math.min(1, dist / 50);
           rotation = smooth * rot + (1 - smooth) * rotation;
+          rotationPlayer = rot;
           // socket.emit('location', room, mouseX, mouseY, rotation);
+          // console.log(`The previous position in X is: ${prevX} and Y: ${prevY}`)
+          console.log(rotationPlayer);
 
           return {
             x: mouseX,
             y: mouseY,
           };
         });
+      } else {
+        clearInterval(positionPlayerIntervalId);
+            positionPlayerIntervalId = undefined;
       }
     }
   }

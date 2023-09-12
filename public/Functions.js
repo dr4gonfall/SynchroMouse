@@ -24,6 +24,19 @@ function getNormallyDistributedRandomNumber(mean, stddev) {
     return z0 * stddev + mean;
 }
 
+function randIntervalFromInterval(min, max) {
+  return (Math.random() * (max - min + 1) + min);
+}
+
+function randIntervalFromIntervalInteger(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function linearInterpolation(min, max, percentage) {
+  let result = min * (1 - percentage) + max * percentage;
+  return result;
+}
+
 function BezierCurveMovement(currentPosition, point1Bezier, point2Bezier, endPoint) {
     let points = [
         currentPosition,

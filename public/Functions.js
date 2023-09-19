@@ -37,6 +37,16 @@ function linearInterpolation(min, max, percentage) {
   return result;
 }
 
+function randomSelectionVariations(array, n) {
+ const output = [];
+ for (let i = 0; i < n; i++) {
+  const randomIndex = Math.floor(Math.random() * array.length);
+  output.push(array[randomIndex])
+  array.splice(randomIndex, 1);
+ }
+ return output;
+}
+
 function BezierCurveMovement(currentPosition, point1Bezier, point2Bezier, endPoint) {
     let points = [
         currentPosition,
@@ -81,6 +91,28 @@ function BezierCurveMovement(currentPosition, point1Bezier, point2Bezier, endPoi
     this.initialBezier.x = xt;
     this.initialBezier.y = yt;
 
+}
+
+function defineMagnitude(x, y) {
+  return Math.sqrt(x ** 2 + y ** 2);
+}
+
+function normalize(x, y) {
+  let m = defineMagnitude(x, y);
+  if (m > 0) {
+    return { x: x / m, y: y / m };
+  }
+  if (m === 0) {
+    return { x: 0, y: 0 };
+  }
+}
+
+// linearly maps value from the range (a..b) to (c..d)
+function mapRange(value, a, b, c, d) {
+  // first map value from (a..b) to (0..1)
+  value = (value - a) / (b - a);
+  // then map it from (0..1) to (c..d) and return it
+  return c + value * (d - c);
 }
 
 

@@ -8,6 +8,7 @@ class Player {
         this.collisionRadius = 20;
         this.speedX = 0;
         this.speedY = 0;
+        this.rotation = 0;
         // Acceleration of the Agent.
         this.accX = 0;
         this.accY = 0;
@@ -22,7 +23,7 @@ class Player {
         // PREVIOUS ACCELERATION
         // this.dx = 0;
         // this.dy = 0;
-        this.maxSpeed = 5;
+        this.maxSpeed = 10;
         this.overSpeedX = 0;
         this.overSpeedY = 0;
         // this.maxForce = 100;
@@ -32,6 +33,8 @@ class Player {
         this.rawMouseMoveY = 0;
         this.forcePlayerX = 0;
         this.forcePlayerY = 0;
+        this.timePrev = performance.now()
+        this.timeCurrent = performance.now()
     }
 
     applyForce(force) {
@@ -108,12 +111,14 @@ class Player {
           force.x = this.game.mouse.x - this.collisionX
         } else if (this.game.mouse.x === undefined) {
             force.x = this.prevMouseX - this.collisionY
+  
         }
 
         if (this.game.mouse.y !== undefined) {
             force.y = this.game.mouse.y - this.collisionY
         } else if (this.game.mouse.y === undefined) {
-            force.y = this.prevMouseY - this.collisionY
+             force.y = this.prevMouseY - this.collisionY
+
         }
          
         let slowRadius = 100;
@@ -197,6 +202,7 @@ class Player {
         // console.log(`The player collision in X: ${this.collisionX} and for Y: ${this.collisionY}`)
         this.rawMouseMoveX = moveX;
         this.rawMouseMoveY = moveY;
+        this.timeCurrent = performance.now()
         
         this.prevMoveDec = this.movementDecision;
 
@@ -209,7 +215,7 @@ class Player {
             this.movementDecision = true
         }
 
-        if (this.timerDecision >= 60) {
+        if (this.timerDecision >= 5) {
             this.movementDecision = false
             // console.log(`The movement was registered as a stop.`)
         }
@@ -263,8 +269,13 @@ class Player {
 
         // this.collisionX += moveX;
         // this.collisionY += moveY;
+
+       
+
         this.collisionX += forceX
         this.collisionY += forceY
+
+
         // this.collisionX = Math.round(this.collisionX + moveX * dt);
         // this.collisionY = Math.round(this.collisionY + moveY * dt);
         // if (moveX !== 0) {
@@ -314,11 +325,23 @@ class Player {
 
 
 
-
+        
         // console.log(`The movement of the mouse in x: ${moveX} and in y: ${moveY}`)
 
-        this.speedX = this.collisionX - this.prevMouseX;
-        this.speedY = this.collisionY - this.prevMouseY;
+        // this.speedX = (this.collisionX - this.prevMouseX) / (this.timeCurrent - this.timePrev);
+        // this.speedY = (this.collisionY - this.prevMouseY) / (this.timeCurrent - this.timePrev);
+
+        this.speedX = (this.collisionX - this.prevMouseX)
+        this.speedY = (this.collisionY - this.prevMouseY)
+        // console.log(`X: P: ${this.prevMouseX} ; C: ${this.collisionX} Y: ${this.collisionY} ; ${this.prevMouseY}`)
+
+        this.rotation =
+        (Math.atan2(this.collisionY - this.prevMouseY, this.collisionX - this.prevMouseX)  *
+          180.0) / Math.PI;
+
+        this.timePrev = this.timeCurrent;
+
+        // console.log(`The rotation of the player is: ${this.rotation}`)
 
         // console.log(`The speed in X: ${this.collisionX - this.prevMouseX} and in Y: ${this.collisionY - this.prevMouseY}`)
 

@@ -2249,15 +2249,15 @@ var init = function() {
     // let newForce = this.secondOrderForces();
     // console.log(`The forces are: X ${newForce.x} Y: ${newForce.y}`)
 
-    let currentInput = { x: this.seek().x, y: this.seek().y };
-    let nextInput = {
-      x: this.seek().x + this.speedX,
-      y: this.seek().y + this.speedY,
-    };
+    // let currentInput = { x: this.seek().x, y: this.seek().y };
+    // let nextInput = {
+    //   x: this.seek().x + this.speedX,
+    //   y: this.seek().y + this.speedY,
+    // };
     // if (nextInput == null) { // Estimate velocity
-    nextInput.x = (currentInput.x - this.previousInput.x) / this.deltaTime;
-    nextInput.y = (currentInput.y - this.previousInput.y) / this.deltaTime;
-    this.previousInput = currentInput;
+    // nextInput.x = (currentInput.x - this.previousInput.x) / this.deltaTime;
+    // nextInput.y = (currentInput.y - this.previousInput.y) / this.deltaTime;
+    // this.previousInput = currentInput;
     // }
     // this.frequency = 30;
     // console.log(value)
@@ -2440,3 +2440,621 @@ var init = function() {
         // this.applyForce(steering)
 
         // console.log(`The movement force in x: ${moveX} and in Y: ${moveY}`)
+
+
+         // OLD VERSION OF THE FOLLOWER ==========================================================
+    // if (
+    //   (this.player.movementDecision ||
+    //     (!this.player.movementDecision &&
+    //       this.defineMagnitude(
+    //         this.target.x - this.collisionX,
+    //         this.target.y - this.collisionY
+    //       ) <= 20)) &&
+    //   !this.movementDecision
+    // ) {
+    //   this.target = { x: this.player.collisionX, y: this.player.collisionY };
+    //   // let steering = this.seek();
+    //   let steering = this.movementAgent()
+    //   // let steering = this.arrive();
+    //   this.applyForce(steering);
+
+    //   this.accX += this.getRandomJitter();
+    //   this.accY += this.getRandomJitter();
+
+    //   this.speedX += this.accX;
+    //   this.speedY += this.accY;
+
+    //   this.collisionX += this.speedX;
+    //   this.collisionY += this.speedY;
+
+    //   this.accX = 0;
+    //   this.accY = 0;
+
+
+
+    // } else {
+
+    //   // CONDITION TO SEE IF THE AGENT DECIDED ON A MOVEMENT
+    //   this.prevMoveDec = this.movementDecision;
+    //   if (!this.movementDecision) {
+    //     this.paintMovementDecision = true;
+    //     this.decideMovement();
+    //     socket.emit(
+    //       "movementDecisionAgent",
+    //       room,
+    //       this.maxSpeed,
+    //       this.trajectoryMovement.length - 1
+    //     );
+
+    //     // this.movementOrder++;
+    //     // if (this.movementOrder > 3) {
+    //     //   this.movementOrder = 0;
+    //     // }
+
+    //     // The movement is decided and the counter is increased
+    //     this.movementDecision = true;
+    //     this.movementCounter++;
+    //     this.target = this.trajectoryMovement[this.counterTarget];
+
+
+    //   }
+
+    //   // CONDITION TO SEE IF THE AGENT ARRIVED TO THE TARGET POINT
+    //   if (
+    //     Math.abs(Math.floor(this.collisionX) - Math.floor(this.target.x)) <=
+    //     20 &&
+    //     Math.abs(Math.floor(this.collisionY) - Math.floor(this.target.y)) <= 20
+    //   ) {
+    //     this.hasArrived = true;
+    //   }
+
+    //   // CHANGE THE TARGET TO A NEW TARGET
+    //   if (this.hasArrived === true) {
+
+    //     this.counterTarget++;
+
+    //     if (this.counterTarget < this.trajectoryMovement.length) {
+
+    //       this.target = this.trajectoryMovement[this.counterTarget];
+
+    //       if (!this.competence) {
+    //         this.agentDesiredSpeedX = Math.random() * this.maxSpeed;
+    //         this.agentDesiredSpeedY = Math.random() * this.maxSpeed;
+    //         this.slowRadiusAgent = Math.random() * 50;
+    //       } else {
+    //         this.slowRadiusAgent = 50;
+    //       }
+
+
+    //     }
+
+    //     if (this.counterTarget >= this.trajectoryMovement.length) {
+    //       this.counterTarget = 0;
+    //       this.movementDecision = false;
+    //       this.trajectoryMovement = [];
+    //       this.speedXPoint = 0;
+    //       this.speedYPoint = 0;
+    //       this.velocityProfile = [];
+    //       this.moveErrorX = Math.abs(getNormallyDistributedRandomNumber(0, 1));
+    //       this.moveErrorY = Math.abs(getNormallyDistributedRandomNumber(0, 1));
+    //     }
+    //     // console.log(this.target)
+    //     this.hasArrived = false;
+    //   }
+    //   // console.log(this.target)
+    //   // FORCE DEFINITION AND APPLICATION TO GO TO THE CURRENT TARGET
+    //   // let steering = this.seek();
+    //   let steering = this.movementAgent();
+    //   // let steering = this.arrive();
+    //   this.applyForce(steering);
+
+
+
+    //   // this.SecondOrderDynamics(1, 2, 1, this.collisionX)
+
+
+
+    //   this.accX += this.getRandomJitter();
+    //   this.accY += this.getRandomJitter();
+
+    //   this.speedX += this.accX;
+    //   this.speedY += this.accY;
+
+    //   this.collisionX += this.speedX;
+    //   this.collisionY += this.speedY;
+
+    //   this.prevAccX = this.accX;
+    //   this.prevAccY = this.accY;
+
+    //   if (this.speedX > this.maxSpeed) {
+    //     this.speedX = this.maxSpeed;
+    //     // console.log('Entered in Speed X')
+    //   } else if (this.speedX < -this.maxSpeed) {
+    //     this.speedX = -this.maxSpeed;
+    //   }
+
+    //   if (this.speedY > this.maxSpeed) {
+    //     this.speedY = this.maxSpeed;
+    //     // console.log('Entered in Speed Y')
+    //   } else if (this.speedY < -this.maxSpeed) {
+    //     this.speedY = -this.maxSpeed;
+    //   }
+
+    //   this.moveErrorX = 0;
+    //   this.moveErrorY = 0;
+
+    //   this.accX = 0;
+    //   this.accY = 0;
+
+    // }
+    // END OLD VERSION OF THE FOLLOWER ======================================================
+
+
+
+    // OLD LEADER MOVEMENT ==================================================================================
+    // if (this.competence) {
+    //   this.maxJitter = 0;
+    // } else {
+    //   this.maxJitter = 5;
+    // }
+
+    // this.maxJitter = 0;
+
+    // const newTime = performance.now();
+    // const dt = (newTime - this.currentTime) / 1000; // Convert to seconds
+    // this.currentTime = newTime;
+
+
+    // this.prevMoveDec = this.movementDecision;
+
+    // if (!this.movementDecision) {
+
+    //   // Choose a movement to do
+    //   this.paintMovementDecision = true;
+    //   this.decideMovement(0);
+    //   socket.emit(
+    //     "movementDecisionAgent",
+    //     room,
+    //     this.maxSpeed,
+    //     this.trajectoryMovementSamplePlayer.length - 1
+    //   );
+
+    //   this.movementOrder++;
+    //   if (this.movementOrder > 3) {
+    //     this.movementOrder = 0;
+    //   }
+    //   this.movementDecision = true;
+    //   this.movementCounter++;
+    //   this.targetSamplePlayer = this.trajectoryMovementSamplePlayer[this.counterTarget];
+    //   if (!this.competence) {
+    //     this.agentDesiredSpeedX = Math.random() * this.maxSpeed;
+    //     this.agentDesiredSpeedY = Math.random() * this.maxSpeed;
+    //     this.slowRadiusAgent = Math.random() * 50;
+    //   } else {
+    //     this.slowRadiusAgent = 50;
+    //   }
+    // }
+
+    // if (
+    //   Math.abs(Math.floor(this.collisionX) - Math.floor(this.targetSamplePlayer.x)) <= 20 &&
+    //   Math.abs(Math.floor(this.collisionY) - Math.floor(this.targetSamplePlayer.y)) <= 20
+    // ) {
+    //   this.hasArrived = true;
+    // }
+
+    // if (this.hasArrived === true) {
+    //   this.counterTarget++;
+    //   if (this.counterTarget < this.trajectoryMovement.length) {
+    //     this.targetSamplePlayer = this.trajectoryMovement[this.counterTarget];
+    //     if (!this.competence) {
+    //       this.agentDesiredSpeedX = Math.random() * this.maxSpeed;
+    //       this.agentDesiredSpeedY = Math.random() * this.maxSpeed;
+    //       this.slowRadiusAgent = Math.random() * 50;
+    //     } else {
+    //       this.slowRadiusAgent = 50;
+    //     }
+    //   }
+
+    //   if (this.counterTarget >= this.trajectoryMovementSamplePlayer.length) {
+    //     this.counterTarget = 0;
+    //     this.movementDecision = false;
+    //     this.trajectoryMovementSamplePlayer = [];
+    //   }
+
+    //   this.hasArrived = false;
+    // }
+
+    // // let steering = this.seek();
+    // let steering = this.movementAgent();
+    // // let steering = this.arrive();
+    // this.applyForce(steering);
+
+    // this.accX += this.getRandomJitter();
+    // this.accY += this.getRandomJitter();
+
+
+    // this.speedX += this.accX;
+    // this.speedY += this.accY;
+
+
+    // this.prevAccX = this.accX;
+    // this.prevAccY = this.accY;
+
+    // this.prevCollisionX = this.collisionX;
+    // this.prevCollisionY = this.collisionY;
+
+    // this.collisionX += this.speedX;
+    // this.collisionY += this.speedY;
+
+    // this.rotation =
+    //       (Math.atan2(
+    //         this.collisionY - this.prevCollisionY,
+    //         this.collisionX - this.prevCollisionX
+    //       ) *
+    //         180.0) /
+    //       Math.PI;
+
+    // this.accX = 0;
+    // this.accY = 0;
+
+
+    // END OF OLD LEADER MOVEMENT =========================================================
+
+
+          // // WRITE THE SCORES OF THE PLAYER IN A JSON FILE.
+      // let finalDataPlayer = JSON.stringify(dataPlayer);
+      // let finalDataPlayerPosition = JSON.stringify(dataPlayerPosition);
+      // let textFilePlayerPosition = "scores_player_training_position_" + socket.id + "_Round" + currentRoundTrainingTotal + ".json"
+      // let textFilePlayer = "scores_player_training" + socket.id + "_Round" + currentRoundTrainingTotal + ".json";
+      // dataPlayerPosition = [];
+      // fs.writeFile(textFilePlayer, finalDataPlayer, (err) => {
+      //   if (err) {
+      //     throw err;
+      //   } else {
+      //     console.log("successful upload");
+      //   }
+      //   console.log("JSON data training player is saved.");
+      // });
+      // fs.writeFile(textFilePlayerPosition, finalDataPlayerPosition, (err) => {
+      //   if (err) {
+      //     throw err;
+      //   } else {
+      //     console.log("successful upload")
+      //   }
+      //   console.log("JSON data training player is saved.");
+      // })
+
+      // // WRITE THE SCORES OF THE AGENT IN A JSON FILE.
+      // let finalDataAgent = JSON.stringify(dataAgent);
+      // let finalDataAgentPosition = JSON.stringify(dataAgentPosition);
+      // let textFileAgentPosition = "scores_agent_training_position_" + socket.id + "_Round" + currentRoundTrainingTotal + ".json";
+      // let textFileAgent = "scores_agent_training" + socket.id + "_Round" + currentRoundTrainingTotal + ".json";
+      // dataAgentPosition = []
+      // fs.writeFile(textFileAgent, finalDataAgent, (err) => {
+      //   if (err) {
+      //     throw err;
+      //   } else {
+      //     console.log("successful upload");
+      //   }
+      //   console.log("JSON data training agent is saved.");
+      // });
+      // fs.writeFile(textFileAgentPosition, finalDataAgentPosition, (err) => {
+      //   if (err) {
+      //     throw err;
+      //   } else {
+      //     console.log("successful upload");
+      //   }
+      //   console.log("JSON data training agent is saved.");
+      // });
+
+      // let textFile
+      // if (mongoClient !== undefined) {
+      //   const db = mongoClient.db(dbName);
+      //   db.collection("room_scores").insert({
+      //     time: new Date(),
+      //     room: room,
+      //     score: room_score[room],
+      //     competence: room_competence[room],
+      //     predictability: room_predictability[room],
+      //     integrity: room_integrity[room],
+      //   });
+      // }
+
+
+      // COMMENTS FROM THE GAME TRAINING=============================
+
+       // VERSION OF THE GAME VARIABLES
+    // let version;
+    // MAIN VARIABLES FOR GAME MODES
+    // let perfect = false;
+    // let comp = false;
+    // let pred = false;
+    // let versionPredictability;
+    // let qualityCompetence;
+    // let qualityPredictability;
+
+
+    // VALIDATION EXPERIMENT SEQUENCE
+    // const $mainVExperiment = document.querySelector("#v-experiment-begin");
+    // const $validationExperimentInstructions = document.querySelector("#validation-instructions-button");
+    // const $trainingSessionEnd = document.querySelector("#button-training-session");
+    // const $validationExperimentPage = document.querySelector("#button-begin-validation-experiment")
+    // const $validationExperimentBegin = document.querySelector("#startValidationExperiment")
+
+
+     // BUTTONS AND FORMS
+
+    // Form that defines parameters for the demo.
+    // const $submitGameMode = document.querySelector("#form");
+    // const $startDemo = document.querySelector("#startNow");
+    // const $backButton = document.querySelector("#goBack");
+    // const $similarityM = document.querySelector("#similarityMeasure");
+    // const $distanceM = document.querySelector("#distanceMeasure");
+    // const $similarNoRotM = document.querySelector("#similarNoRotMeasure");
+
+    // let roomName;
+
+    // let rotationPlayer = 0;
+
+    // let agentIdealPrevX;
+    // let agentIdealPrevY;
+
+    // let agentWavesPrevX;
+    // let agentWavesPrevY;
+
+    // let admin = false;
+
+    // let countStop = 0;
+
+    // let distance;
+    // let distanceArray = [];
+    // let anglePlayerSource;
+    // let angleAgentSource;
+
+    // Agent samples the position of the player at a given time interval
+    // let positionPlayerIntervalId = undefined;
+
+    // SOURCES OF NOISE
+    // let perlinNoise = false;
+
+    // COMPETENCE VARIABLES
+    // let meanCompetence;
+    // let stddevCompetence;
+    // let competenceValueList = [];
+    // let competenceAngle;
+    // let competenceVelocity;
+    // let competenceDistance;
+    // let distanceComp;
+    // let noiseXCompetence;
+    // let noiseYCompetence;
+    // let playerPosCompX;
+    // let playerPosCompY;
+    // let randomNumberInterval;
+    // let versionCompetence = 0;
+
+    // let jerkPlayer = 0;
+    // let jerkAgent = 0;
+
+    // let jerkXPlayer = 0;
+    // let jerkYPlayer = 0;
+    // let jerkXAgent = 0;
+    // let jerkYAgent = 0;
+
+    // let jerksXPlayer = [];
+    // let jerksYPlayer = [];
+    // let jerksXAgent = [];
+    // let jerksYAgent = [];
+
+    // COMPETENCE/INCOMPETENCE PARAMETERS
+
+    // PREDICTABILITY VARIABLES
+    // let predictabilityActive;
+    // let meanPredictability = 0.0;
+    // let stddevPredictability = 100;
+    // let stddevPredRad = Math.PI;
+    // let noiseXPredictability;
+    // let noiseYPredictability;
+    // let distancePred;
+    // let randomNumberIntervalPredic;
+
+    // let playerPosPredX;
+    // let playerPosPredY;
+    // let randomNumPred;
+
+    // let curvaturePlayer;
+
+    // let curvatureAgent;
+
+    // let timer = 0;
+
+    // let inter = 0;
+    // let competenceActive = false;
+    // let randomPerlinNoise = false;
+    // let idealAngle;
+    // let idealVelocity;
+    // let rotationDifference;
+    // let rotationDifferenceAIdeal;
+    // let rotationDifferenceAWaves;
+
+    // let xpos;
+    // let ypos;
+
+    // let velocityPlayer;
+
+    // let testLogic = false;
+
+    // BEGINNING OF THE NEW PROGRAM
+    // let timesProfile = 0;
+    // let roundBeginningGame = false;
+    // let mode = 0;
+
+    // let times = 0;
+    // let score = 0;
+    // let testSmooth;
+    // let interval;
+    // let sliderCompetence;
+    // let competencePlayer = [];
+    // let sliderPredictability;
+    // let entropy;
+    // let smoothness;
+    // let frameP;
+    // let accelXPlayer = [];
+    // let accelYPlayer = [];
+    // let accelXAgent = [];
+    // let accelYAgent = [];
+    // let prevAccelerationX = 0;
+    // let prevAccelerationY = 0;
+    // let jerkX = 0;
+    // let jerkY = 0;
+    // let accel = 0;
+    // let smoothP;
+    // let currentPath;
+    // let stats;
+    // let currentTarget;
+    // let targetCounter = 0;
+    // let txt;
+    // let prevMouseX1;
+    // let prevMouseY1;
+    // let curvaturesAgent = [];
+    // let curvaturesPlayer = [];
+    // let anglePlayerSource
+    // let angleAgentSource
+
+    // let agentCounterMove = 0;
+    // let playerCounterMove = 0;
+
+    // let agentAccel = [];
+
+    // COUNTER FOR THE NUMBER OF ROUNDS
+    // let numberOfRounds = 0;
+
+    // CANVAS DEFINITION FOR GAMES
+
+
+    // GAME EXPERIMENT
+    // BEGINNING OF THE OLD PROGRAM
+
+    // let speedSelection = document.querySelector("#spdOptions");
+    // let levelCompetence = document.querySelector("#competenceOptions");
+    // let levelPredictability = document.querySelector("#predictabilityOptions");
+    // let measureCompetenceType = document.querySelector("#measureCompetence");
+    // let measurePredictabilityType = document.querySelector("#measurePredictability");
+
+
+    // let compMeasurement = 0;
+
+    // let mouseSpeedY = [];
+      // let speeds = [];
+      // let speeds2 = [];
+      // let rounds = 0;
+      // let prevMoveX = 0;
+      // let prevMoveY = 0;
+      // let prevMoveAgentX = 0;
+      // let prevMoveAgentY = 0;
+      // let prevSpeedX = 0;
+      // let prevSpeedY = 0;
+
+      // speeds.push(gameTraining.player.speedX);
+            // speeds2.push(gameTraining.player.speedY);
+            // accelXAgent.push(gameTraining.agent.prevAccX);
+            // accelYAgent.push(gameTraining.agent.prevAccY);
+
+            // if (speeds.length >= 2) {
+            //   accelXPlayer.push(
+            //     speeds[speeds.length - 1] - speeds[speeds.length - 2]
+            //   );
+            // }
+
+            // if (speeds2.length >= 2) {
+            //   accelYPlayer.push(
+            //     speeds2[speeds2.length - 1] - speeds2[speeds2.length - 2]
+            //   );
+            // }
+
+            // if (accelXPlayer.length >= 2) {
+            //   jerkXPlayer =
+            //     accelXPlayer[accelXPlayer.length - 1] -
+            //     accelXPlayer[accelXPlayer.length - 2];
+            //   jerksXPlayer.push(
+            //     accelXPlayer[accelXPlayer.length - 1] -
+            //     accelXPlayer[accelXPlayer.length - 2]
+            //   );
+            // }
+
+            // if (accelYPlayer.length >= 2) {
+            //   jerkYPlayer =
+            //     accelYPlayer[accelYPlayer.length - 1] -
+            //     accelYPlayer[accelYPlayer.length - 2];
+            //   jerksYPlayer.push(
+            //     accelYPlayer[accelYPlayer.length - 1] -
+            //     accelYPlayer[accelYPlayer.length - 2]
+            //   );
+            // }
+
+            // if (accelXAgent.length >= 2) {
+            //   jerkXAgent =
+            //     accelXAgent[accelXAgent.length - 1] -
+            //     accelXAgent[accelXAgent.length - 2];
+            //   jerksXAgent.push(
+            //     accelXAgent[accelXAgent.length - 1] -
+            //     accelXAgent[accelXAgent.length - 2]
+            //   );
+            // }
+
+            // if (accelYAgent.length >= 2) {
+            //   jerkYAgent =
+            //     accelYAgent[accelYAgent.length - 1] -
+            //     accelYAgent[accelYAgent.length - 2];
+            //   jerksYAgent.push(
+            //     accelYAgent[accelYAgent.length - 1] -
+            //     accelYAgent[accelYAgent.length - 2]
+            //   );
+            // }
+
+            // mouseSpeedX.push(gameTraining.mouse.x - prevMoveX);
+            // mouseSpeedY.push(gameTraining.mouse.y - prevMoveY);
+
+            // if (
+            //   accelXPlayer[accelXPlayer.length - 1] !== undefined &&
+            //   accelYPlayer[accelYPlayer.length - 1] !== undefined
+            // ) {
+            //   curvaturePlayer = calculateCurvature(
+            //     gameTraining.player.speedX,
+            //     gameTraining.player.speedY,
+            //     accelXPlayer[accelXPlayer.length - 1],
+            //     accelYPlayer[accelYPlayer.length - 1]
+            //   );
+
+            //   if (curvaturePlayer !== NaN && curvaturePlayer !== null) {
+            //     curvaturesPlayer.push(curvaturePlayer);
+            //     curvaturePlayer = 0;
+            //   } else {
+            //     console.log(`The function is working`);
+            //   }
+            // }
+
+            // if (gameTraining.agent.accX !== undefined && gameTraining.agent.accY !== undefined) {
+            //   curvatureAgent = calculateCurvature(
+            //     gameTraining.agent.speedX,
+            //     gameTraining.agent.speedY,
+            //     gameTraining.agent.prevAccX,
+            //     gameTraining.agent.prevAccY
+            //   );
+            //   curvaturesAgent.push(curvatureAgent);
+            // }
+            // console.log(!gameTraining.player.movementDecision &&
+            //   gameTraining.player.prevMoveDec !== gameTraining.player.movementDecision, gameTraining.player.movementDecision, gameTraining.player.prevMoveDec, gameTraining.player.movementDecision)
+            // if (
+            //   !gameTraining.player.movementDecision &&
+            //   gameTraining.player.prevMoveDec !== gameTraining.player.movementDecision
+            // ) {
+            //   socket.emit("calculateMeasuresPlayer", room);
+            //   curvaturesPlayer = [];
+            // }
+            // if (
+            //   !gameTraining.agent.movementDecision &&
+            //   gameTraining.agent.prevMoveDec !== gameTraining.agent.movementDecision
+            // ) {
+            //   socket.emit("calculateMeasuresAgent", room);
+            //   curvaturesAgent = [];
+            // }

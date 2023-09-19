@@ -19,7 +19,7 @@ class PageSelection {
     const $mainVExperiment = document.querySelector("#v-experiment-begin");
     const $validationExperimentInstructions = document.querySelector("#validation-instructions-button");
     const $trainingSessionExperiment = document.querySelector("#button-training-instructions-en")
-    const $trainingSessionEnd = document.querySelector("#button-training-session");
+    // const $trainingSessionEnd = document.querySelector("#button-training-session");
     const $validationExperimentPage = document.querySelector("#button-begin-validation-experiment")
     const $validationExperimentBegin = document.querySelector("#startValidationExperiment")
 
@@ -181,9 +181,9 @@ class PageSelection {
     //   startTrainingSession()
     // })
     // Go from the training session to the training debrief.
-    $trainingSessionEnd.addEventListener("click", (e) => {
-      startTrainingSessionDebrief();
-    })
+    // $trainingSessionEnd.addEventListener("click", (e) => {
+    //   startTrainingSessionDebrief();
+    // })
     // Go from the training debrief to the validation experiment.
     $validationExperimentPage.addEventListener("click", (e) => {
       console.log(`Is clicked`)

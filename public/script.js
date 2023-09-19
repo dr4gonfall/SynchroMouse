@@ -12,7 +12,7 @@ let qualityCompetence;
 let qualityPredictability;
 
 // PAGE SELECTORS
-const $mainMenu = document.querySelector("#main-menu-button");
+// const $mainMenu = document.querySelector("#main-menu-button");
 
 
 // CANVAS VALIDATION EXPERIMENT SELECTION
@@ -344,9 +344,9 @@ function goBackMenu() {
 
 $backButton.addEventListener("click", goBackMenu);
 
-$mainMenu.addEventListener("click", (e) => {
-  startMenu();
-});
+// $mainMenu.addEventListener("click", (e) => {
+//   startMenu();
+// });
 
 $startDemo.addEventListener("click", () => {
   if (!document.pointerLockElement) {

@@ -34,7 +34,9 @@ class TrainingGame {
     let prevX;
     let prevY;
     let rotation = 0;
+    let differenceRotation = 0;
     let rotationAgent = 0;
+    let differenceRotationAgent = 0;
 
     let urlParams;
     
@@ -254,22 +256,22 @@ class TrainingGame {
         if (roundNumber === 1) {
           gameTraining.agent.role = 0;
           gameTraining.agent.follower = true;
-          gameTraining.agent.competence = false;
-          gameTraining.agent.predictability = false;
+          gameTraining.agent.competence = true;
+          gameTraining.agent.predictability = true;
         } else if (roundNumber === 2) {
           gameTraining.agent.role = 0;
           gameTraining.agent.follower = true;
           gameTraining.agent.competence = true;
-          gameTraining.agent.predictability = true;
+          gameTraining.agent.predictability = false;
         } else if (roundNumber === 3) {
-          gameTraining.agent.role = 1;
-          gameTraining.agent.follower = false;
+          gameTraining.agent.role = 0;
+          gameTraining.agent.follower = true;
           gameTraining.agent.competence = true;
           gameTraining.agent.predictability = false;
         } else if (roundNumber === 4) {
-          gameTraining.agent.role = 1;
-          gameTraining.agent.follower = false;
-          gameTraining.agent.competence = true;
+          gameTraining.agent.role = 0;
+          gameTraining.agent.follower = true;
+          gameTraining.agent.competence = false;
           gameTraining.agent.predictability = false;
         } else if (roundNumber == 5) {
           gameTraining.agent.role = 2;
@@ -357,18 +359,26 @@ class TrainingGame {
             animationId = requestAnimationFrame(animate);
             
 
-            rotationAgent =
-              (Math.atan2(
-                gameTraining.agent.collisionY - prevMoveAgentY,
-                gameTraining.agent.collisionX - prevMoveAgentX
-              ) *
-                180.0) /
-              Math.PI;
+
+            rotationAgent = gameTraining.agent.rotation;
+            differenceRotationAgent = gameTraining.agent.differenceRotation;
+
+            // rotationAgent =
+            //   (Math.atan2(
+            //     gameTraining.agent.collisionY - prevMoveAgentY,
+            //     gameTraining.agent.collisionX - prevMoveAgentX
+            //   ) *
+            //     180.0) /
+            //   Math.PI;
               // console.log(`The rotation of the agent is: ${rotationAgent}`)
-            rotation =
-              (Math.atan2(gameTraining.mouse.y - prevMoveY, gameTraining.mouse.x, prevMouseX) *
-                180.0) /
-              Math.PI;
+            
+            rotation = gameTraining.player.rotation;
+            differenceRotation = gameTraining.player.differenceRotation; 
+
+              // rotation =
+            //   (Math.atan2(gameTraining.mouse.y - prevMoveY, gameTraining.mouse.x, prevMouseX) *
+            //     180.0) /
+            //   Math.PI;
             mouseSpeedXMax.push(Math.abs(gameTraining.mouse.x - prevMoveX));
             mouseSpeedYMax.push(Math.abs(gameTraining.mouse.y - prevMoveY));
 
@@ -379,6 +389,7 @@ class TrainingGame {
               gameTraining.agent.collisionX,
               gameTraining.agent.collisionY,
               rotationAgent,
+              differenceRotationAgent,
               // gameTraining.agent.speedX,
               // gameTraining.agent.speedY,
               // gameTraining.agent.prevAccX,
@@ -394,6 +405,7 @@ class TrainingGame {
               gameTraining.player.rawMouseMoveX,
               gameTraining.player.rawMouseMoveY,
               rotation,
+              differenceRotation,
               gameTraining.player.forcePlayerX,
               gameTraining.player.forcePlayerY,
               // speeds[speeds.length - 1],

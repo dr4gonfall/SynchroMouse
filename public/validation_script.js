@@ -475,6 +475,7 @@ class ValidationScript {
         const gameValidation = new Game(canvasValidation, socket, room);
 
         console.log(`The current round is: ${roundNumber}`)
+        console.log(`The profile of the game: ${currentGameProfile}`)
         // const setGameConfig = (follower, competence, predictability) => {
         //   gameValidation.agent.follower = follower;
         //   gameValidation.agent.competence = competence;

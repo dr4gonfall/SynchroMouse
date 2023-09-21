@@ -14,6 +14,17 @@ class Agent {
     this.speedY = 0;
     this.speedXPoint = 0;
     this.speedYPoint = 0;
+
+    this.prevRotation = 0;
+    this.differenceRotation = 0;
+
+
+    this.speedXCurvature = 0;
+    this.speedYCurvature = 0;
+
+    this.accXCurvature = 0;
+    this.accYCurvature = 0;
+
     this.maxSpeed = 5;
     this.minSpeed = 0;
     this.decSpeed = 0;
@@ -48,6 +59,8 @@ class Agent {
     this.percentagePositionY = 0;
     this.percentageSpeedX = 0;
     this.percentageSpeedY = 0;
+
+    this.bezierProfile = 0;
     // Area Parameters Prototype
     this.minCoordinateX = 0;
     this.minCoordinateY = 0;
@@ -84,6 +97,8 @@ class Agent {
     this.scoreSpeedYSimilarityAgent = 0;
     this.scoreRotationSimilarityAgent = 0;
     this.rotation = 0;
+    this.rotationSum = 0;
+    
 
     this.currentCuadrant = 0;
 
@@ -143,12 +158,16 @@ class Agent {
 
     this.degreeVel = 0;
 
+    this.initialTrajectoryLength = 0;
+
     this.prevMoveDec = this.movementDecision;
     this.agentDesiredSpeedX =  randIntervalFromInterval(0, this.maxSpeed);
     this.agentDesiredSpeedY = randIntervalFromInterval(0, this.maxSpeed);
     this.velocityVector = {x: 0, y: 0};
 
     this.velocityProfile = [];
+    this.amountOfSharpTurnsPlayer = 0;
+    this.amountOfSmoothTurnsPlayer = 0;
 
     // Second Order dynamics
     // Previous Input
@@ -476,7 +495,9 @@ class Agent {
 
       this.movementDecision = true;
 
-      this.bezierMoveExecutionAlternative(1);
+      this.bezierProfile = 1;
+
+      this.bezierMoveExecutionAlternative(this.bezierProfile);
 
       // Algorithm for better decision making...
     } else if (currentMovementType == 1) {
@@ -566,9 +587,23 @@ class Agent {
         y: this.collisionY
       }
 
+      
+
       this.endBezier = {
-        x: this.player.collisionX,
-        y: this.player.collisionY
+        x: this.player.collisionX + (this.player.speedX * (40)),
+        y: this.player.collisionY + (this.player.speedY * (40))
+      }
+
+      if (this.endBezier.x < this.collisionRadius) {
+        this.endBezier.x = this.collisionRadius;
+      } else if (this.endBezier.x > this.game.width - this.collisionRadius) {
+        this.endBezier.x = this.game.width - this.collisionRadius;
+      }
+
+      if (this.endBezier.y < this.collisionRadius) {
+        this.endBezier.y = this.collisionRadius;
+      } else if (this.endBezier.y > this.game.height - this.collisionRadius) {
+        this.endBezier.y = this.game.height - this.collisionRadius;
       }
 
       // this.trajectoryMovementSamplePlayer.push(this.initialBezier);
@@ -585,32 +620,99 @@ class Agent {
           y: linearInterpolation(this.initialBezier.y, this.endBezier.y, 1 / 3),
         };
 
+        // Alternative Definition of the First Parameter of Bezier Curve
+
+        // this.p1Bezier = {
+        //   x: 0,
+        //   y:0,
+        // }
+
+
+
         // Definition of the Second Parameter of Bezier Curve
+        // this.p2Bezier = {
+        //   x: linearInterpolation(this.initialBezier.x, this.endBezier.x, 2 / 3),
+        //   y: linearInterpolation(this.initialBezier.y, this.endBezier.y, 2 / 3),
+        // };
+
         this.p2Bezier = {
-          x: linearInterpolation(this.initialBezier.x, this.endBezier.x, 2 / 3),
-          y: linearInterpolation(this.initialBezier.y, this.endBezier.y, 2 / 3),
-        };
+          x:0,
+          y:0,
+        }
+
+        if (this.initialBezier.x < this.endBezier.x) {
+          this.p2Bezier.x = randIntervalFromIntervalInteger(this.initialBezier.x, this.endBezier.x)
+        } else if (this.initialBezier.x >= this.endBezier.x) {
+          this.p2Bezier.x = randIntervalFromIntervalInteger(this.endBezier.x, this.initialBezier.x)
+        }
+
+        if (this.initialBezier.y < this.endBezier.y) {
+          this.p2Bezier.y = randIntervalFromIntervalInteger(this.initialBezier.y, this.endBezier.y)
+        } else if (this.initialBezier.y >= this.endBezier.y) {
+          this.p2Bezier.y = randIntervalFromIntervalInteger(this.endBezier.y, this.initialBezier.y)
+        }
+
+
+
+
+
       } else if (!this.predictability) {
 
-        // Definition of the First Parameter of Bezier Curve
+        // Math.floor(Math.random() * ((this.game.width - this.collisionRadius)) + this.collisionRadius)
         this.p1Bezier = {
-          x: Math.floor(Math.random() * ((this.game.width - this.collisionRadius)) + this.collisionRadius),
-          y: Math.floor(Math.random() * (this.game.height - this.collisionRadius) + this.collisionRadius),
+          x: 0,
+          y: 0,
         };
+
+
+        
+        
+        // Definition of the First Parameter of Bezier Curve
+        if (this.initialBezier.x < this.endBezier.x) {
+          this.p1Bezier.x = randIntervalFromIntervalInteger(this.initialBezier.x, this.endBezier.x)
+        } else if (this.initialBezier.x >= this.endBezier.x) {
+          this.p1Bezier.x = randIntervalFromIntervalInteger(this.endBezier.x, this.initialBezier.x)
+        }
+
+        if (this.initialBezier.y < this.endBezier.y) {
+          this.p1Bezier.y = randIntervalFromIntervalInteger(this.initialBezier.y, this.endBezier.y)
+        } else if (this.initialBezier.y >= this.endBezier.y) {
+          this.p1Bezier.y = randIntervalFromIntervalInteger(this.endBezier.y, this.initialBezier.y)
+        }
+        
 
         // console.log(this.p1Bezier)
 
         // Definition of the Second Parameter of Bezier Curve
+
+
         this.p2Bezier = {
-          x: Math.floor(Math.random() * ((this.game.width - this.collisionRadius)) + this.collisionRadius),
-          y: Math.floor(Math.random() * (this.game.height - this.collisionRadius) + this.collisionRadius),
-        };
+          x: randIntervalFromIntervalInteger(this.collisionRadius, this.game.width - this.collisionRadius),
+          y: randIntervalFromIntervalInteger(this.collisionRadius, this.game.height - this.collisionRadius)
+        }
+        
+        // this.p2Bezier = {
+        //   x:0,
+        //   y:0,
+        // }
+
+        // if (this.initialBezier.x < this.endBezier.x) {
+        //   this.p2Bezier.x = randIntervalFromIntervalInteger(this.initialBezier.x, this.endBezier.x)
+        // } else if (this.initialBezier.x >= this.endBezier.x) {
+        //   this.p2Bezier.x = randIntervalFromIntervalInteger(this.endBezier.x, this.initialBezier.x)
+        // }
+
+        // if (this.initialBezier.y < this.endBezier.y) {
+        //   this.p2Bezier.y = randIntervalFromIntervalInteger(this.initialBezier.y, this.endBezier.y)
+        // } else if (this.initialBezier.y >= this.endBezier.y) {
+        //   this.p2Bezier.y = randIntervalFromIntervalInteger(this.endBezier.y, this.initialBezier.y)
+        // }
 
       }
 
       this.movementDecision = true;
-
-      this.bezierMoveExecutionAlternative(1);
+      this.bezierProfile = 1;
+      this.bezierMoveExecutionAlternative(this.bezierProfile);
       // console.log(`The length of the trajectory is: ${this.trajectoryMovementSamplePlayer.length}`)
 
 
@@ -622,11 +724,6 @@ class Agent {
         x: this.collisionX,
         y: this.collisionY
       }
-
-
-      console.log('ENTERED FUNCTION')
-
-      
 
       // this.trajectoryMovementSamplePlayer.push(this.initialBezier);
 
@@ -682,6 +779,8 @@ class Agent {
           x: linearInterpolation(this.initialBezier.x, this.endBezier.x, 2 / 3),
           y: linearInterpolation(this.initialBezier.y, this.endBezier.y, 2 / 3),
         };
+
+
       } else if (!this.predictability) {
 
 
@@ -729,8 +828,9 @@ class Agent {
 
 
       this.movementDecision = true;
+      this.bezierProfile = 1
 
-      this.bezierMoveExecutionAlternative(1);
+      this.bezierMoveExecutionAlternative(this.bezierProfile);
 
 
     }
@@ -745,15 +845,19 @@ class Agent {
       if (profile === 0) {
         this.percentageSpeedX = 0.05;
         this.percentageSpeedY = 0.05;
+        // this.initialTrajectoryLength = 1 / 0.05
       } else if (profile === 1) {
         this.percentageSpeedX = 0.1;
         this.percentageSpeedY = 0.1;
+        // this.initialTrajectoryLength = 1 / 0.1
       } else if (profile === 2) {
         this.percentageSpeedX = 0.2;
         this.percentageSpeedY = 0.2;
+        // this.initialTrajectoryLength = 1/ 0.2
       } else if (profile === 3) {
         this.percentageSpeedX = 0.5;
         this.percentageSpeedY = 0.5;
+        // this.initialTrajectoryLength = 1 / 0.5;
       }
       // this.percentageSpeedX = 0.5;
       // this.percentageSpeedY = 0.5;
@@ -892,7 +996,7 @@ class Agent {
     // console.log(this.trajectoryMovement)
 
 
-    console.log(this.trajectoryMovementSamplePlayer)
+    // console.log(this.trajectoryMovementSamplePlayer)
   }
 
 
@@ -974,14 +1078,14 @@ class Agent {
       force = normalize(force.x, force.y);
 
       if (!this.competence) {
-        force.x = force.x * (this.agentDesiredSpeedX + (randIntervalFromInterval(0,this.maxSpeed - this.agentDesiredSpeedX)));
-        force.y = force.y * (this.agentDesiredSpeedY + (randIntervalFromInterval(0, this.maxSpeed - this.agentDesiredSpeedY)));
+        force.x = force.x * (this.agentDesiredSpeedX);
+        force.y = force.y * (this.agentDesiredSpeedY);
         // console.log(`The desired speed is: ${this.agentDesiredSpeedX} and ${this.agentDesiredSpeedY}`)
         
         // console.log(`The force is: ${force.x} and ${force.y}`)
 
 
-      } else {
+      } else if(this.competence) {
         force.x = force.x * this.maxSpeed;
         force.y = force.y * this.maxSpeed;
       }
@@ -1090,39 +1194,69 @@ class Agent {
       y: this.targetSamplePlayer.y - this.collisionY,
     };
     force = normalize(force.x, force.y);
-
+    // console.log(`The force in X: ${force.x} and Y: ${force.y}`)
 
     if (!this.competence) {
-      force.x = force.x * (this.agentDesiredSpeedX + (randIntervalFromInterval(0,this.maxSpeed - this.agentDesiredSpeedX)));
-      force.y = force.y * (this.agentDesiredSpeedY + (randIntervalFromInterval(0, this.maxSpeed - this.agentDesiredSpeedY)));
+      force.x = force.x * (this.agentDesiredSpeedX);
+      force.y = force.y * (this.agentDesiredSpeedY);
       // console.log(`The desired speed is: ${this.agentDesiredSpeedX} and ${this.agentDesiredSpeedY}`)
       
+      // force.x = force.x * (this.player.speedX * randIntervalFromIntervalInteger(1, 2));
+      // force.y = force.y * (this.player.speedY * randIntervalFromIntervalInteger(1, 2))
+
+
       // console.log(`The force is: ${force.x} and ${force.y}`)
 
+      
+    } else if(this.competence){
+      // if (this.player.speedX / this.player.maxSpeed < 0) {
+      //   force.x = this.maxSpeed * (-randIntervalFromInterval(0, Math.abs((this.player.speedX / this.player.maxSpeed))))
+      //   // console.log(`A random number is: ${randIntervalFromInterval((this.player.speedX / this.player.maxSpeed), 0)}`)
+      // } else if(this.player.speedX / this.player.maxSpeed > 0) {
+      //   force.x = this.maxSpeed * (randIntervalFromInterval(0, (this.player.speedX / this.player.maxSpeed)))
+      // }
 
-    } else {
+      // if (this.player.speedY / this.player.maxSpeed < 0) {
+      //   force.y = this.maxSpeed * (-randIntervalFromInterval(0, Math.abs((this.player.speedY / this.player.maxSpeed))))
+      // } else if(this.player.speedY / this.player.maxSpeed > 0) {
+      //   force.y = this.maxSpeed * (randIntervalFromInterval(0, (this.player.speedY / this.player.maxSpeed)))
+      // }
+      // force.x = this.maxSpeed * ( randIntervalFromInterval(0, (this.player.speedX / this.player.maxSpeed)));
+      // force.y = this.maxSpeed * ( (this.player.speedY / this.player.maxSpeed));
+      // force.x = force.x * (linearInterpolation(1, this.maxSpeed, this.initialTrajectoryLength));
+      // force.y = force.y * (linearInterpolation(1, this.maxSpeed, this.initialTrajectoryLength));
       force.x = force.x * this.maxSpeed;
       force.y = force.y * this.maxSpeed;
+      // force.x = this.player.speedX * randIntervalFromInterval(0.1, 1);
+      // force.y = this.player.speedY * randIntervalFromInterval(0.1, 1);
+      // console.log(`The percentage of speed: ${this.player.speedX / this.player.maxSpeed} and Y: ${this.player.speedY / this.player.maxSpeed}`);
     }
 
+    console.log(`The length of trajectory: ${this.initialTrajectoryLength}`)
+
+    // console.log(`Initial trajectory: ${this.initialTrajectoryLength}`)
+    // console.log(`The force is X: ${force.x} and Y: ${force.y}`)
 
     // force.x = force.x * this.maxSpeed;
     // force.y = force.y * this.maxSpeed;
 
     force = { x: force.x - this.speedX, y: force.y - this.speedY };
 
-    if (force.x > this.maxForce) {
-      force.x = this.maxForce;
-    } else if (force.x < -this.maxForce) {
-      force.x = -this.maxForce;
-    }
+    // console.log(`The force is X: ${force.x} and Y: ${force.y}`)
 
-    if (force.y > this.maxForce) {
-      force.y = this.maxForce;
-    } else if (force.y < -this.maxForce) {
-      force.y = -this.maxForce;
-    }
+    // if (force.x > this.maxForce) {
+    //   force.x = this.maxForce;
+    // } else if (force.x < -this.maxForce) {
+    //   force.x = -this.maxForce;
+    // }
 
+    // if (force.y > this.maxForce) {
+    //   force.y = this.maxForce;
+    // } else if (force.y < -this.maxForce) {
+    //   force.y = -this.maxForce;
+    // }
+
+    
     return force;
   }
 
@@ -1178,7 +1312,34 @@ class Agent {
     this.maxJitter = 0;
     // console.log(`The target is ${this.targetSamplePlayer.x} and ${this.targetSamplePlayer.y}`)
 
+    if (Math.abs(this.player.rotation) >= 90) {
+      this.amountOfSharpTurnsPlayer ++;
+    } else if (Math.abs(this.player.rotation) < 90 && this.amountOfSharpTurnsPlayer > 0) {
+      this.amountOfSmoothTurnsPlayer ++;
+    
+    }
+
+    if (this.amountOfSharpTurnsPlayer >= 10 && this.amountOfSmoothTurnsPlayer <= 10) {
+      this.movementDecision = false;
+      this.trajectoryMovementSamplePlayer = [this.targetSamplePlayer]
+      // this.amountOfSharpTurnsPlayer = 0;
+
+    }
+
+    if (this.amountOfSmoothTurnsPlayer >= 10) {
+      this.amountOfSharpTurnsPlayer = 0;
+      this.amountOfSmoothTurnsPlayer = 0;
+    }
+
+    // console.log(`The amount of sharp turns is: ${this.amountOfSharpTurnsPlayer}`)
+    
+    
+    
     if (!this.predictability) {
+      
+      if (this.initialTrajectoryLength > 1) {
+        this.initialTrajectoryLength = 0;
+      }
       // If there is a distance greater than a 100 and the agent has not decided a movement.
       if (defineMagnitude(this.player.collisionX - this.collisionX, this.player.collisionY - this.collisionY) >= 50 &&
         !this.movementDecision) {
@@ -1188,6 +1349,16 @@ class Agent {
         this.movementDecision = true;
         this.targetSamplePlayer.x = this.trajectoryMovementSamplePlayer[0].x;
         this.targetSamplePlayer.y = this.trajectoryMovementSamplePlayer[0].y;
+        if (this.bezierProfile === 0) {
+          this.initialTrajectoryLength += 0.05
+        } else if (this.bezierProfile === 1) {
+          this.initialTrajectoryLength += 0.1
+        } else if (this.bezierProfile === 2) {
+          this.initialTrajectoryLength += 0.2
+        } else if (this.bezierProfile === 3) {
+          this.initialTrajectoryLength +=0.5
+        }
+        // this.initialTrajectoryLength += 
         this.hasArrivedSamplePlayer = false;
         
         
@@ -1210,8 +1381,9 @@ class Agent {
           this.trajectoryMovementSamplePlayer.shift();
           setTimeout(() => {
             this.movementDecision = false;
-            this.thinkingTime = randIntervalFromIntervalInteger(200, 500)
+            this.thinkingTime = randIntervalFromIntervalInteger(50, 200)
           }, this.thinkingTime);
+          this.initialTrajectoryLength = 0;
         }
 
 
@@ -1222,10 +1394,10 @@ class Agent {
           this.hasArrivedSamplePlayer = false;
           // Conditions for desired speed for agent incompetence.
           if (!this.competence) {
-            this.agentDesiredSpeedX = randIntervalFromIntervalInteger(0, this.maxSpeed);
-            this.agentDesiredSpeedY = randIntervalFromIntervalInteger(0, this.maxSpeed);
-            this.slowRadiusAgent = randIntervalFromInterval(0, 50);
-          } else {
+            this.agentDesiredSpeedX = randIntervalFromIntervalInteger(1, this.maxSpeed);
+            this.agentDesiredSpeedY = randIntervalFromIntervalInteger(1, this.maxSpeed);
+            this.slowRadiusAgent = 50;
+          } else if(this.competence) {
             this.slowRadiusAgent = 50;
           }
 
@@ -1253,6 +1425,8 @@ class Agent {
           this.collisionX += this.speedX;
           this.collisionY += this.speedY;
 
+          this.prevRotation = this.rotation
+
           this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
@@ -1260,6 +1434,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+          this.differenceRotation = this.rotation - this.prevRotation;
 
           this.prevAccX = this.accX;
           this.prevAccY = this.accY;
@@ -1300,13 +1476,17 @@ class Agent {
           this.collisionX += this.speedX;
           this.collisionY += this.speedY;
 
+          this.prevRotation = this.rotation;
+
           this.rotation =
           (Math.atan2(
-            this.collisionY - this.prevCollisionY,
+            this.collisionY- this.prevCollisionY,
             this.collisionX - this.prevCollisionX
           ) *
             180.0) /
           Math.PI;
+
+          this.differenceRotation = this.rotation - this.prevRotation;
 
           this.prevAccX = this.accX;
           this.prevAccY = this.accY;
@@ -1340,6 +1520,8 @@ class Agent {
         this.collisionX += this.speedX;
         this.collisionY += this.speedY;
 
+        this.prevRotation = this.rotation;
+
         this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
@@ -1347,6 +1529,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+          this.differenceRotation = this.rotation - this.prevRotation;
 
         this.prevAccX = this.accX;
         this.prevAccY = this.accY;
@@ -1379,6 +1563,12 @@ class Agent {
     // CONDITION AGENT IS PREDICTABLE
     } else if (this.predictability) {
 
+      // Control of the length of points for speed profile.
+      if (this.initialTrajectoryLength >1) {
+        this.initialTrajectoryLength = 0;
+      }
+
+      // Selection of a new series of points for a decision.
       if (!this.movementDecision) {
         this.paintMovementDecision = true;
         this.decideMovement(4);
@@ -1386,9 +1576,23 @@ class Agent {
         this.movementDecision = true;
         this.targetSamplePlayer.x = this.trajectoryMovementSamplePlayer[0].x;
         this.targetSamplePlayer.y = this.trajectoryMovementSamplePlayer[0].y;
+        
+        
+        if (this.bezierProfile === 0) {
+          this.initialTrajectoryLength += 0.05
+        } else if (this.bezierProfile === 1) {
+          this.initialTrajectoryLength += 0.1
+        } else if (this.bezierProfile === 2) {
+          this.initialTrajectoryLength += 0.2
+        } else if (this.bezierProfile === 3) {
+          this.initialTrajectoryLength +=0.5
+        }
+        
+        
         this.hasArrivedSamplePlayer = false;
       }
 
+      // condition to see if the agent arrived to the target.
       if (
         Math.abs(Math.floor(this.collisionX) - Math.floor(this.targetSamplePlayer.x)) <=
         20 &&
@@ -1399,9 +1603,9 @@ class Agent {
 
       // CONDITION AGENT IS INCOMPETENT
       if (!this.competence) {
-        this.agentDesiredSpeedX = randIntervalFromInterval(0, this.maxSpeed);
-        this.agentDesiredSpeedY = randIntervalFromInterval(0, this.maxSpeed);
-        this.slowRadiusAgent = randIntervalFromInterval(0, 50);
+        this.agentDesiredSpeedX = randIntervalFromInterval(1, this.maxSpeed);
+        this.agentDesiredSpeedY = randIntervalFromInterval(1, this.maxSpeed);
+        this.slowRadiusAgent = 50;
       // CONDITION AGENT IS COMPETENT
       } else if (this.competence) {
         this.slowRadiusAgent = 50;
@@ -1415,11 +1619,12 @@ class Agent {
 
         if (this.trajectoryMovementSamplePlayer.length === 1) {
           this.trajectoryMovementSamplePlayer.shift();
+          this.initialTrajectoryLength = 0;
           setTimeout(() => {
             this.movementDecision = false;
             this.thinkingTime = randIntervalFromIntervalInteger(200, 500)
           }, 50);
-          
+          this.initialTrajectoryLength = 0;
         }
 
 
@@ -1433,10 +1638,10 @@ class Agent {
 
           if (!this.competence) {
 
-            this.agentDesiredSpeedX = randIntervalFromInterval(0, this.maxSpeed);
-            this.agentDesiredSpeedY = randIntervalFromInterval(0, this.maxSpeed);
-            this.slowRadiusAgent = randIntervalFromInterval(0, 50);
-          } else {
+            this.agentDesiredSpeedX = randIntervalFromInterval(1, this.maxSpeed);
+            this.agentDesiredSpeedY = randIntervalFromInterval(1, this.maxSpeed);
+            this.slowRadiusAgent = 50;
+          } else if(this.competence) {
             this.slowRadiusAgent = 50;
           }
 
@@ -1464,6 +1669,8 @@ class Agent {
           this.collisionX += this.speedX;
           this.collisionY += this.speedY;
 
+          this.prevRotation = this.rotation;
+
           this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
@@ -1471,6 +1678,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+          this.differenceRotation = this.rotation - this.prevRotation;
 
           this.prevAccX = this.accX;
           this.prevAccY = this.accY;
@@ -1496,7 +1705,7 @@ class Agent {
 
 
         } else if (this.trajectoryMovementSamplePlayer.length === 0 &&
-           this.collisionX - this.player.collisionX <= 20 && this.collisionY - this.player.collisionY <= 20) {
+           this.collisionX - this.player.collisionX <= 0 && this.collisionY - this.player.collisionY <= 0) {
 
           this.accX = 0;
           this.accY = 0;
@@ -1511,6 +1720,8 @@ class Agent {
           this.collisionX += this.speedX;
           this.collisionY += this.speedY;
 
+          this.prevRotation = this.rotation;
+
           this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
@@ -1518,6 +1729,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+          this.differenceRotation = this.rotation - this.prevRotation;
 
           this.prevAccX = this.accX;
           this.prevAccY = this.accY;
@@ -1538,6 +1751,8 @@ class Agent {
             steering = this.movementAgent();
           }
 
+          console.log(`The length of the trajectory movement is: ${this.trajectoryMovementSamplePlayer.length}`)
+
         // let steering = this.movementAgent();
         this.applyForce(steering);
 
@@ -1553,6 +1768,8 @@ class Agent {
         this.collisionX += this.speedX;
         this.collisionY += this.speedY;
 
+        this.prevRotation = this.rotation;
+
         this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
@@ -1561,6 +1778,7 @@ class Agent {
             180.0) /
           Math.PI;
 
+        this.differenceRotation = this.rotation - this.prevRotation;
         
 
         this.prevAccX = this.accX;
@@ -1612,7 +1830,7 @@ class Agent {
         // console.log(`The force is: ${force.x} and ${force.y}`)
   
   
-      } else {
+      } else if (this.competence) {
         force.x = this.player.speedX;
         force.y = this.player.speedY;
       }
@@ -1628,6 +1846,8 @@ class Agent {
       this.collisionX += this.speedX;
       this.collisionY += this.speedY;
 
+      this.prevRotation = this.rotation;
+
 
       this.rotation =
           (Math.atan2(
@@ -1636,6 +1856,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+      this.differenceRotation = this.rotation - this.differenceRotation;
 
 
     } else {
@@ -1649,6 +1871,7 @@ class Agent {
       this.collisionX += this.speedX;
       this.collisionY += this.speedY;
 
+      this.prevRotation = this.rotation;
 
       this.rotation =
           (Math.atan2(
@@ -1657,6 +1880,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+      this.differenceRotation = this.rotation - this.prevRotation;
 
     }
 
@@ -1696,6 +1921,7 @@ class Agent {
       this.collisionX += this.speedX;
       this.collisionY += this.speedY;
 
+      this.prevRotation = this.rotation;
 
       this.rotation =
           (Math.atan2(
@@ -1704,6 +1930,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+      this.differenceRotation = this.rotation - this.prevRotation;
     } else {
       this.speedX = 0;
       this.speedY = 0;
@@ -1714,6 +1942,7 @@ class Agent {
       this.collisionX += this.speedX;
       this.collisionY += this.speedY;
 
+      this.prevRotation = this.rotation;
 
       this.rotation =
           (Math.atan2(
@@ -1723,6 +1952,7 @@ class Agent {
             180.0) /
           Math.PI;
 
+      this.differenceRotation = this.rotation - this.prevRotation;
 
     }
 
@@ -1765,6 +1995,7 @@ class Agent {
       this.collisionX += this.speedX;
       this.collisionY += this.speedY;
 
+      this.prevRotation = this.rotation;
 
       this.rotation =
           (Math.atan2(
@@ -1773,6 +2004,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+      this.differenceRotation = this.rotation - this.prevRotation;
     } else {
       this.speedX = 0;
       this.speedY = 0;
@@ -1784,6 +2017,9 @@ class Agent {
       this.collisionY += this.speedY;
 
 
+      this.prevRotation = this.rotation;
+
+
       this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
@@ -1791,6 +2027,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+      this.differenceRotation = this.rotation - this.prevRotation;
 
 
     }
@@ -1891,7 +2129,7 @@ class Agent {
             this.agentDesiredSpeedY = randIntervalFromInterval(0, this.maxSpeed);
             // console.log(`THE AGENT SPEED SELECTION IS: ${this.agentDesiredSpeedX} and ${this.agentDesiredSpeedY}`)
             this.slowRadiusAgent = randIntervalFromInterval(0, 50);
-          } else {
+          } else if(this.competence) {
             this.slowRadiusAgent = 50;
           }
 
@@ -1917,6 +2155,8 @@ class Agent {
           this.collisionX += this.speedX;
           this.collisionY += this.speedY;
 
+          this.prevRotation = this.rotation;
+
           this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
@@ -1925,6 +2165,7 @@ class Agent {
             180.0) /
           Math.PI;
 
+          this.differenceRotation = this.rotation - this.prevRotation;
           
 
           this.prevAccX = this.accX;
@@ -1984,13 +2225,17 @@ class Agent {
         this.collisionX += this.speedX;
         this.collisionY += this.speedY;
 
-        this.rotation =
+        this.prevRotation = this.rotation;
+
+          this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
             this.collisionX - this.prevCollisionX
           ) *
             180.0) /
           Math.PI;
+
+          this.differenceRotation = this.rotation - this.prevRotation;
 
         this.prevAccX = this.accX;
         this.prevAccY = this.accY;
@@ -2088,7 +2333,7 @@ class Agent {
             this.agentDesiredSpeedY = randIntervalFromInterval(0, this.maxSpeed);
             // console.log(`THE AGENT SPEED SELECTION IS: ${this.agentDesiredSpeedX} and ${this.agentDesiredSpeedY}`)
             this.slowRadiusAgent = randIntervalFromInterval(0, 50);
-          } else {
+          } else if(this.competence) {
             this.slowRadiusAgent = 50;
           }
 
@@ -2115,6 +2360,8 @@ class Agent {
           this.collisionX += this.speedX;
           this.collisionY += this.speedY;
 
+          this.prevRotation = this.rotation;
+
           this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
@@ -2122,6 +2369,8 @@ class Agent {
           ) *
             180.0) /
           Math.PI;
+
+          this.differenceRotation = this.rotation - this.prevRotation;
 
           this.prevAccX = this.accX;
           this.prevAccY = this.accY;
@@ -2182,13 +2431,17 @@ class Agent {
         this.collisionX += this.speedX;
         this.collisionY += this.speedY;
 
-        this.rotation =
+        this.prevRotation = this.rotation;
+
+          this.rotation =
           (Math.atan2(
             this.collisionY - this.prevCollisionY,
             this.collisionX - this.prevCollisionX
           ) *
             180.0) /
           Math.PI;
+
+          this.differenceRotation = this.rotation - this.prevRotation;
 
         
 
@@ -2230,7 +2483,7 @@ class Agent {
       // this.target = {x: targetX, y: targetY}
       // this.mirroringMovement(socket, room);
       // his.follower = true;
-      console.log(`THE Value Follow: ${this.follower}`)
+      // console.log(`THE Value Follow: ${this.follower}`)
       if (this.followerBehaviorType === 0) {
         this.followerMovement(socket,room);
       } else if (this.followerBehaviorType === 1) {
@@ -2247,9 +2500,14 @@ class Agent {
     } else if (this.role === 1) {
       this.follower = false;
       this.LeaderMovement(socket, room);
+      // console.log(`The curvature is: ${calculateCurvature(this.speedX,this.speedY, this.prevAccX, this.prevAccY)}`)
+    console.log(`The rotation of agent: ${this.differenceRotation}`)
+    // console.log(`The rotation and previous is: ${this.rotation} and ${this.prevRotation}`)
     } else if (this.role === 2) {
       this.noLeaderMovement(socket,room);
     }
+
+    // console.log(`The speed of the agent X: ${this.speedX} and Y: ${this.speedY}`)
     // Detect Side Walls
     if (this.collisionX + this.collisionRadius > this.game.width) {
       this.collisionX = this.game.width - this.collisionRadius;

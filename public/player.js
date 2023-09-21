@@ -9,6 +9,8 @@ class Player {
         this.speedX = 0;
         this.speedY = 0;
         this.rotation = 0;
+        this.prevRotation = 0;
+        this.differenceRotation = 0;
         // Acceleration of the Agent.
         this.accX = 0;
         this.accY = 0;
@@ -229,6 +231,9 @@ class Player {
         let forceX = linearInterpolation(0, 20, Math.abs(moveX)/300)
         let forceY = linearInterpolation(0, 20, Math.abs(moveY)/300)
 
+        // console.log(`The rotation and previous is: ${this.rotation} and ${this.prevRotation}`)
+        // console.log(`The rotation difference is: ${this.differenceRotation}`)
+
         // if (forceX > 20 || forceX < -20) {
         //     this.overSpeedX++
         // }
@@ -335,11 +340,19 @@ class Player {
         this.speedY = (this.collisionY - this.prevMouseY)
         // console.log(`X: P: ${this.prevMouseX} ; C: ${this.collisionX} Y: ${this.collisionY} ; ${this.prevMouseY}`)
 
+        this.prevRotation = this.rotation;
+
+
         this.rotation =
         (Math.atan2(this.collisionY - this.prevMouseY, this.collisionX - this.prevMouseX)  *
           180.0) / Math.PI;
 
         this.timePrev = this.timeCurrent;
+
+        this.differenceRotation = this.rotation - this.prevRotation;
+
+
+        // console.log(`The rotation is: ${this.rotation}`)
 
         // console.log(`The rotation of the player is: ${this.rotation}`)
 

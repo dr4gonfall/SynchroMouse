@@ -87,7 +87,7 @@ const totalRoundTimes = 2;
 const totalRoundTimesTraining = 5;
 
 // Total amount of Rounds for the validation
-const totalRoundTimesValidation = 16;
+const totalRoundTimesValidation = 8;
 // Current amount of rounds for the training
 let currentRoundTraining = 0;
 let currentRoundTrainingTotal = 0;
@@ -298,6 +298,7 @@ io.on("connection", (socket) => {
       socket.emit("endTraining", true);
       console.log("We entered the end of the training.");
 
+      currentRoundTraining = 0;
       currentRoundTrainingTotal = 0;
 
 
@@ -321,7 +322,8 @@ io.on("connection", (socket) => {
     
     let finalDataPlayerPosition = JSON.stringify(dataPlayerPosition)
     let textFilePlayerPosition = "scores_player_experiment_position_" + socket.id + "_Round" + currentRoundValidationTotal + ".json"
-      fs.writeFile(textFilePlayerPosition, finalDataPlayerPosition, (err) => {
+    dataPlayerPosition = [];  
+    fs.writeFile(textFilePlayerPosition, finalDataPlayerPosition, (err) => {
         if (err) {
           throw err;
         } else {
@@ -334,7 +336,7 @@ io.on("connection", (socket) => {
       let finalDataAgentPosition = JSON.stringify(dataAgentPosition);
       let textFileAgentPosition = "scores_agent_experiment_position_" + socket.id + "_Round" + currentRoundValidationTotal + ".json"
       // let textFileAgent = "scores_agent_validation" + socket.id + "_Round" + currentRoundValidationTotal + ".json";
-
+      dataAgentPosition = [];
       fs.writeFile(textFileAgentPosition, finalDataAgentPosition, (err) => {
         if (err) {
           throw err;
@@ -359,6 +361,7 @@ io.on("connection", (socket) => {
       socket.emit("beginGameValidation", roundBeginningValidation);
       socket.emit("endValidation", true);
       console.log("We entered the end of the validation.");
+      currentRoundValidationTotal = 0;
       currentRoundValidation = 0;
 
       // // WRITE THE SCORES OF THE PLAYER IN A JSON FILE.
@@ -492,7 +495,7 @@ io.on("connection", (socket) => {
 
   // FUNCTION THAT GATHERS THE DATA OF THE AGENT EVERY FRAME
   socket.on("locationAgent",
-    (room, x, y, rotation, speedX, speedY, accelX, accelY, jerkX, jerkY) => {
+    (room, x, y, rotation, differenceRotation, speedX, speedY, accelX, accelY, jerkX, jerkY) => {
       if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
         socket.to(room).emit("location", socket.id, x, y);
         // Positions data structure
@@ -521,6 +524,7 @@ io.on("connection", (socket) => {
           x: x,
           y: y,
           rotation: rotation,
+          differenceRotation: differenceRotation,
         }
         dataAgentPosition.push(metricsAgent);
       }
@@ -572,7 +576,7 @@ io.on("connection", (socket) => {
   // FUNCTION TO TAKE THE VALUES OF THE PLAYER EVERY FRAME
   socket.on(
     "locationPlayer",
-    (room, x, y, rawX, rawY, rotation, forceX, forceY, speedX, speedY, accelX, accelY, jerkX, jerkY) => {
+    (room, x, y, rawX, rawY, rotation, differenceRotation, forceX, forceY, speedX, speedY, accelX, accelY, jerkX, jerkY) => {
       io.to(room).emit("locationPlayer", socket.id, x, y, rotation);
       // console.log("The position in x is: " + x)
       // console.log(`The registered position in x: ${x} and Position in Y: ${y}`)
@@ -605,6 +609,7 @@ io.on("connection", (socket) => {
           rawX: rawX,
           rawY: rawY,
           rotation: rotation,
+          differenceRotation: differenceRotation,
           forceX: forceX,
           forceY: forceY,
         }

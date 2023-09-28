@@ -55,6 +55,7 @@ const MongoClient = require("mongodb").MongoClient;
 let roundBeginning = false;
 let roundBeginningTraining = false;
 let roundBeginningValidation = false;
+let roundBeginningRExperiment = false;
 // let totalGameTime = 30000;
 // let playing = false
 // let playerPositionsTest = []
@@ -88,12 +89,26 @@ const totalRoundTimesTraining = 5;
 
 // Total amount of Rounds for the validation
 const totalRoundTimesValidation = 8;
+
+// Total amount of Rounds for the Simulation
+const totalRoundTimesSimulation = 8;
+
+// Total amount of Rounds for the Experiment
+const totalRoundTimesRExperiment = 8;
+
 // Current amount of rounds for the training
 let currentRoundTraining = 0;
 let currentRoundTrainingTotal = 0;
 
 let currentRoundValidation = 0;
 let currentRoundValidationTotal = 0;
+
+let currentRoundSimulation = 0;
+let currentRoundSimulationTotal = 0;
+
+let currentRoundRExperiment = 0;
+let currentRoundRExperimentTotal = 0;
+
 let numberUsers = 0;
 // let smoothFinal = []
 // let smoothAgentFinal = []
@@ -159,6 +174,18 @@ io.on("connection", (socket) => {
     socket.emit("currentRoundValidation", currentRoundValidation);
   }
 
+  const startSimulationServer = (room) => {
+    console.log('The simulation begins in room ' + room);
+    socket.emit("endSimulation", false);
+    socket.emit("currentRoundSimulation", currentRoundSimulation)
+  }
+
+  const startRExperimentServer = (room) => {
+    console.log('The experiment begins in room ' + room);
+    socket.emit("endRExperiment", false);
+    socket.emit("currentRoundRExperiment", currentRoundRExperiment)
+  }
+
 
   // Emits the begin event.
   // socket.emit("beginGame");
@@ -193,6 +220,7 @@ io.on("connection", (socket) => {
 
   let roundTime = 30000
 
+  
   // When the validation begins.
 
 
@@ -202,6 +230,8 @@ io.on("connection", (socket) => {
   // When the training begins.
   socket.on("start-training", (room) => startTrainingServer(room));
   socket.on("start-validation", (room) => startValidationServer(room));
+  socket.on("start-simulation", (room) => startSimulationServer(room));
+  socket.on("start-experiment", (room) => startRExperimentServer(room));
 
   socket.on("rest_end_training", (room) => {
     roundBeginningTraining = true;
@@ -221,6 +251,27 @@ io.on("connection", (socket) => {
       const db = mongoClient.db(dbName);
       db.collection("round_begin").insert({ time: new Date(), room: room });
     }
+  })
+
+  socket.on("rest-end-simulation", (room) => {
+    roundBeginningSimulation = true;
+    socket.emit("beginGameSimulation", roundBeginningSimulation);
+    socket.to(room).emit("startSimulation");
+    if (mongoClient !== undefined) {
+      const db = mongoClient.db(dbName);
+      db.collection("round_begin").insert({ time: new Date(), room: room});
+    }
+  })
+
+  socket.on("rest_end_real_experiment", (room) => {
+    roundBeginningRExperiment = true;
+    socket.emit("beginGameRExperiment", roundBeginningRExperiment);
+    socket.to(room).emit("startRExperiment");
+    if (mongoClient !== undefined) {
+      const db = mongoClient.db(dbName);
+      db.collection("round_begin").insert({ time: new Date(), room: room });
+    }
+    
   })
 
   // FUNCTION THAT DEFINES WHAT HAPPENS AT THE END OF THE TRAINING ROUND
@@ -410,6 +461,127 @@ io.on("connection", (socket) => {
   })
 
 
+  socket.on("round_end_real_experiment", (room) => {
+    currentRoundRExperiment++;
+    currentRoundRExperimentTotal++;
+    console.log(`The current round in the experiment is: ${currentRoundRExperiment}`)
+    socket.emit("currentRoundRExperiment", currentRoundRExperiment)
+
+    
+    let finalDataPlayerPosition = JSON.stringify(dataPlayerPosition)
+    let textFilePlayerPosition = "scores_player_experiment_position_" + socket.id + "_Round" + currentRoundRExperimentTotal + ".json"
+    dataPlayerPosition = [];  
+    fs.writeFile(textFilePlayerPosition, finalDataPlayerPosition, (err) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log("successful upload");
+        }
+        console.log("JSON data experiment player is saved.");
+      });
+
+      // WRITE THE SCORES OF THE AGENT IN A JSON FILE.
+      let finalDataAgentPosition = JSON.stringify(dataAgentPosition);
+      let textFileAgentPosition = "scores_agent_experiment_position_" + socket.id + "_Round" + currentRoundRExperimentTotal + ".json"
+      // let textFileAgent = "scores_agent_validation" + socket.id + "_Round" + currentRoundValidationTotal + ".json";
+      dataAgentPosition = [];
+      fs.writeFile(textFileAgentPosition, finalDataAgentPosition, (err) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log("successful upload");
+        }
+        console.log("JSON data experiment agent is saved.");
+      });
+
+      fs.writeFile(textFileAgentPosition, finalDataAgentPosition, (err) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log("successful upload");
+        }
+        console.log("JSON data experiment agent is saved.");
+      });
+
+
+    if (currentRoundRExperiment >= totalRoundTimesRExperiment) {
+      roundBeginningRExperiment = false;
+      socket.emit("beginGameRExperiment", roundBeginningRExperiment);
+      socket.emit("endRExperiment", true);
+      console.log("We entered the end of the experiment.");
+      currentRoundRExperimentTotal = 0;
+      currentRoundRExperiment = 0;
+
+    } else {
+      roundBeginningRExperiment = false;
+      socket.emit("beginGameRExperiment", roundBeginningRExperiment);
+      socket.emit("endRExperiment", false);
+    }
+  })
+
+
+
+    // FUNCTION THAT DEFINES WHAT HAPPENS AT THE END OF THE SIMULATION ROUND
+
+  socket.on("round_end_simulation", (room) => {
+      currentRoundSimulation++;
+      currentRoundSimulationTotal++;
+      console.log(`The current round in the simulation is: ${currentRoundSimulation}`)
+      socket.emit("currentRoundSimulation", currentRoundSimulation)
+  
+      
+      let finalDataAgentBotPosition = JSON.stringify(dataAgentBotPosition)
+      let textFileAgentBotPosition = "scores_agentBot_simulation_position_" + socket.id + "_Round" + currentRoundSimulationTotal + ".json"
+      dataAgentBotPosition = [];  
+      fs.writeFile(textFileAgentBotPosition, finalDataAgentBotPosition, (err) => {
+          if (err) {
+            throw err;
+          } else {
+            console.log("successful upload");
+          }
+          console.log("JSON data experiment player is saved.");
+        });
+  
+        // WRITE THE SCORES OF THE AGENT IN A JSON FILE.
+        let finalDataAgentPosition = JSON.stringify(dataAgentPosition);
+        let textFileAgentPosition = "scores_agent_simulation_position_" + socket.id + "_Round" + currentRoundSimulationTotal + ".json"
+        // let textFileAgent = "scores_agent_validation" + socket.id + "_Round" + currentRoundValidationTotal + ".json";
+        dataAgentPosition = [];
+        fs.writeFile(textFileAgentPosition, finalDataAgentPosition, (err) => {
+          if (err) {
+            throw err;
+          } else {
+            console.log("successful upload");
+          }
+          console.log("JSON data experiment agent is saved.");
+        });
+  
+        fs.writeFile(textFileAgentPosition, finalDataAgentPosition, (err) => {
+          if (err) {
+            throw err;
+          } else {
+            console.log("successful upload");
+          }
+          console.log("JSON data experiment agent is saved.");
+        });
+  
+  
+      if (currentRoundSimulation >= totalRoundTimesSimulation) {
+        roundBeginningSimulation = false;
+        socket.emit("beginGameSimulation", roundBeginningSimulation);
+        socket.emit("endSimulation", true);
+        console.log("We entered the end of the simulation.");
+        currentRoundSimulationTotal = 0;
+        currentRoundSimulation = 0;
+  
+      } else {
+        roundBeginningSimulation = false;
+        socket.emit("beginGameSimulation", roundBeginningSimulation);
+        socket.emit("endSimulation", false);
+      }
+  })
+
+
 
 
   // When the game begins.
@@ -492,6 +664,27 @@ io.on("connection", (socket) => {
   // })
 
   // Definition of the location socket.
+
+
+  // FUNCTION THAT GATHERS THE DATA OF THE AGENT EVERY FRAME
+  socket.on("locationAgentBot",
+    (room, x, y, rotation, differenceRotation, speedX, speedY, accelX, accelY, jerkX, jerkY) => {
+      if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
+        socket.to(room).emit("location", socket.id, x, y);
+
+        let metricsAgentBot = {
+          time: new Date(),
+          nano: performance.now(),
+          room: room,
+          x: x,
+          y: y,
+          rotation: rotation,
+          differenceRotation: differenceRotation,
+        }
+        dataAgentBotPosition.push(metricsAgentBot);
+      }
+    }
+  );
 
   // FUNCTION THAT GATHERS THE DATA OF THE AGENT EVERY FRAME
   socket.on("locationAgent",

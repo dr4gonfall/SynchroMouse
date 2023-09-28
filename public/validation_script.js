@@ -67,6 +67,7 @@ class ValidationScript {
     let prevX;
     let prevY;
     let rotation = 0;
+    let differenceRotation = 0;
 
     // let agentIdealPrevX;
     // let agentIdealPrevY;
@@ -74,6 +75,7 @@ class ValidationScript {
     // let agentWavesPrevX;
     // let agentWavesPrevY;
     let rotationAgent = 0;
+    let differenceRotationAgent = 0;
 
     let urlParams;
     // let admin = false;
@@ -702,19 +704,25 @@ class ValidationScript {
             // mouseSpeedX.push(gameValidation.mouse.x - prevMoveX);
             // mouseSpeedY.push(gameValidation.mouse.y - prevMoveY);
 
-            rotationAgent =
-              (Math.atan2(
-                gameValidation.agent.collisionY - prevMoveAgentY,
-                gameValidation.agent.collisionX - prevMoveAgentX
-              ) *
-                180.0) /
-              Math.PI;
-            rotation =
-              (Math.atan2(gameValidation.mouse.y - prevMoveY, gameValidation.mouse.x, prevMouseX) *
-                180.0) /
-              Math.PI;
-            mouseSpeedXMax.push(Math.abs(gameValidation.mouse.x - prevMoveX));
-            mouseSpeedYMax.push(Math.abs(gameValidation.mouse.y - prevMoveY));
+            rotationAgent = gameValidation.agent.rotation;
+            differenceRotationAgent = gameValidation.agent.differenceRotation;
+
+            rotation = gameValidation.player.rotation;
+            differenceRotation = gameValidation.player.differenceRotation;
+
+            // rotationAgent =
+            //   (Math.atan2(
+            //     gameValidation.agent.collisionY - prevMoveAgentY,
+            //     gameValidation.agent.collisionX - prevMoveAgentX
+            //   ) *
+            //     180.0) /
+            //   Math.PI;
+            // rotation =
+            //   (Math.atan2(gameValidation.mouse.y - prevMoveY, gameValidation.mouse.x, prevMouseX) *
+            //     180.0) /
+            //   Math.PI;
+            // mouseSpeedXMax.push(Math.abs(gameValidation.mouse.x - prevMoveX));
+            // mouseSpeedYMax.push(Math.abs(gameValidation.mouse.y - prevMoveY));
 
 
             // if (
@@ -767,6 +775,7 @@ class ValidationScript {
               gameValidation.agent.collisionX,
               gameValidation.agent.collisionY,
               rotationAgent,
+              differenceRotationAgent,
               // gameValidation.agent.speedX,
               // gameValidation.agent.speedY,
               // gameValidation.agent.prevAccX,
@@ -782,6 +791,7 @@ class ValidationScript {
               gameValidation.player.rawMouseMoveX,
               gameValidation.player.rawMouseMoveY,
               rotation,
+              differenceRotation,
               gameValidation.player.forcePlayerX,
               gameValidation.player.forcePlayerY,
               // speeds[speeds.length - 1],

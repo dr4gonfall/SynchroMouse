@@ -11,6 +11,7 @@ class Player {
         this.rotation = 0;
         this.prevRotation = 0;
         this.differenceRotation = 0;
+        this.counterTestSpeed = 0;
         // Acceleration of the Agent.
         this.accX = 0;
         this.accY = 0;
@@ -201,6 +202,14 @@ class Player {
   }
 
     update(moveX, moveY){
+        this.counterTestSpeed += 0.1;
+
+        if (this.counterTestSpeed >=1) {
+            this.counterTestSpeed = 0;
+        }
+        
+        // console.log(`For the counter: ${this.counterTestSpeed} the value of function: ${ 10 * easeInSine(this.counterTestSpeed)}`)
+        
         // console.log(`The player collision in X: ${this.collisionX} and for Y: ${this.collisionY}`)
         this.rawMouseMoveX = moveX;
         this.rawMouseMoveY = moveY;

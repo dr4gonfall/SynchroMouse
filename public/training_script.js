@@ -50,6 +50,10 @@ class TrainingGame {
     let randomBehaviorIntervalId = undefined;
     let randomMirroringIntervalId = undefined;
     let randomJitterIntervalId = undefined;
+    let updateEndPointAgentId = undefined;
+    let updatePlayerNotMoving = undefined;
+
+    let playerNotMovingCounter = 0;
 
 
     let prevMouseX;
@@ -169,10 +173,14 @@ class TrainingGame {
               clearInterval(randomBehaviorIntervalId);
               clearInterval(randomMirroringIntervalId);
               clearInterval(randomJitterIntervalId);
+              clearInterval(updateEndPointAgentId);
+              clearInterval(updatePlayerNotMoving)
               gameIntervalId = undefined;
               randomBehaviorIntervalId = undefined;
               randomMirroringIntervalId = undefined;
               randomJitterIntervalId = undefined;
+              updateEndPointAgentId = undefined;
+              updatePlayerNotMoving = undefined;
               playingTraining = false;
               gameStartedTraining = false;
               socket.emit("round_end_training");
@@ -248,24 +256,26 @@ class TrainingGame {
         // What happens when the human disconnects.
         socket.on("disconnected", function (socketId) { });
 
+
+
         // let average = (array) => array.reduce((a, b) => a + b) / array.length;
         
 
-
+        
         const gameTraining = new Game(canvasTraining, socket, room);
         if (roundNumber === 1) {
-          gameTraining.agent.role = 0;
-          gameTraining.agent.follower = true;
+          gameTraining.agent.role = 1;
+          gameTraining.agent.follower = false;
           gameTraining.agent.competence = true;
           gameTraining.agent.predictability = true;
         } else if (roundNumber === 2) {
-          gameTraining.agent.role = 0;
-          gameTraining.agent.follower = true;
-          gameTraining.agent.competence = true;
-          gameTraining.agent.predictability = false;
+          gameTraining.agent.role = 1;
+          gameTraining.agent.follower = false;
+          gameTraining.agent.competence = false;
+          gameTraining.agent.predictability = true;
         } else if (roundNumber === 3) {
-          gameTraining.agent.role = 0;
-          gameTraining.agent.follower = true;
+          gameTraining.agent.role = 1;
+          gameTraining.agent.follower = false;
           gameTraining.agent.competence = true;
           gameTraining.agent.predictability = false;
         } else if (roundNumber === 4) {
@@ -275,9 +285,9 @@ class TrainingGame {
           gameTraining.agent.predictability = false;
         } else if (roundNumber == 5) {
           gameTraining.agent.role = 2;
-          gameTraining.agent.follower = true;
+          gameTraining.agent.follower = false;
           gameTraining.agent.competence = true;
-          gameTraining.agent.predictability = false;
+          gameTraining.agent.predictability = true;
         }
 
         // console.log(rolePlayerTraining)
@@ -309,6 +319,20 @@ class TrainingGame {
             console.log(`The time for the interval was: ${randomBehaviorTime} and the agent is the follower: ${gameTraining.agent.follower}`)
           }, randomBehaviorTime);
         }
+
+        // updateEndPointAgentId = setInterval(() => {
+        //   if (gameTraining.player.speedX !== 0 || gameTraining.player.speedY !== 0) {
+        //     playerNotMovingCounter = 0;
+        //     gameTraining.agent.addEndBezier();
+        //   }
+        // }, 200)
+
+        // updatePlayerNotMoving = setInterval(() => {
+        //   if (gameTraining.player.speedX === 0 && gameTraining.player.speedY === 0) {
+        //     playerNotMovingCounter ++;  
+        //     console.log(playerNotMovingCounter)
+        //   }
+        // }, 20);
 
 
         // if (gameTraining.agent.follower) {

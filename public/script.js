@@ -42,6 +42,11 @@ let roundNumber = 0;
 let timerBetweenRoundsValidation = document.getElementById("time-validation-prelim");
 let timerRoundsValidation = document.getElementById("time-validation-round")
 
+// Simulation Experiment Timers Definition
+let timerBetweenRoundsSimulation = document.getElementById("time-simulation-prelim");
+let timerRoundsSimulation = document.getElementById("time-simulation-round");
+
+
 // Role of the player
 
 let rolePlayer = document.getElementById("rolePlayer");
@@ -386,10 +391,13 @@ let playingValidation = false;
 
 let currentRoundTraining = 0;
 let currentRoundValidation = 0;
+let currentRoundRExperiment = 0;
 
 (new TrainingGame()).trainingScript(socket, currentRoundTraining);
+(new TrainingGameAlt()).trainingScriptAlt(socket);
 (new PageSelection()).pageSelection(socket);
 (new ValidationScript()).validationScript(socket, currentRoundValidation);
+(new ExperimentScript()).experimentScript(socket, currentRoundRExperiment);
 
 socket.on("endGame", (finish) => {
   console.log(`The value of finish is: ${finish}`);

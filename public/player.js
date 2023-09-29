@@ -179,6 +179,7 @@ class Player {
     }
 
     draw(context){
+        console.log(`draw: ${this.collisionX} Y: ${this.collisionY}`)
         context.beginPath();
         context.arc(this.collisionX, this.collisionY, this.collisionRadius, 0, Math.PI * 2);
         context.save();
@@ -210,6 +211,7 @@ class Player {
         
         // console.log(`For the counter: ${this.counterTestSpeed} the value of function: ${ 10 * easeInSine(this.counterTestSpeed)}`)
         
+        console.log(`Mouse movements X: ${moveX} Y: ${moveY}`)
         // console.log(`The player collision in X: ${this.collisionX} and for Y: ${this.collisionY}`)
         this.rawMouseMoveX = moveX;
         this.rawMouseMoveY = moveY;
@@ -239,6 +241,9 @@ class Player {
         
         let forceX = linearInterpolation(0, 20, Math.abs(moveX)/300)
         let forceY = linearInterpolation(0, 20, Math.abs(moveY)/300)
+
+        // let forceX = moveX;
+        // let forceY = moveY;
 
         // console.log(`The rotation and previous is: ${this.rotation} and ${this.prevRotation}`)
         // console.log(`The rotation difference is: ${this.differenceRotation}`)
@@ -288,7 +293,9 @@ class Player {
 
         this.collisionX += forceX
         this.collisionY += forceY
-
+        
+        // this.collisionX = moveX;
+        // this.collisionY = 
 
         // this.collisionX = Math.round(this.collisionX + moveX * dt);
         // this.collisionY = Math.round(this.collisionY + moveY * dt);

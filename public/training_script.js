@@ -52,6 +52,7 @@ class TrainingGame {
     let randomJitterIntervalId = undefined;
     let updateEndPointAgentId = undefined;
     let updatePlayerNotMoving = undefined;
+    let stopTimerIntervalId = undefined;
 
     let playerNotMovingCounter = 0;
 
@@ -248,6 +249,11 @@ class TrainingGame {
       canvasTraining.addEventListener('mousemove', (e) => {
        mouseMoveX = e.movementX;
        mouseMoveY = e.movementY;
+       clearInterval(stopTimerIntervalId)
+        stopTimerIntervalId = setInterval(()=> {
+          mouseMoveX = 0;
+          mouseMoveY = 0;
+        },100)
    })
 
       if (playingTraining) {

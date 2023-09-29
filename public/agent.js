@@ -328,7 +328,7 @@ class Agent {
 
       times++;
     }
-    console.log(`THE END OF THE CIRCLE`);
+    // console.log(`THE END OF THE CIRCLE`);
 
     this.currentAngle = 0;
   }
@@ -990,7 +990,7 @@ class Agent {
           x: this.initialBezier.x,
           y: this.initialBezier.y,
         });
-        console.log(`The initial point is: ${this.trajectoryMovementSamplePlayer[0].x} and ${this.trajectoryMovementSamplePlayer[0].y}`)
+        // console.log(`The initial point is: ${this.trajectoryMovementSamplePlayer[0].x} and ${this.trajectoryMovementSamplePlayer[0].y}`)
         // console.log(this.trajectoryMovement)
         // console.log(`The bezier point is: ${this.initialBezier.x} and ${this.initialBezier.y}`)
       } else {
@@ -1488,7 +1488,7 @@ class Agent {
       }
     } else if (!this.follower) {
       // console.log(`ENTERED THE FUNCTION OF LEADER`)
-      console.log(`The length of the array is: ${this.pendingEndBezier.length}`)
+      // console.log(`The length of the array is: ${this.pendingEndBezier.length}`)
       if (this.pendingEndBezier.length === 1) {
         this.addEndBezierLeader();
 
@@ -1558,7 +1558,7 @@ class Agent {
         })
       }
     }
-    console.log(`The coordinates of the end point: ${this.pendingEndBezier[this.pendingEndBezier.length - 1].x} and Y: ${this.pendingEndBezier[this.pendingEndBezier.length - 1].y}`)
+    // console.log(`The coordinates of the end point: ${this.pendingEndBezier[this.pendingEndBezier.length - 1].x} and Y: ${this.pendingEndBezier[this.pendingEndBezier.length - 1].y}`)
 
   }
 
@@ -1583,7 +1583,7 @@ class Agent {
           this.paintMovementDecision = true;
           if (this.pendingEndBezier[0] === undefined) {
             this.addEndBezier()
-            console.log(`ENTERED THIS FUNCTION CAREFUL`)
+            // console.log(`ENTERED THIS FUNCTION CAREFUL`)
           }
           // console.log(`The length of the bezier array is: ${this.pendingBezier.length}`)
           this.endBezier = this.pendingEndBezier[0];
@@ -1644,7 +1644,7 @@ class Agent {
   
           this.degreesVariationX = randIntervalFromIntervalInteger(30, 90);
           this.degreesVariationY = randIntervalFromIntervalInteger(0, 30);
-          console.log(`The variation is: ${this.degreesVariationX} and Y: ${this.degreesVariationY}`)
+          // console.log(`The variation is: ${this.degreesVariationX} and Y: ${this.degreesVariationY}`)
   
           if (this.trajectoryMovementSamplePlayer.length > 1) {
             this.trajectoryMovementSamplePlayer.shift();
@@ -1830,12 +1830,12 @@ class Agent {
           this.paintMovementDecision = true;
           if (this.pendingEndBezier[0] === undefined) {
             this.addEndBezier()
-            console.log(`ENTERED THIS FUNCTION CAREFUL and ${this.pendingEndBezier[0].x} and Y ${this.pendingEndBezier[0].y}`)
+            // console.log(`ENTERED THIS FUNCTION CAREFUL and ${this.pendingEndBezier[0].x} and Y ${this.pendingEndBezier[0].y}`)
           }
           this.endBezier = this.pendingEndBezier[0];
           this.pendingEndBezier.shift()
           if (this.endBezier === undefined) {
-            console.log(`PROBLEM FOLLOWER PRED!!!!!!!!!`)
+            // console.log(`PROBLEM FOLLOWER PRED!!!!!!!!!`)
           }
           this.decideMovement(4);
           // The movement is decided and the counter is increased
@@ -2324,7 +2324,7 @@ class Agent {
 
   addEndBezier() {
     let direction = (Math.atan2(this.player.speedY, this.player.speedX));
-    console.log(`The coordinate of endBezier in X: ${this.endBezier.x}`)
+    // console.log(`The coordinate of endBezier in X: ${this.endBezier.x}`)
     if (this.endBezier.x === this.game.width * 3 / 4) {
       this.pendingEndBezier.push({
         x: this.game.width / 4,
@@ -2374,7 +2374,7 @@ class Agent {
         // console.log(`End Bezier: ${this.endBezier.x} and Y: ${this.endBezier.y}`)
         this.pendingEndBezier.shift();
         if (this.endBezier === undefined) {
-          console.log(`PROBLEM LEADER UNPRED!!!!!!!!!`)
+          // console.log(`PROBLEM LEADER UNPRED!!!!!!!!!`)
         }
         this.decideMovement(5);
         // The movement is decided and the counter is increased
@@ -2594,7 +2594,7 @@ class Agent {
         this.endBezier = this.pendingEndBezier[0];
         this.pendingEndBezier.shift();
         if (this.endBezier === undefined) {
-          console.log(`PROBLEM LEADER PRED!!!!!!!!!`)
+          // console.log(`PROBLEM LEADER PRED!!!!!!!!!`)
         }
         this.decideMovement(4);
         // The movement is decided and the counter is increased
@@ -2822,7 +2822,7 @@ class Agent {
 
   update(random, targetX, targetY, socket, room) {
 
-    console.log(`The end Bezier is: ${this.endBezier}`)
+    // console.log(`The end Bezier is: ${this.endBezier}`)
     if (this.player.speedX === 0 && this.player.speedY === 0) {
       this.playerNotMovingCounter++;
     }
@@ -2869,7 +2869,7 @@ class Agent {
           this.endBezier = {}
 
         } else if (this.playerNotMovingCounter <= 10) {
-          console.log(this.playerNotMovingCounter)
+          // console.log(this.playerNotMovingCounter)
           if (this.pendingEndBezier.length === 0) {
             // console.log(this.pendingEndBezier.length)
             this.addEndBezier();

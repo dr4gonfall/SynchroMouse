@@ -22,7 +22,7 @@ class ValidationScript {
 
     let currentGameProfile = variations[roundNumber]
 
-    console.log(variations)
+    // console.log(variations)
 
 
     // VALIDATION EXPERIMENT SEQUENCE
@@ -96,6 +96,8 @@ class ValidationScript {
     let randomBehaviorIntervalId = undefined;
     let randomMirroringIntervalId = undefined;
     let randomJitterIntervalId = undefined;
+
+    let stopTimerIntervalId = undefined;
 
     // // SOURCES OF NOISE
     // let perlinNoise = false;
@@ -392,6 +394,7 @@ class ValidationScript {
               clearInterval(randomBehaviorIntervalId)
               clearInterval(randomMirroringIntervalId)
               clearInterval(randomJitterIntervalId)
+              // clearInterval()
               // timeRoundGameValidation = 31;
               gameIntervalId = undefined;
               randomBehaviorIntervalId = undefined;
@@ -458,6 +461,11 @@ class ValidationScript {
       canvasValidation.addEventListener('mousemove', (e) => {
         mouseMoveX = e.movementX;
         mouseMoveY = e.movementY;
+        clearInterval(stopTimerIntervalId)
+        stopTimerIntervalId = setInterval(()=> {
+          mouseMoveX = 0;
+          mouseMoveY = 0;
+        },100)
       })
 
 
@@ -466,6 +474,8 @@ class ValidationScript {
         socket.on("disconnected", function (socketId) {
 
         });
+
+        
 
         // playerPositions["X"].push(200);
         // let counterTest = 0;
@@ -476,8 +486,8 @@ class ValidationScript {
 
         const gameValidation = new Game(canvasValidation, socket, room);
 
-        console.log(`The current round is: ${roundNumber}`)
-        console.log(`The profile of the game: ${currentGameProfile}`)
+        // console.log(`The current round is: ${roundNumber}`)
+        // console.log(`The profile of the game: ${currentGameProfile}`)
         // const setGameConfig = (follower, competence, predictability) => {
         //   gameValidation.agent.follower = follower;
         //   gameValidation.agent.competence = competence;
@@ -618,7 +628,7 @@ class ValidationScript {
             } else if (!gameValidation.agent.follower) {
               gameValidation.agent.follower = true;
             }
-            console.log(`The time for the interval was: ${randomBehaviorTime} and the agent is the follower: ${gameValidation.agent.follower}`)
+            // console.log(`The time for the interval was: ${randomBehaviorTime} and the agent is the follower: ${gameValidation.agent.follower}`)
           }, randomBehaviorTime);
         }
 
@@ -818,7 +828,7 @@ class ValidationScript {
           }
         }
         if (gameStartedValidation) {
-          console.log('THE VALIDATION IS ANIMATING')
+          // console.log('THE VALIDATION IS ANIMATING')
           animate();
         }
 

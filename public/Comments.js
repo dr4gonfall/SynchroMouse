@@ -3338,3 +3338,319 @@ var init = function() {
     //   toggleScreen("training-session", false);
     //   toggleScreen("training-session-debrief", true);
     // }
+
+
+    // Positions data structure
+        // curvatureAgent.push(
+        //   Math.abs(speedX * accelY - accelX * speedY) /
+        //   (speedX ** 2 + speedY ** 2) ** (3 / 2)
+        // );
+        // agePositions.push({ x: x, y: y });
+        // speedXAgent.push(speedX);
+        // speedYAgent.push(speedY);
+        // accelXAgent.push(accelX);
+        // accelYAgent.push(accelY);
+        // jerkXAgent.push(jerkX);
+        // jerkYAgent.push(jerkY);
+        // // Rotation data structure
+        // rotationAgent.push(rotation);
+        // if (Math.abs(rotation) >= 90) {
+        //   amountSharpTurnsAgent++;
+        // }
+
+        // Positions data structure
+        // curvaturePlayer.push(
+        //   Math.abs(speedX * accelY - accelX * speedY) /
+        //   (speedX ** 2 + speedY ** 2) ** (3 / 2)
+        // );
+        // playPositions.push({ x: x, y: y });
+        // speedXPlayer.push(speedX);
+        // speedYPlayer.push(speedY);
+        // accelXPlayer.push(accelX);
+        // accelYPlayer.push(accelY);
+        // jerkXPlayer.push(jerkX);
+        // jerkYPlayer.push(jerkY);
+        // // Rotation data structure
+        // rotationPlayer.push(rotation);
+        // if (Math.abs(rotation) >= 90) {
+        //   amountSharpTurnsAgent++;
+        // }
+
+         // ALTERNATIVE FUNCTION TO CALCULATE ONLY THE POSITION
+
+  // socket.on("position", (room) => {
+  //   if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
+  //     let metricsPlayer = {
+  //       time: new Date(),
+  //       nano: performance.now(),
+  //       room: room,
+
+  //     }
+  //   }
+  // })
+
+  // FUNCTION TO CALCULATE THE MEASURES FOR EACH PLAYER
+
+  // socket.on("calculateMeasuresPlayer", (room) => {
+  //   if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
+  //     // let predictabilityPlayerTurns =  amountSharpTurnsPlayer / rotDifferencesPlayer.length
+  //     // console.log("POR FAVOR SALVENME!!!")
+  //     // WRITE THE JSON FILE
+  //     let metricsPlayer = {
+  //       time: new Date(),
+  //       nano: performance.now(),
+  //       room: room,
+  //       // predictabilityPlayer: predictabilityPlayerTurns,
+  //       velocityXPlayer: speedXPlayer,
+  //       velocityYPlayer: speedYPlayer,
+  //       accelerationXPlayer: accelXPlayer,
+  //       accelerationYPlayer: accelYPlayer,
+  //       jerkXPlayer: jerkXPlayer,
+  //       jerkYPlayer: jerkYPlayer,
+  //       curvaturePlayer: curvaturePlayer,
+  //     };
+
+  //     dataPlayer.push(metricsPlayer);
+
+  //     playPositions = [];
+  //     // rotDifferencesIdealAgent = []
+  //     rotationPlayer = [];
+  //     speedXPlayer = [];
+  //     speedYPlayer = [];
+  //     accelXPlayer = [];
+  //     accelYPlayer = [];
+  //     jerkXPlayer = [];
+  //     jerkYPlayer = [];
+  //     curvaturePlayer = [];
+
+  //     amountSharpTurnsPlayer = 0;
+  //   }
+  // });
+
+  // socket.on("calculateMeasuresAgent", (room) => {
+  //   if (roundBeginning || roundBeginningTraining || roundBeginningValidation) {
+  //     let predictabilityAgentTurns =
+  //       amountSharpTurnsAgent / rotationAgent.length;
+
+  //     // WRITE THE JSON FILE
+  //     let metricsAgent = {
+  //       time: new Date(),
+  //       nano: performance.now(),
+  //       room: room,
+  //       // predictabilityAgent: predictabilityAgentTurns,
+  //       velocityXAgent: speedXAgent,
+  //       velocityYAgent: speedYAgent,
+  //       accelerationXAgent: accelXAgent,
+  //       accelerationYAgent: accelYAgent,
+  //       jerkXAgent: jerkXAgent,
+  //       jerkYAgent: jerkYAgent,
+  //       curvatureAgent: curvatureAgent,
+  //     };
+
+  //     dataAgent.push(metricsAgent);
+
+  //     agePositions = [];
+  //     predictabilityAgentTurns = [];
+  //     speedXAgent = [];
+  //     speedYAgent = [];
+  //     accelXAgent = [];
+  //     accelYAgent = [];
+  //     jerkXAgent = [];
+  //     jerkYAgent = [];
+  //     curvatureAgent = [];
+
+  //     amountSharpTurnsAgent = 0;
+  //   }
+  // });
+
+  // socket.on("calculateMeasures", (room) => {
+  //   if (roundBeginning) {
+
+
+  //     // Measure of Sharp Turns Players and Agents
+
+  //     let predictabilityPlayerTurns =
+  //       amountSharpTurnsPlayer / rotDifferencesPlayer.length;
+  //     let predictabilityAgentTurns =
+  //       amountSharpTurnsAgent / rotationAgent.length;
+
+  //     socket.emit(
+  //       "scoresSimilar",
+  //       predictabilityPlayerTurns,
+  //       predictabilityAgentTurns
+  //     );
+  //     // console.log(`The amount of sharp turns for the player is: ${amountSharpTurnsPlayer}, for the wave agent: ${amountSharpTurnsWaves} and the ideal agent: ${amountSharpTurnsIdeal}`)
+  //     // console.log(`The competence in smoothness of the player is: ${competenceSmoothPlayer.toFixed(3)}, for the wave agent: ${competenceSmoothWaveAgent.toFixed(3)} and the ideal agent: ${competenceSmoothnessIdeal.toFixed(3)}`)
+  //     // WRITE THE JSON FILE
+  //     let scores = {
+  //       time: new Date(),
+  //       room: room,
+  //       predictabilityPlayer: predictabilityPlayerTurns,
+  //       predictabilityAgent: predictabilityAgentTurns,
+  //       velocityAgent: speedAgent,
+  //       jerkAgent: jerkAgent,
+  //     };
+  //     dataAgent.push(scores);
+  //     // data.resultsAgent2.push(scores2)
+
+  //     prevPlayPositions = playPositions;
+
+  //     prevAgePositions = agePositions;
+  //     prevAgePositions2 = agePositions2;
+
+  //     playPositions = [];
+  //     // rotDifferencesIdealAgent = []
+  //     rotDifferencesPlayer = [];
+  //     rotationAgent = [];
+  //     // rotDifferencesWaveAgent = []
+
+  //     velocityAgent = [];
+  //     velocityPlayer = [];
+
+  //     speedAgent = [];
+  //     accelAgent = [];
+  //     jerkAgent = [];
+
+  //     agePositions = [];
+  //     agePositions2 = [];
+
+  //     playerPositionsTest = [];
+  //     smoothFinal = [];
+  //     smooth = [];
+  //     smooth2 = [];
+  //     smoothAgentFinal = [];
+  //     // amountSharpTurnsIdeal = 0
+  //     amountSharpTurnsAgent = 0;
+  //     amountSharpTurnsPlayer = 0;
+  //   }
+  // });
+
+  // let registerTime = 100;
+// setInterval(() => {
+//   // console.log(playPositions)
+//   // playPositionsPrev = playPositions
+//   for (r in rooms_history) {
+//     var room = rooms_history[r];
+//     var min_distance = 999999;
+//     var mean_x = [];
+//     var mean_y = [];
+//     var mean_rot = [];
+
+//     // Variables for predictability and integrity.
+//     // Number of players.
+//     var n_players = 0;
+//     // For each player in a room have the definition of the parameters for the scores.
+//     for (p in room) {
+//       n_players++;
+//       var player = room[p];
+//       var distance = 0;
+//       var prev_location = null;
+//       // Introduction of Previous speed and angle.
+//       let prev_speed = null;
+//       let prev_angle = null;
+
+//       // Obtain angle based on the position.
+//       // const angleDeg = Math.atan2(mousePosition.y - (canvas.height/2), mousePosition.x - (canvas.width/2)) * 180 / Math.PI;
+
+//       mean_x.unshift(0);
+//       mean_y.unshift(0);
+//       mean_rot.unshift(null);
+
+//       //
+//       for (var l = 0; l < player.length; ++l) {
+//         var i = parseInt(l);
+//         var location = player[l];
+//         // Condition for the difference of location for the players.
+//         if (prev_location !== null) {
+//           distance += Math.sqrt(
+//             Math.pow(location.x - prev_location.x, 2) +
+//             Math.pow(location.y - prev_location.y, 2)
+//           );
+//         }
+
+//         prev_location = location;
+//         mean_x[0] += location.x / player.length;
+//         mean_y[0] += location.y / player.length;
+
+//         if (mean_rot[0] === null) {
+//           mean_rot[0] = location.rotation;
+//         } else {
+//           while (location.rotation - mean_rot[0] > 180)
+//             location.rotation -= 360;
+//           while (mean_rot[0] - location.rotation > 180)
+//             location.rotation += 360;
+//           location.rotation = location.rotation;
+//           mean_rot[0] =
+//             location.rotation / (i + 1) + (mean_rot[0] * i) / (i + 1);
+//         }
+//       }
+//       min_distance = Math.min(min_distance, distance);
+//       rooms_history[r][p] = [];
+//     }
+//     max_rot_diff = 0;
+//     max_location_diff = 0;
+//     for (var i = 0; i < mean_rot.length; i++) {
+//       for (var j = i + 1; j < mean_rot.length; j++) {
+//         rot1 = mean_rot[i];
+//         rot2 = mean_rot[j];
+//         if (rot1 !== null && rot2 !== null) {
+//           while (rot1 - rot2 > 180) rot1 -= 360;
+//           while (rot2 - rot1 > 180) rot1 += 360;
+//           max_rot_diff = Math.max(max_rot_diff, Math.abs(rot1 - rot2));
+//           max_location_diff = Math.max(
+//             max_location_diff,
+//             Math.sqrt(
+//               Math.pow(mean_x[i] - mean_x[j], 2) +
+//               Math.pow(mean_y[i] - mean_y[j], 2)
+//             )
+//           );
+//         }
+//       }
+//     }
+
+//     score = min_distance / (0.01 + max_location_diff);
+//     // console.log(score)
+//     if (max_rot_diff > 90) score = 0;
+//     io.to(r).emit("score", score);
+//     room_score[r] += score;
+//   }
+// }, registerTime);
+
+// // WRITE THE SCORES OF THE PLAYER IN A JSON FILE.
+      // let finalDataPlayer = JSON.stringify(dataPlayer);
+      // let textFilePlayer = "scores_player_validation" + socket.id + "_Round" + currentRoundValidationTotal + ".json";
+      // let textFilePlayerPosition = "scores_player_training_position_" + socket.id + "_Round" + currentRoundTrainingTotal + ".json"
+      // fs.writeFile(textFilePlayer, finalDataPlayer, (err) => {
+      //   if (err) {
+      //     throw err;
+      //   } else {
+      //     console.log("successful upload");
+      //   }
+      //   console.log("JSON data experiment player is saved.");
+      // });
+
+      // // WRITE THE SCORES OF THE AGENT IN A JSON FILE.
+      // let finalDataAgent = JSON.stringify(dataAgent);
+      // let textFileAgent = "scores_agent_validation" + socket.id + "_Round" + currentRoundValidationTotal + ".json";
+
+      // fs.writeFile(textFileAgent, finalDataAgent, (err) => {
+      //   if (err) {
+      //     throw err;
+      //   } else {
+      //     console.log("successful upload");
+      //   }
+      //   console.log("JSON data experiment agent is saved.");
+      // });
+
+      // let textFile
+      // if (mongoClient !== undefined) {
+      //   const db = mongoClient.db(dbName);
+      //   db.collection("room_scores").insert({
+      //     time: new Date(),
+      //     room: room,
+      //     score: room_score[room],
+      //     competence: room_competence[room],
+      //     predictability: room_predictability[room],
+      //     integrity: room_integrity[room],
+      //   });
+      // }

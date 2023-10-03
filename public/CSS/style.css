@@ -31,7 +31,7 @@ body {
 .start-screen {
   margin: auto;
   align-items: center;
-  margin: auto;
+  text-align: center;
 }
 
 #main-menu-button {
@@ -88,6 +88,18 @@ body {
 
 #welcome-message {
   padding: 20px;
+  font-size: 40px;
+}
+
+#title-main-screen {
+  padding: 20px;
+  font-size: 70px;
+}
+
+#r-experiment-begin {
+  padding: 20px;
+  
+  position: relative;
 }
 
 #canvas-demo {
@@ -126,7 +138,7 @@ button {
     padding: 12px 48px 12px 48px;
     border-radius: 4px;
     color: #ffffff;
-    background-color: #333;
+    background-color: #5a607f;
     border-color: 2px solid #ffffff;
 }
 
@@ -134,7 +146,28 @@ button { transition-duration: 0.4s;}
 
 button:hover {
     font-size: 1.6em;
-    background-color: #05c46b;
+    background-color: #6878b5;
+}
+
+#progress-practice {
+  width: 100%;
+  background-color: gray;
+}
+
+#practiceBar {
+  width: 1%;
+  height: 30px;
+  background-color: #04AA6D;
+}
+
+#progress-experiment {
+  width: 100%;
+  background-color: gray;
+}
+#experimentBar {
+  width: 1%;
+  height: 30px;
+  background-color: #04AA6D;
 }
 
 div#game {
@@ -177,10 +210,22 @@ div#cursor {
     background-image: url(cursor_white.png);
 }
 
+.heading-experiment {
+  padding: 20px;
+  font-size: 50px;
+  text-align: center;
+}
+
+.button-experiment {
+  padding: 20px;
+  font-size: 30px;
+  text-align: center;
+
+}
 
 .btn-group button {
-    background-color: #04AA6D; /* Green background */
-    border: 1px solid green; /* Green border */
+    background-color: #2596be; /* Green background */
+    border: 1px solid #1cabdf; /* Green border */
     color: white; /* White text */
     padding: 10px 24px; /* Some padding */
     cursor: pointer; /* Pointer/hand icon */
@@ -195,7 +240,7 @@ div#cursor {
   
   /* Add a background color on hover */
   .btn-group button:hover {
-    background-color: #3e8e41;
+    background-color: #2596be;
   }
   /* Add styles necessary for game menu */
   .container {

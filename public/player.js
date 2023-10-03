@@ -179,7 +179,7 @@ class Player {
     }
 
     draw(context){
-        console.log(`draw: ${this.collisionX} Y: ${this.collisionY}`)
+        // console.log(`draw: ${this.collisionX} Y: ${this.collisionY}`)
         context.beginPath();
         context.arc(this.collisionX, this.collisionY, this.collisionRadius, 0, Math.PI * 2);
         context.save();
@@ -211,7 +211,7 @@ class Player {
         
         // console.log(`For the counter: ${this.counterTestSpeed} the value of function: ${ 10 * easeInSine(this.counterTestSpeed)}`)
         
-        console.log(`Mouse movements X: ${moveX} Y: ${moveY}`)
+        
         // console.log(`The player collision in X: ${this.collisionX} and for Y: ${this.collisionY}`)
         this.rawMouseMoveX = moveX;
         this.rawMouseMoveY = moveY;

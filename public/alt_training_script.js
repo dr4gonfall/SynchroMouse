@@ -13,8 +13,11 @@ class TrainingGameAlt {
     const canvasTrainingExperiment = document.getElementById("training-game-alt");
     const ctxTrainingExperiment = canvasTrainingExperiment.getContext("2d");
     // Training Canvas Dimensions
-    canvasTrainingExperiment.width = 800;
+    canvasTrainingExperiment.width = 1000;
     canvasTrainingExperiment.height = 500;
+    
+    // canvasTrainingExperiment.width = 200;
+    // canvasTrainingExperiment.height = 200;
 
     // Timers Definition
 
@@ -50,6 +53,7 @@ class TrainingGameAlt {
     let randomJitterIntervalId = undefined;
     let updateEndPointAgentId = undefined;
     let updatePlayerNotMoving = undefined;
+    let progressBarTimeId = undefined;
 
 
 
@@ -106,6 +110,7 @@ class TrainingGameAlt {
 
     $stopTrainingSessionExperimentAlt.addEventListener("click", (e) => {
       startTrainingDebriefAlt();
+      // clearInterval(id);
     })
 
 
@@ -142,6 +147,31 @@ class TrainingGameAlt {
     //   }
     // });
 
+    
+    function progressBarMove() {
+      let i = 0;
+      let counter =0;
+      if (i === 0) {
+        i = 1;
+        let elem = document.getElementById("practiceBar");
+        let width = 0;
+        let id = setInterval(frame, 1000);
+        function frame() {
+          if (width >= 100) {
+            clearInterval(id);
+            i = 0;
+            width = 0;
+            counter = 0;
+          } else {
+            width += (5/3);
+            counter ++;
+            elem.style.width = width + "%";
+          }
+          // console.log(counter)
+        }
+      }
+    }
+
 
     // Creation of a new training session
     function newTrainingAlt() {
@@ -149,6 +179,7 @@ class TrainingGameAlt {
       prevY = 200;
       urlParams = new URLSearchParams(window.location.search);
       room = urlParams.get("room");
+      
       trainingGameAlt()
       // socket.emit("start-training", room);
       // socket.on("beginGameTraining", (roundBeginningTraining) => {
@@ -200,6 +231,8 @@ class TrainingGameAlt {
       // let mouseSpeedX = [];
       let mouseSpeedXMax = [];
       let mouseSpeedYMax = [];
+
+      progressBarMove();
       
       let random = Math.random();
 
@@ -225,6 +258,7 @@ class TrainingGameAlt {
       // game.player.maxSpeed = 20;
       // Agent Controls
       // game.agent.maxSpeed = 20;
+      
 
       
       let targetX = canvasTrainingExperiment.width / 2 + 50;
@@ -272,11 +306,11 @@ class TrainingGameAlt {
         const gameTrainingAlt = new Tutorial(canvasTrainingExperiment);
 
         canvasTrainingExperiment.addEventListener('click', (e) => {
-          if (gameTrainingAlt.agent.tutorialCondition >= 0 && gameTrainingAlt.agent.tutorialCondition < 2) {
-            gameTrainingAlt.agent.tutorialCondition ++;
-          } else {
-            gameTrainingAlt.agent.tutorialCondition = 0;
-          }
+          // if (gameTrainingAlt.agent.tutorialCondition >= 0 && gameTrainingAlt.agent.tutorialCondition < 2) {
+          //   gameTrainingAlt.agent.tutorialCondition ++;
+          // } else {
+          //   gameTrainingAlt.agent.tutorialCondition = 0;
+          // }
         })
 
 

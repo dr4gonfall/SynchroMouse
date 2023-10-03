@@ -1,23 +1,29 @@
 <html>
 
 <head>
-    <title>SynchroMouse</title>
+    <title>Mirror Game 2D</title>
     <base href=".">
     <link rel="stylesheet" type="text/css" href="CSS/style.css">
 </head>
 
 
-<body>
+<body background="BackgroundExperiment.001.jpeg">
     <div id="start-screen" class="screen" style="display: block;">
-        <h1 class="main-message">Trust and Improvisation in Human-autonomous Teams</h1>
+        <div class="heading-experiment">
+            <h1 id="title-main-screen" class="heading-experiment">Mirror Game 2D</h1>
+        </div>
+
         <div id="welcome-message" class="main-message">
-            <p>Welcome and thank you for your participation on this experiment. Please click the button down below when
-                you are ready to begin.</p>
+            <p>Welcome to the Mirror Game! Please click on the button below when you are
+                ready to begin.</p>
         </div>
         <!-- <button id="main-menu-button">Begin Demo</button> -->
-        <button id="v-experiment-begin">Begin Experiment Validation</button>
+        <!-- <button id="v-experiment-begin" style="display: none;">Begin Experiment Validation</button> -->
         <!-- <button id="simulation-begin">Begin Simulation</button> -->
-        <button id="r-experiment-begin">Begin Experiment</button>
+        <div class="button-experiment" style="text-align: center;">
+            <button id="r-experiment-begin">Begin</button>
+        </div>
+
     </div>
 
     <div id="game-modes" class="screen" style="display: none;">
@@ -159,86 +165,148 @@
     </div>
 
     <div id="real-experiment-instructions-en-alt" class="screen" style="display: none;">
+        <div class="heading-experiment">
+            <h1>Overview</h1>
+        </div>
+        <div>
+            <p style="font-size: 40px;">
+                Welcome to the Mirror Game 2D! The instructions for the game are the following:
+            </p>
+        </div>
+        <div style="font-size: 30px;">
+            <ul>
+                <li>This is a game without words. You will create movements together with a virtual player.</li>
+                <li>The objective of the game is to produce creative and aesthetic movements together with the other
+                    player.</li>
+                <li>This game is not a competition.</li>
+                <li>We will collect data related to the movements you create with the virtual player.</li>
+                <li>The game will have a duration of 10 minutes</li>
+            </ul>
+        </div>
 
-        <h1>Experiment Instructions</h1>
-        <p>
-            Welcome to this experiment and thanks for participating in this study.
-            You will play a game called the Mirror Game with an autonomous agent. This is a game, not a competition, and
-            the goal is
-            simply to enjoy producing movements together. In this experiment you will play 16 rounds of the
-            Mirror Game.
-            In this version either you or the agent will be assigned the roles of the one who leads and the one who
-            complements
-            the movements in the team.
-            The teammate who leads will propose and perform movements while the other teammate complements the movements
-            of the leader while
-            coordinating. After you finish each game, we will ask you to
-            fill a form after each game. Before the game we will play two rounds of practice, one per type so that
-            you get used to the controls.
-        </p>
+        <!-- Welcome to this experiment and thanks for participating in this study.
+                You will play a game called the Mirror Game with an autonomous agent. This is a game, not a competition, and
+                the goal is
+                simply to enjoy producing movements together. In this experiment you will play 16 rounds of the
+                Mirror Game.
+                In this version either you or the agent will be assigned the roles of the one who leads and the one who
+                complements
+                the movements in the team.
+                The teammate who leads will propose and perform movements while the other teammate complements the movements
+                of the leader while
+                coordinating. After you finish each game, we will ask you to
+                fill a form after each game. Before the game we will play two rounds of practice, one per type so that
+                you get used to the controls. -->
+        <div class="button-experiment">
+            <button id="real-experiment-instructions-button">Continue</button>
+        </div>
 
-        <button id="real-experiment-instructions-button">Continue</button>
 
 
     </div>
 
 
     <div id="instructions-training-session-en-alt" class="screen" style="display: none;">
-        <h1>Training Session</h1>
-        <div>
-            <p>
-                During this training session you will first have a screen where you can move your mouse and see how the
-                icon that represents your character moves. Please familiarize yourself with the controls of the tool and
-                once you feel you understand how you move please let me know.
-
-                When you are ready please press the button continue to begin the game. If you have any questions please
-                let the researcher know.
-            </p>
-
-            <button id="button-training-instructions-en-alt">Begin Training</button>
+        <div class="heading-experiment">
+            <h1>Practice</h1>
         </div>
+
+        <div style="font-size: 40px;">
+            <p style="margin:auto">
+                In the next screen your character will be a blue circle on the screen. Please familiarize yourself with
+                the controls. You are the blue circle in the screen. To move, move your mouse and the blue circle will
+                move along. The bar below the title represents the amount of time the game has been played.
+                When you are familiar with the controls press the Esc key.
+            </p>
+        </div>
+        <div class="button-experiment">
+            <button id="button-training-instructions-en-alt">Begin Practice</button>
+        </div>
+
     </div>
 
 
     <div id="training-session-alt" class="screen" style="display: none;">
-        <div class="wrapper">
-            <h2>Training Session:</h2>
-            <p>
-                You are the blue circle in the screen. Move your mouse to move the circle. The gray circle is the agent.
-                If you left click the agent will begin moving. If you left click again the
-                agent will follow you. The mouse icon was removed
-                and you can press 'ESC' to exit the game and see your mouse again.
-            </p>
 
+        <div class="heading-experiment">
+            <h1 class="heading-experiment">Practice</h1>
+        </div>
+        <div id="progress-practice">
+            <div id="practiceBar"></div>
+        </div>
+
+        <br>
+        <div>
             <canvas id="training-game-alt"></canvas>
         </div>
-        <button id="button-training-session-alt">Finish Training</button>
+
+
+        <div class="button-experiment">
+            <button id="button-training-session-alt">Finish Practice</button>
+        </div>
+
     </div>
 
 
 
 
     <div id="training-session-debrief-alt" class="screen" style="display: none;">
-        <h1>Debriefing Session</h1>
-        <div>
-            <p>
-                You saw two different versions of the Mirror Game being a the person who creates the movements (Leader)
-                and the person who complements the movements (Complementer) of the other. You will play 8 rounds of 1
-                min with a break of 10 seconds between each round. When you are ready for the experiment please let the
-                researcher know.
+        <div class="heading-experiment">
+            <h1>Debriefing Practice</h1>
+        </div>
+
+        <div style="font-size: 40px;">
+            <p style="margin: auto;">
+                The games with the virtual player will last 10 minutes. In this version of the game you and the agent
+                will create different movements while coordinating to each other. When you are ready to begin please
+                press the "Play Game" button. The bar below the title represents the amount of time the game has been played. When the bar
+                is filled the time for the game will end.
             </p>
-            <button id="button-begin-real-experiment">Begin Experiment</button>
+
+        </div>
+        <br>
+        <div class="button-experiment" style="padding: 50px;">
+            <button id="button-begin-real-experiment">Play Game</button>
         </div>
     </div>
 
     <div id="real-experiment" class="screen" style="display: none;">
-        <h1>Synchromouse Experiment</h1>
-        <div class="row">
+        <div class="heading-experiment">
+            <h1>Mirror Game</h1>
+        </div>
+
+        <!-- <div class="row">
             <p class="column left">Next round begins in <span id="time-real-experiment-prelim">X</span> seconds</p>
             <p class="column right">Time remaining: <span id="time-real-experiment-round">X</span> seconds</p>
+        </div> -->
+        <div id="progress-experiment">
+            <div id="experimentBar"></div>
         </div>
-        <canvas id="canvas-real-experiment" style="cursor: none;"></canvas>
+        <br>
+        <div>
+            <canvas id="canvas-real-experiment" style="cursor: none;"></canvas>
+        </div>
+
     </div>
+
+    <div id="real-experiment-session-debrief" class="screen" style="display: none;">
+        <div class="heading-experiment">
+            <h1>Thank you for playing!</h1>
+        </div>
+
+        <div>
+            <p style="font-size: 40px;">
+                Thank you for participating in this game. We hope you had fun while playing our version of the
+                Mirror Game.
+                If you have any further questions please refer to: Daniel Gonzalez (gonzad5@rpi.edu).
+            </p>
+        </div>
+        <div class="button-experiment">
+            <!-- <button id="button-end-real-experiment">Begin Again</button> -->
+        </div>
+
+    </div>
+
 
 
 

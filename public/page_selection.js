@@ -59,9 +59,9 @@ class PageSelection {
     // VALIDATION EXPERIMENT SEQUENCE
 
     // Go from main screen to the validation experiment instructions.
-    $mainVExperiment.addEventListener("click", (e) => {
-      startValidationExperimentInstructions();
-    });
+    // $mainVExperiment.addEventListener("click", (e) => {
+    //   startValidationExperimentInstructions();
+    // });
     // Go from the validation experiment instructions to the training session instructions.
     $validationExperimentInstructions.addEventListener("click", (e) => {
       startTrainingSessionInstructions()

@@ -2,7 +2,12 @@ class ExperimentScript {
   experimentScript(socket, roundNumber) {
     let room;
    
-    
+    let lastPlayerCollisionX = 0;
+    let lastPlayerCollisionY = 0;
+
+    let lastAgentCollisionX = 0;
+    let lastAgentCollisionY = 0;
+
     // ORDER FOR THE EXPERIMENT
 
     let numberArrayVariations = [1, 2, 3, 4, 5, 6, 7, 8]
@@ -12,13 +17,17 @@ class ExperimentScript {
 
     let currentGameProfile = variations[roundNumber]
 
+    let progressBarExperiment = document.getElementById("experimentBar")
+
     console.log(variations)
+
+    socket.emit("variationDefinition", variations);
 
 
     // VALIDATION EXPERIMENT SEQUENCE
     
-    const $realExperimentPage = document.querySelector("#button-begin-real-experiment")
-
+    const $realExperimentPage = document.querySelector("#button-begin-real-experiment");
+    // const $realExperimentDebrief = document.querySelector("button-end-real-experiment");
 
     // CANVAS VALIDATION EXPERIMENT SELECTION
 
@@ -26,7 +35,7 @@ class ExperimentScript {
     const canvasRExperiment = document.getElementById("canvas-real-experiment");
     const ctxRExperiment = canvasRExperiment.getContext("2d");
     // Canvas RExperiment Experiment Dimensions
-    canvasRExperiment.width = 800;
+    canvasRExperiment.width = 1000;
     canvasRExperiment.height = 500;
 
 
@@ -34,8 +43,8 @@ class ExperimentScript {
 
     // Training number of rounds
     // RExperiment Experiment Timers Definition
-    let timerBetweenRoundsRExperiment = document.getElementById("time-real-experiment-prelim");
-    let timerRoundsRExperiment = document.getElementById("time-real-experiment-round")
+    // let timerBetweenRoundsRExperiment = document.getElementById("time-real-experiment-prelim");
+    // let timerRoundsRExperiment = document.getElementById("time-real-experiment-round")
 
     // Role of the player
 
@@ -65,11 +74,12 @@ class ExperimentScript {
     let randomBehaviorTime = randIntervalFromIntervalInteger(5, 10) * 1000;
     let randomMirroringTime = 5000;
     let randomJitterTime = randIntervalFromIntervalInteger(1, 2) * 1000;
+    
 
     let randomBehaviorIntervalId = undefined;
     let randomMirroringIntervalId = undefined;
     let randomJitterIntervalId = undefined;
-
+    let stopTimerIntervalId = undefined;
 
     // VALIDATION EXPERIMENT SESSION
 
@@ -87,7 +97,8 @@ class ExperimentScript {
     }
 
     function endOfExperiment() {
-
+      toggleScreen("real-experiment", false);
+      toggleScreen("real-experiment-session-debrief", true);
     }
 
     // VALIDATION EXPERIMENT SEQUENCE
@@ -97,6 +108,15 @@ class ExperimentScript {
       console.log(`Is clicked the beginning of the game`)
       startRealExperiment();
     })
+
+    function reDoExperiment() {
+      toggleScreen("real-experiment-session-debrief", false);
+      toggleScreen("start-screen", true);
+    }
+
+    // $realExperimentDebrief.addEventListener("click", (e) => {
+    //   reDoExperiment();
+    // })
 
 
     // GAME EXPERIMENT
@@ -118,19 +138,24 @@ class ExperimentScript {
       if (finish) {
         gameStartedRExperiment = false;
         console.log("The experiment is finished");
-        timerBetweenRoundsRExperiment.innerHTML = "X";
-        timerRoundsRExperiment.innerHTML = "X";
+        // timerBetweenRoundsRExperiment.innerHTML = "X";
+        // timerRoundsRExperiment.innerHTML = "X";
+        progressBarExperiment.style.width = "0%";
         // rolePlayerRExperiment.innerHTML = "X";
         // instructionPlayerRExperiment.innerHTML = "...";
         finishGame = true;
         // $validationExperimentBegin.disabled = false;
         variations = [];
+        endOfExperiment();
         // socket.off("endRExperiment")
       } else {
         let seconds = 10;
+        let widthBar = 100;
+        progressBarExperiment.style.backgroundColor = "red";
         roundNumber++;
+        progressBarExperiment.style.width = "100%";
         console.log(`The round of the experiment: ${roundNumber}`)
-        timerBetweenRoundsRExperiment.innerHTML = seconds;
+        // timerBetweenRoundsRExperiment.innerHTML = seconds;
         if (restIntervalId !== undefined) {
           clearInterval(restIntervalId);
         }
@@ -138,15 +163,19 @@ class ExperimentScript {
           seconds--;
           if (seconds < 0) {
             clearInterval(restIntervalId);
+            progressBarExperiment.style.width = "0%";
             restIntervalId = undefined;
             playingRExperiment = true;
             socket.emit("rest_end_real_experiment");
           } else {
-            timerBetweenRoundsRExperiment.innerHTML = seconds;
+            // timerBetweenRoundsRExperiment.innerHTML = seconds;
+            widthBar -= 10;
+            progressBarExperiment.style.width = widthBar + "%";
           }
         }, 1000);
       }
     });
+
 
     function newRExperiment() {
       prevX = 200;
@@ -158,21 +187,25 @@ class ExperimentScript {
         console.log(`The round is beginning: ${roundBeginningRExperiment}`);
         if (!roundBeginningRExperiment) {
           // console.log("The experiment will begin")
-          timerRoundsRExperiment.innerHTML = "X";
+          // timerRoundsRExperiment.innerHTML = "X";
           playingRExperiment = false;
         } else if (roundBeginningRExperiment) {
           // console.log("playing", playingRExperiment);
           gameStartedRExperiment = true;
-          let timeRoundGameRExperiment = 61;
+          let timeRoundGameRExperiment = 60;
 
+          progressBarExperiment.style.backgroundColor = "#04AA6D";
 
-
-          timerRoundsRExperiment.innerHTML = timeRoundGameRExperiment;
+          // timerRoundsRExperiment.innerHTML = timeRoundGameRExperiment;
+          let widthBar = 0;
           gameIntervalId = setInterval(() => {
+            
             timeRoundGameRExperiment--;
-            timerRoundsRExperiment.innerHTML = timeRoundGameRExperiment;
+            // timerRoundsRExperiment.innerHTML = timeRoundGameRExperiment;
             // console.log(`The time for the validation is: ${timeRoundGameRExperiment}`)
             if (timeRoundGameRExperiment <= 0) {
+              widthBar = 0;
+              progressBarExperiment.style.width = widthBar + "%";
               console.log("Time", timeRoundGameRExperiment);
               console.log("Id", gameIntervalId);
               clearInterval(gameIntervalId);
@@ -187,17 +220,26 @@ class ExperimentScript {
               playingRExperiment = false;
               gameStartedRExperiment = false;
               socket.emit("round_end_real_experiment");
+              // if (roundNumber > 0) {
+              //   lastPlayerCollisionX = gameRExperiment.player.collisionX;
+              //   lastPlayerCollisionY = gameRExperiment.player.collisionY;
+              //   lastAgentCollisionX = gameRExperiment.agent.collisionX;
+              //   lastAgentCollisionY = gameRExperiment.agent.collisionY;
+              // }
+              
+            } else {
+              widthBar += (5/3);
+              progressBarExperiment.style.width = widthBar + "%"
             }
           }, 1000);
         }
-          validationGame();
-
+        realExperimentGame();
       });
     }
 
     // VALIDATION GAME
 
-    function validationGame() {
+    function realExperimentGame() {
       // console.log(`The training is: ${playingTraining}`);
       let mouseSpeedX = [];
       let mouseSpeedXMax = [];
@@ -245,6 +287,11 @@ class ExperimentScript {
       canvasRExperiment.addEventListener('mousemove', (e) => {
         mouseMoveX = e.movementX;
         mouseMoveY = e.movementY;
+        clearInterval(stopTimerIntervalId)
+        stopTimerIntervalId = setInterval(()=> {
+          mouseMoveX = 0;
+          mouseMoveY = 0;
+        },100)
       })
 
 
@@ -262,6 +309,13 @@ class ExperimentScript {
 
 
         const gameRExperiment = new Game(canvasRExperiment, socket, room);
+        if (roundNumber > 0) {
+          gameRExperiment.player.collisionX = lastPlayerCollisionX;
+          gameRExperiment.player.collisionY = lastPlayerCollisionY;
+
+          gameRExperiment.agent.collisionX = lastAgentCollisionX;
+          gameRExperiment.agent.collisionY = lastAgentCollisionY;
+        }
 
         console.log(`The current round is: ${roundNumber}`)
         console.log(`The profile of the game: ${currentGameProfile}`)
@@ -271,56 +325,56 @@ class ExperimentScript {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
           gameRExperiment.player.maxSpeed = 10;
-          gameRExperiment.agent.maxSpeed = 8;
+          gameRExperiment.agent.maxSpeed = 10;
           gameRExperiment.agent.competence = true;
           gameRExperiment.agent.predictability = true;
         } else if (currentGameProfile === 2) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
           gameRExperiment.player.maxSpeed = 10;
-          gameRExperiment.agent.maxSpeed = 8;
+          gameRExperiment.agent.maxSpeed = 10;
           gameRExperiment.agent.competence = false;
           gameRExperiment.agent.predictability = true;
         } else if (currentGameProfile === 3) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
           gameRExperiment.player.maxSpeed = 10;
-          gameRExperiment.agent.maxSpeed = 8;
+          gameRExperiment.agent.maxSpeed = 10;
           gameRExperiment.agent.competence = true;
           gameRExperiment.agent.predictability = false;
         } else if (currentGameProfile === 4) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
           gameRExperiment.player.maxSpeed = 10;
-          gameRExperiment.agent.maxSpeed = 8;
+          gameRExperiment.agent.maxSpeed = 10;
           gameRExperiment.agent.competence = false;
           gameRExperiment.agent.predictability = false;
         } else if (currentGameProfile === 5) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
           gameRExperiment.player.maxSpeed = 5;
-          gameRExperiment.agent.maxSpeed = 3;
+          gameRExperiment.agent.maxSpeed = 5;
           gameRExperiment.agent.competence = true;
           gameRExperiment.agent.predictability = true;
         } else if (currentGameProfile === 6) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
           gameRExperiment.player.maxSpeed = 5;
-          gameRExperiment.agent.maxSpeed = 3;
+          gameRExperiment.agent.maxSpeed = 5;
           gameRExperiment.agent.competence = false;
           gameRExperiment.agent.predictability = true;
         } else if (currentGameProfile === 7) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
           gameRExperiment.player.maxSpeed = 5;
-          gameRExperiment.agent.maxSpeed = 3;
+          gameRExperiment.agent.maxSpeed = 5;
           gameRExperiment.agent.competence = true;
           gameRExperiment.agent.predictability = false;
         } else if (currentGameProfile === 8) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
           gameRExperiment.player.maxSpeed = 5;
-          gameRExperiment.agent.maxSpeed = 3;
+          gameRExperiment.agent.maxSpeed = 5;
           gameRExperiment.agent.competence = false;
           gameRExperiment.agent.predictability = false;
         } 
@@ -356,7 +410,7 @@ class ExperimentScript {
               
             }
             // console.log(`The time for the interval was: ${randomBehaviorTime} and the agent is the follower: ${gameRExperiment.agent.follower}`)
-          }, 10000);
+          }, randomBehaviorTime);
         }
 
 
@@ -413,11 +467,19 @@ class ExperimentScript {
 
           } else {
             cancelAnimationFrame(animationId);
+            lastAgentCollisionX = gameRExperiment.agent.collisionX;
+            lastAgentCollisionY = gameRExperiment.agent.collisionY;
+
+            lastPlayerCollisionX = gameRExperiment.player.collisionX;
+            lastPlayerCollisionY = gameRExperiment.player.collisionY;
+            // console.log(`The last position of player was: ${lastPlayerCollisionX} and ${lastPlayerCollisionY} Agent: ${lastAgentCollisionX} and ${lastAgentCollisionY}`)
           }
         }
         if (gameStartedRExperiment) {
-          console.log('THE VALIDATION IS ANIMATING')
+          // console.log('THE VALIDATION IS ANIMATING')
           animate();
+        } else {
+          
         }
 
         // MOUSE MOVEMENTS

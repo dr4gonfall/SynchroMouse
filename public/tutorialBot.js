@@ -228,8 +228,8 @@ class TutorialBot {
   
     arrive() {
       let force = {
-        x: this.target.x - this.collisionX,
-        y: this.target.y - this.collisionY,
+        x: this.player.collisionX - this.collisionX,
+        y: this.player.collisionY - this.collisionY,
       };
       let slowRadius = 50;
       let d = defineMagnitude(force.x, force.y);
@@ -414,11 +414,12 @@ class TutorialBot {
             this.collisionY += Math.sin(this.radians);
             // console.log(`The collision in X: ${this.collisionX} and Y: ${this.collisionY}`)
         } else if (this.tutorialCondition === 2) {
-            let steering = this.seek()
+            let steering = this.arrive()
             this.applyForce(steering);
 
             this.speedX += this.accX;
             this.speedY += this.accY;
+
             
             this.collisionX += this.speedX;
             this.collisionY += this.speedY;

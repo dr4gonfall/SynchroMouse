@@ -228,78 +228,78 @@ class Agent {
     context.restore();
     // context.stroke();
 
-    context.beginPath();
-    context.arc(this.initialBezier.x, this.initialBezier.y, 5, 0, Math.PI * 2);
-    context.save();
-    context.globalAlpha = 0.5;
-    context.fillStyle = "purple";
-    context.fill();
-    context.restore();
-    context.stroke();
-
-    // Painting of the first control point in Bezier Curve
-    context.beginPath()
-    context.arc(this.p1Bezier.x, this.p1Bezier.y, 5, 0, Math.PI * 2)
-    context.save();
-    context.globalAlpha = 0.5;
-    context.fillStyle = 'blue'
-    context.fill();
-    context.restore();
-    context.stroke()
-
-    // Painting of the second control point in Bezier Curve
-    context.beginPath()
-    context.arc(this.p2Bezier.x, this.p2Bezier.y, 5, 0, Math.PI * 2)
-    context.save();
-    context.globalAlpha = 0.5;
-    context.fillStyle = 'blue'
-    context.fill();
-    context.restore();
-    context.stroke()
-
-    // Painting of the end point in Bezier Curve
-    context.beginPath();
-    context.arc(this.endBezier.x, this.endBezier.y, 5, 0, Math.PI * 2);
-    context.save();
+    // context.beginPath();
+    // context.arc(this.initialBezier.x, this.initialBezier.y, 5, 0, Math.PI * 2);
+    // context.save();
     // context.globalAlpha = 0.5;
-    // context.fillStyle = "black";
-    context.fill();
-    context.restore();
+    // context.fillStyle = "purple";
+    // context.fill();
+    // context.restore();
+    // context.stroke();
+
+    // // Painting of the first control point in Bezier Curve
+    // context.beginPath()
+    // context.arc(this.p1Bezier.x, this.p1Bezier.y, 5, 0, Math.PI * 2)
+    // context.save();
+    // context.globalAlpha = 0.5;
+    // context.fillStyle = 'blue'
+    // context.fill();
+    // context.restore();
     // context.stroke()
 
-    context.beginPath();
-    context.moveTo(this.collisionX, this.collisionY);
-    context.lineTo(this.targetSamplePlayer.x, this.targetSamplePlayer.y);
-    context.stroke();
+    // // Painting of the second control point in Bezier Curve
+    // context.beginPath()
+    // context.arc(this.p2Bezier.x, this.p2Bezier.y, 5, 0, Math.PI * 2)
+    // context.save();
+    // context.globalAlpha = 0.5;
+    // context.fillStyle = 'blue'
+    // context.fill();
+    // context.restore();
+    // context.stroke()
 
-    for (let i = 0; i < this.trajectoryMovement.length - 1; i++) {
-      context.beginPath();
-      context.arc(
-        this.trajectoryMovement[i].x,
-        this.trajectoryMovement[i].y,
-        5,
-        0,
-        Math.PI * 2
-      );
-      if (i >= 1) {
-        context.moveTo(
-          this.trajectoryMovement[i].x,
-          this.trajectoryMovement[i].y
-        );
-        context.lineTo(
-          this.trajectoryMovement[i - 1].x,
-          this.trajectoryMovement[i - 1].y
-        );
-      }
+    // Painting of the end point in Bezier Curve
+    // context.beginPath();
+    // context.arc(this.endBezier.x, this.endBezier.y, 5, 0, Math.PI * 2);
+    // context.save();
+    // context.globalAlpha = 0.5;
+    // context.fillStyle = "black";
+    // context.fill();
+    // context.restore();
+    // context.stroke()
 
-      context.save();
-      // context.globalAlpha = 0.5;
-      context.fillStyle = "red";
-      context.fill();
-      context.restore();
-      context.stroke();
+    // context.beginPath();
+    // context.moveTo(this.collisionX, this.collisionY);
+    // context.lineTo(this.targetSamplePlayer.x, this.targetSamplePlayer.y);
+    // context.stroke();
 
-    }
+    // for (let i = 0; i < this.trajectoryMovement.length - 1; i++) {
+    //   context.beginPath();
+    //   context.arc(
+    //     this.trajectoryMovement[i].x,
+    //     this.trajectoryMovement[i].y,
+    //     5,
+    //     0,
+    //     Math.PI * 2
+    //   );
+    //   if (i >= 1) {
+    //     context.moveTo(
+    //       this.trajectoryMovement[i].x,
+    //       this.trajectoryMovement[i].y
+    //     );
+    //     context.lineTo(
+    //       this.trajectoryMovement[i - 1].x,
+    //       this.trajectoryMovement[i - 1].y
+    //     );
+    //   }
+
+    //   context.save();
+    //   // context.globalAlpha = 0.5;
+    //   context.fillStyle = "red";
+    //   context.fill();
+    //   context.restore();
+    //   context.stroke();
+
+    // }
   }
 
   // Agent controls:
@@ -1637,7 +1637,7 @@ class Agent {
             this.trajectoryMovementSamplePlayer.shift();
             setTimeout(() => {
               this.movementDecision = false;
-              this.thinkingTime = randIntervalFromIntervalInteger(200, 400)
+              this.thinkingTime = randIntervalFromIntervalInteger(100, 300)
             }, this.thinkingTime);
             this.initialTrajectoryLength = 0;
           }
@@ -2408,7 +2408,7 @@ class Agent {
           this.trajectoryMovementSamplePlayer.shift();
           setTimeout(() => {
             this.movementDecision = false;
-            this.thinkingTime = randIntervalFromIntervalInteger(200, 500)
+            this.thinkingTime = randIntervalFromIntervalInteger(200, 300)
           }, this.thinkingTime);
           // this.velocityFunctionProfile = randIntervalFromInterval(0, 3)
           this.initialTrajectoryLength = 0;
@@ -2649,7 +2649,7 @@ class Agent {
           this.trajectoryMovementSamplePlayer.shift();
           setTimeout(() => {
             this.movementDecision = false;
-            this.thinkingTime = randIntervalFromIntervalInteger(200, 500)
+            this.thinkingTime = randIntervalFromIntervalInteger(200, 300)
           }, this.thinkingTime);
 
         }

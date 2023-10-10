@@ -317,64 +317,68 @@ class ExperimentScript {
           gameRExperiment.agent.collisionY = lastAgentCollisionY;
         }
 
+        currentGameProfile = variations[roundNumber];
         console.log(`The current round is: ${roundNumber}`)
         console.log(`The profile of the game: ${currentGameProfile}`)
+
+        
+
 
 
         if (currentGameProfile === 1) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
-          gameRExperiment.player.maxSpeed = 10;
-          gameRExperiment.agent.maxSpeed = 10;
+          gameRExperiment.player.maxSpeed = 20;
+          gameRExperiment.agent.maxSpeed = 15;
           gameRExperiment.agent.competence = true;
           gameRExperiment.agent.predictability = true;
         } else if (currentGameProfile === 2) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
-          gameRExperiment.player.maxSpeed = 10;
-          gameRExperiment.agent.maxSpeed = 10;
+          gameRExperiment.player.maxSpeed = 20;
+          gameRExperiment.agent.maxSpeed = 15;
           gameRExperiment.agent.competence = false;
           gameRExperiment.agent.predictability = true;
         } else if (currentGameProfile === 3) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
-          gameRExperiment.player.maxSpeed = 10;
-          gameRExperiment.agent.maxSpeed = 10;
+          gameRExperiment.player.maxSpeed = 20;
+          gameRExperiment.agent.maxSpeed = 15;
           gameRExperiment.agent.competence = true;
           gameRExperiment.agent.predictability = false;
         } else if (currentGameProfile === 4) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
-          gameRExperiment.player.maxSpeed = 10;
-          gameRExperiment.agent.maxSpeed = 10;
+          gameRExperiment.player.maxSpeed = 20;
+          gameRExperiment.agent.maxSpeed = 15;
           gameRExperiment.agent.competence = false;
           gameRExperiment.agent.predictability = false;
         } else if (currentGameProfile === 5) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
-          gameRExperiment.player.maxSpeed = 5;
-          gameRExperiment.agent.maxSpeed = 5;
+          gameRExperiment.player.maxSpeed = 10;
+          gameRExperiment.agent.maxSpeed = 7;
           gameRExperiment.agent.competence = true;
           gameRExperiment.agent.predictability = true;
         } else if (currentGameProfile === 6) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
-          gameRExperiment.player.maxSpeed = 5;
-          gameRExperiment.agent.maxSpeed = 5;
+          gameRExperiment.player.maxSpeed = 10;
+          gameRExperiment.agent.maxSpeed = 7;
           gameRExperiment.agent.competence = false;
           gameRExperiment.agent.predictability = true;
         } else if (currentGameProfile === 7) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
-          gameRExperiment.player.maxSpeed = 5;
-          gameRExperiment.agent.maxSpeed = 5;
+          gameRExperiment.player.maxSpeed = 10;
+          gameRExperiment.agent.maxSpeed = 7;
           gameRExperiment.agent.competence = true;
           gameRExperiment.agent.predictability = false;
         } else if (currentGameProfile === 8) {
           gameRExperiment.agent.role = 2;
           gameRExperiment.agent.follower = true;
-          gameRExperiment.player.maxSpeed = 5;
-          gameRExperiment.agent.maxSpeed = 5;
+          gameRExperiment.player.maxSpeed = 10;
+          gameRExperiment.agent.maxSpeed = 7;
           gameRExperiment.agent.competence = false;
           gameRExperiment.agent.predictability = false;
         } 

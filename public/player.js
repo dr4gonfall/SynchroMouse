@@ -236,11 +236,11 @@ class Player {
         this.prevMouseX = this.collisionX;
         this.prevMouseY = this.collisionY;
         // console.log(`The collision in X: ${Math.round(this.collisionX + moveX * dt)} and Y: ${Math.round(this.collisionY + moveY * dt)}`)
-        this.forcePlayerX = linearInterpolation(0, 20, Math.abs(moveX) / 300);
-        this.forcePlayerY = linearInterpolation(0, 20, Math.abs(moveY) / 300);
+        this.forcePlayerX = linearInterpolation(0, this.maxSpeed, Math.abs(moveX) / 300);
+        this.forcePlayerY = linearInterpolation(0, this.maxSpeed, Math.abs(moveY) / 300);
         
-        let forceX = linearInterpolation(0, 20, Math.abs(moveX)/300)
-        let forceY = linearInterpolation(0, 20, Math.abs(moveY)/300)
+        let forceX = linearInterpolation(0, this.maxSpeed, Math.abs(moveX)/300)
+        let forceY = linearInterpolation(0, this.maxSpeed, Math.abs(moveY)/300)
 
         // let forceX = moveX;
         // let forceY = moveY;
@@ -267,21 +267,21 @@ class Player {
             this.forcePlayerY = - this.forcePlayerY;
         }
 
-        if (forceX > 20) {
-            forceX = 20;
-            this.forcePlayerX = 20;
+        if (forceX > this.maxSpeed) {
+            forceX = this.maxSpeed;
+            this.forcePlayerX = this.maxSpeed;
 
-        } else if (forceX < -20) {
-            forceX = -20;
+        } else if (forceX < -this.maxSpeed) {
+            forceX = -this.maxSpeed;
             this.forcePlayerX = -20;
         }
 
-        if (forceY > 20) {
-            forceY = 20;
-            this.forcePlayerY = 20;
-        } else if (forceY < -20){
-            forceY = -20;
-            this.forcePlayerY = 20;
+        if (forceY > this.maxSpeed) {
+            forceY = this.maxSpeed;
+            this.forcePlayerY = this.maxSpeed;
+        } else if (forceY < -this.maxSpeed){
+            forceY = -this.maxSpeed;
+            this.forcePlayerY = this.maxSpeed;
         }
 
         // console.log(`The forces are in X: ${forceX} and Y: ${forceY}`)

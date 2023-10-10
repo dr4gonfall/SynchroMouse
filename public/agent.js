@@ -610,7 +610,7 @@ class Agent {
         this.pendingEndBezier.shift()
       }
 
-      console.log(`The end Bezier point is X: ${this.endBezier.x} and Y: ${this.endBezier.y}`)
+      // console.log(`The end Bezier point is X: ${this.endBezier.x} and Y: ${this.endBezier.y}`)
 
       if (this.endBezier.x < this.collisionRadius) {
         this.endBezier.x = this.collisionRadius;
@@ -1477,7 +1477,7 @@ class Agent {
         // this.pendingEndBezier = [];
 
       } else if (this.playerNotMovingCounter <= 10) {
-        console.log(this.playerNotMovingCounter)
+        // console.log(this.playerNotMovingCounter)
         if (this.pendingEndBezier.length === 0) {
           // console.log(this.pendingEndBezier.length)
           this.addEndBezier();
@@ -1669,6 +1669,18 @@ class Agent {
   
             this.prevCollisionX = this.collisionX;
             this.prevCollisionY = this.collisionY;
+
+            if (this.speedX > this.maxSpeed) {
+              this.speedX = this.maxSpeed;
+            } else if (this.speedX < -this.maxSpeed) {
+              this.speedX = -this.maxSpeed;
+            }
+  
+            if (this.speedY > this.maxSpeed) {
+              this.speedY = this.maxSpeed;
+            } else if (this.speedY < -this.maxSpeed) {
+              this.speedY = -this.maxSpeed;
+            }
   
             this.collisionX += this.speedX;
             this.collisionY += this.speedY;
@@ -1688,17 +1700,9 @@ class Agent {
             this.prevAccX = this.accX;
             this.prevAccY = this.accY;
   
-            if (this.speedX > this.maxSpeed) {
-              this.speedX = this.maxSpeed;
-            } else if (this.speedX < -this.maxSpeed) {
-              this.speedX = -this.maxSpeed;
-            }
-  
-            if (this.speedY > this.maxSpeed) {
-              this.speedY = this.maxSpeed;
-            } else if (this.speedY < -this.maxSpeed) {
-              this.speedY = -this.maxSpeed;
-            }
+            
+
+            // console.log(`The Follower No Predictable Speed X: ${this.speedX} and Y: ${this.speedY}`)
   
             this.moveErrorX = 0;
             this.moveErrorY = 0;
@@ -1771,6 +1775,20 @@ class Agent {
   
           this.prevCollisionX = this.collisionX;
           this.prevCollisionY = this.collisionY;
+
+          if (this.speedX > this.maxSpeed) {
+            this.speedX = this.maxSpeed;
+            // console.log('Entered in Speed X')
+          } else if (this.speedX < -this.maxSpeed) {
+            this.speedX = -this.maxSpeed;
+          }
+  
+          if (this.speedY > this.maxSpeed) {
+            this.speedY = this.maxSpeed;
+            // console.log('Entered in Speed Y')
+          } else if (this.speedY < -this.maxSpeed) {
+            this.speedY = -this.maxSpeed;
+          }
   
           this.collisionX += this.speedX;
           this.collisionY += this.speedY;
@@ -1790,19 +1808,9 @@ class Agent {
           this.prevAccX = this.accX;
           this.prevAccY = this.accY;
   
-          if (this.speedX > this.maxSpeed) {
-            this.speedX = this.maxSpeed;
-            // console.log('Entered in Speed X')
-          } else if (this.speedX < -this.maxSpeed) {
-            this.speedX = -this.maxSpeed;
-          }
-  
-          if (this.speedY > this.maxSpeed) {
-            this.speedY = this.maxSpeed;
-            // console.log('Entered in Speed Y')
-          } else if (this.speedY < -this.maxSpeed) {
-            this.speedY = -this.maxSpeed;
-          }
+          
+
+          // console.log(`The Follower No Predictable 2 Speed X: ${this.speedX} and Y: ${this.speedY}`)
   
           this.moveErrorX = 0;
           this.moveErrorY = 0;
@@ -1924,9 +1932,23 @@ class Agent {
   
             this.prevCollisionX = this.collisionX;
             this.prevCollisionY = this.collisionY;
+
+            if (this.speedX > this.maxSpeed) {
+              this.speedX = this.maxSpeed;
+            } else if (this.speedX < -this.maxSpeed) {
+              this.speedX = -this.maxSpeed;
+            }
+  
+            if (this.speedY > this.maxSpeed) {
+              this.speedY = this.maxSpeed;
+            } else if (this.speedY < -this.maxSpeed) {
+              this.speedY = -this.maxSpeed;
+            }
   
             this.collisionX += this.speedX;
             this.collisionY += this.speedY;
+
+            // console.log(`The speeds X: ${this.speedX} and Y: ${this.speedY}`)
   
             this.prevRotation = this.rotation;
   
@@ -1943,17 +1965,7 @@ class Agent {
             this.prevAccX = this.accX;
             this.prevAccY = this.accY;
   
-            if (this.speedX > this.maxSpeed) {
-              this.speedX = this.maxSpeed;
-            } else if (this.speedX < -this.maxSpeed) {
-              this.speedX = -this.maxSpeed;
-            }
-  
-            if (this.speedY > this.maxSpeed) {
-              this.speedY = this.maxSpeed;
-            } else if (this.speedY < -this.maxSpeed) {
-              this.speedY = -this.maxSpeed;
-            }
+
   
             this.moveErrorX = 0;
             this.moveErrorY = 0;
@@ -2026,6 +2038,20 @@ class Agent {
   
           this.prevCollisionX = this.collisionX;
           this.prevCollisionY = this.collisionY;
+
+          if (this.speedX > this.maxSpeed) {
+            this.speedX = this.maxSpeed;
+            // console.log('Entered in Speed X')
+          } else if (this.speedX < -this.maxSpeed) {
+            this.speedX = -this.maxSpeed;
+          }
+  
+          if (this.speedY > this.maxSpeed) {
+            this.speedY = this.maxSpeed;
+            // console.log('Entered in Speed Y')
+          } else if (this.speedY < -this.maxSpeed) {
+            this.speedY = -this.maxSpeed;
+          }
   
           this.collisionX += this.speedX;
           this.collisionY += this.speedY;
@@ -2046,19 +2072,7 @@ class Agent {
           this.prevAccX = this.accX;
           this.prevAccY = this.accY;
   
-          if (this.speedX > this.maxSpeed) {
-            this.speedX = this.maxSpeed;
-            // console.log('Entered in Speed X')
-          } else if (this.speedX < -this.maxSpeed) {
-            this.speedX = -this.maxSpeed;
-          }
-  
-          if (this.speedY > this.maxSpeed) {
-            this.speedY = this.maxSpeed;
-            // console.log('Entered in Speed Y')
-          } else if (this.speedY < -this.maxSpeed) {
-            this.speedY = -this.maxSpeed;
-          }
+          
   
           this.moveErrorX = 0;
           this.moveErrorY = 0;
@@ -2457,6 +2471,24 @@ class Agent {
           this.prevCollisionX = this.collisionX;
           this.prevCollisionY = this.collisionY;
 
+          if (this.speedX > this.maxSpeed) {
+            this.speedX = this.maxSpeed;
+            this.percentageFunction = 0;
+            // console.log('Entered in Speed X')
+          } else if (this.speedX < -this.maxSpeed) {
+            this.speedX = -this.maxSpeed;
+            this.percentageFunction = 0;
+          }
+
+          if (this.speedY > this.maxSpeed) {
+            this.speedY = this.maxSpeed;
+            // console.log('Entered in Speed Y')
+            this.percentageFunction = 0;
+          } else if (this.speedY < -this.maxSpeed) {
+            this.speedY = -this.maxSpeed;
+            this.percentageFunction = 0;
+          }
+
           this.collisionX += this.speedX;
           this.collisionY += this.speedY;
 
@@ -2476,23 +2508,7 @@ class Agent {
           this.prevAccX = this.accX;
           this.prevAccY = this.accY;
 
-          if (this.speedX > this.maxSpeed) {
-            this.speedX = this.maxSpeed;
-            this.percentageFunction = 0;
-            // console.log('Entered in Speed X')
-          } else if (this.speedX < -this.maxSpeed) {
-            this.speedX = -this.maxSpeed;
-            this.percentageFunction = 0;
-          }
-
-          if (this.speedY > this.maxSpeed) {
-            this.speedY = this.maxSpeed;
-            // console.log('Entered in Speed Y')
-            this.percentageFunction = 0;
-          } else if (this.speedY < -this.maxSpeed) {
-            this.speedY = -this.maxSpeed;
-            this.percentageFunction = 0;
-          }
+          
 
           this.moveErrorX = 0;
           this.moveErrorY = 0;
@@ -2537,6 +2553,21 @@ class Agent {
         this.prevCollisionX = this.collisionX;
         this.prevCollisionY = this.collisionY;
 
+        if (this.speedX > this.maxSpeed) {
+          this.speedX = this.maxSpeed;
+          // console.log('Entered in Speed X')
+        } else if (this.speedX < -this.maxSpeed) {
+          this.speedX = -this.maxSpeed;
+        }
+
+        if (this.speedY > this.maxSpeed) {
+          this.speedY = this.maxSpeed;
+          // console.log('Entered in Speed Y')
+        } else if (this.speedY < -this.maxSpeed) {
+          this.speedY = -this.maxSpeed;
+        }
+
+
         this.collisionX += this.speedX;
         this.collisionY += this.speedY;
 
@@ -2555,19 +2586,7 @@ class Agent {
         this.prevAccX = this.accX;
         this.prevAccY = this.accY;
 
-        if (this.speedX > this.maxSpeed) {
-          this.speedX = this.maxSpeed;
-          // console.log('Entered in Speed X')
-        } else if (this.speedX < -this.maxSpeed) {
-          this.speedX = -this.maxSpeed;
-        }
-
-        if (this.speedY > this.maxSpeed) {
-          this.speedY = this.maxSpeed;
-          // console.log('Entered in Speed Y')
-        } else if (this.speedY < -this.maxSpeed) {
-          this.speedY = -this.maxSpeed;
-        }
+        
 
         this.moveErrorX = 0;
         this.moveErrorY = 0;
@@ -2693,6 +2712,20 @@ class Agent {
           this.speedY += this.accY;
 
 
+          if (this.speedX > this.maxSpeed) {
+            this.speedX = this.maxSpeed;
+            // console.log('Entered in Speed X')
+          } else if (this.speedX < -this.maxSpeed) {
+            this.speedX = -this.maxSpeed;
+          }
+
+          if (this.speedY > this.maxSpeed) {
+            this.speedY = this.maxSpeed;
+            // console.log('Entered in Speed Y')
+          } else if (this.speedY < -this.maxSpeed) {
+            this.speedY = -this.maxSpeed;
+          }
+
 
           this.prevCollisionX = this.collisionX;
           this.prevCollisionY = this.collisionY;
@@ -2715,19 +2748,7 @@ class Agent {
           this.prevAccX = this.accX;
           this.prevAccY = this.accY;
 
-          if (this.speedX > this.maxSpeed) {
-            this.speedX = this.maxSpeed;
-            // console.log('Entered in Speed X')
-          } else if (this.speedX < -this.maxSpeed) {
-            this.speedX = -this.maxSpeed;
-          }
-
-          if (this.speedY > this.maxSpeed) {
-            this.speedY = this.maxSpeed;
-            // console.log('Entered in Speed Y')
-          } else if (this.speedY < -this.maxSpeed) {
-            this.speedY = -this.maxSpeed;
-          }
+          
 
           this.moveErrorX = 0;
           this.moveErrorY = 0;
@@ -2770,6 +2791,20 @@ class Agent {
         this.prevCollisionX = this.collisionX;
         this.prevCollisionY = this.collisionY;
 
+        if (this.speedX > this.maxSpeed) {
+          this.speedX = this.maxSpeed;
+          // console.log('Entered in Speed X')
+        } else if (this.speedX < -this.maxSpeed) {
+          this.speedX = -this.maxSpeed;
+        }
+
+        if (this.speedY > this.maxSpeed) {
+          this.speedY = this.maxSpeed;
+          // console.log('Entered in Speed Y')
+        } else if (this.speedY < -this.maxSpeed) {
+          this.speedY = -this.maxSpeed;
+        }
+
         this.collisionX += this.speedX;
         this.collisionY += this.speedY;
 
@@ -2790,19 +2825,7 @@ class Agent {
         this.prevAccX = this.accX;
         this.prevAccY = this.accY;
 
-        if (this.speedX > this.maxSpeed) {
-          this.speedX = this.maxSpeed;
-          // console.log('Entered in Speed X')
-        } else if (this.speedX < -this.maxSpeed) {
-          this.speedX = -this.maxSpeed;
-        }
-
-        if (this.speedY > this.maxSpeed) {
-          this.speedY = this.maxSpeed;
-          // console.log('Entered in Speed Y')
-        } else if (this.speedY < -this.maxSpeed) {
-          this.speedY = -this.maxSpeed;
-        }
+        
 
         this.moveErrorX = 0;
         this.moveErrorY = 0;

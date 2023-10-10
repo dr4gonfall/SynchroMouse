@@ -305,6 +305,7 @@ class TrainingGameAlt {
         
         const gameTrainingAlt = new Tutorial(canvasTrainingExperiment);
 
+        gameTrainingAlt.player.maxSpeed = 40;
         canvasTrainingExperiment.addEventListener('click', (e) => {
           // if (gameTrainingAlt.agent.tutorialCondition >= 0 && gameTrainingAlt.agent.tutorialCondition < 2) {
           //   gameTrainingAlt.agent.tutorialCondition ++;

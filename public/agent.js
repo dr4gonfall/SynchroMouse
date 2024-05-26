@@ -257,7 +257,7 @@ class Agent {
     // context.restore();
     // context.stroke()
 
-    // Painting of the end point in Bezier Curve
+    // // Painting of the end point in Bezier Curve
     // context.beginPath();
     // context.arc(this.endBezier.x, this.endBezier.y, 5, 0, Math.PI * 2);
     // context.save();
@@ -272,23 +272,23 @@ class Agent {
     // context.lineTo(this.targetSamplePlayer.x, this.targetSamplePlayer.y);
     // context.stroke();
 
-    // for (let i = 0; i < this.trajectoryMovement.length - 1; i++) {
+    // for (let i = 0; i < this.trajectoryMovementSamplePlayer.length - 1; i++) {
     //   context.beginPath();
     //   context.arc(
-    //     this.trajectoryMovement[i].x,
-    //     this.trajectoryMovement[i].y,
+    //     this.trajectoryMovementSamplePlayer[i].x,
+    //     this.trajectoryMovementSamplePlayer[i].y,
     //     5,
     //     0,
     //     Math.PI * 2
     //   );
     //   if (i >= 1) {
     //     context.moveTo(
-    //       this.trajectoryMovement[i].x,
-    //       this.trajectoryMovement[i].y
+    //       this.trajectoryMovementSamplePlayer[i].x,
+    //       this.trajectoryMovementSamplePlayer[i].y
     //     );
     //     context.lineTo(
-    //       this.trajectoryMovement[i - 1].x,
-    //       this.trajectoryMovement[i - 1].y
+    //       this.trajectoryMovementSamplePlayer[i - 1].x,
+    //       this.trajectoryMovementSamplePlayer[i - 1].y
     //     );
     //   }
 
@@ -436,8 +436,6 @@ class Agent {
   decideMovement(currentMovementType) {
     // Algorithm to decide what movement is going to be performed.
 
-    // let decideMovement = Math.floor(Math.random())
-    // this.currentMovementDecision = 0;
     // Decide the parameters depending on the movement desired.
 
     if (currentMovementType == 0) {
@@ -489,19 +487,6 @@ class Agent {
         }
         // console.log(`The value of the end point is: ${this.endBezier}`)
       }
-
-
-      // if (this.endBezier.x > this.game.width - this.collisionRadius - 20) {
-      //   this.endBezier.x = this.game.width - this.collisionRadius - 20;
-      // } else if (this.endBezier.x < this.collisionRadius + 20) {
-      //   this.endBezier.x = this.collisionRadius + 20;
-      // }
-
-      // if (this.endBezier.y > this.game.height - this.collisionRadius - 20) {
-      //   this.endBezier.y = this.game.height - this.collisionRadius - 20;
-      // } else if (this.endBezier.y < this.collisionRadius + 20) {
-      //   this.endBezier.y = this.collisionRadius + 20;
-      // }
 
       this.movementDecision = true;
 
@@ -598,19 +583,12 @@ class Agent {
         y: this.collisionY
       }
 
-      // et direction = (Math.atan2(this.player.speedY, this.player.speedX));
-
-      // this.endBezier = {
-      //   x: this.collisionX + (Math.cos(direction) * ( 10 * this.player.maxSpeed)),
-      //   y: this.collisionY + (Math.sin(direction) * ( 10 * this.player.maxSpeed))
-      // }
       if (this.endBezier === undefined) {
         this.addEndBezier()
         this.endBezier = this.pendingEndBezier[0];
         this.pendingEndBezier.shift()
       }
 
-      // console.log(`The end Bezier point is X: ${this.endBezier.x} and Y: ${this.endBezier.y}`)
 
       if (this.endBezier.x < this.collisionRadius) {
         this.endBezier.x = this.collisionRadius;
@@ -624,7 +602,6 @@ class Agent {
         this.endBezier.y = this.game.height - this.collisionRadius;
       }
 
-      // this.trajectoryMovementSamplePlayer.push(this.initialBezier);
 
       // Definition of p1Bezier
 
@@ -649,32 +626,10 @@ class Agent {
           y: linearInterpolation(this.initialBezier.y, this.endBezier.y, 2 / 3),
         };
 
-        // this.p2Bezier = {
-        //   x:0,
-        //   y:0,
-        // }
-
-
-
-        // if (this.initialBezier.x < this.endBezier.x) {
-        //   this.p2Bezier.x = randIntervalFromIntervalInteger(this.initialBezier.x, this.endBezier.x)
-        // } else if (this.initialBezier.x >= this.endBezier.x) {
-        //   this.p2Bezier.x = randIntervalFromIntervalInteger(this.endBezier.x, this.initialBezier.x)
-        // }
-
-        // if (this.initialBezier.y < this.endBezier.y) {
-        //   this.p2Bezier.y = randIntervalFromIntervalInteger(this.initialBezier.y, this.endBezier.y)
-        // } else if (this.initialBezier.y >= this.endBezier.y) {
-        //   this.p2Bezier.y = randIntervalFromIntervalInteger(this.endBezier.y, this.initialBezier.y)
-        // }
-
-
-
         this.bezierProfile = 1;
 
       } else if (!this.predictability) {
 
-        // Math.floor(Math.random() * ((this.game.width - this.collisionRadius)) + this.collisionRadius)
         this.p1Bezier = {
           x: 0,
           y: 0,
@@ -696,9 +651,6 @@ class Agent {
           this.p1Bezier.y = randIntervalFromIntervalInteger(this.endBezier.y, this.initialBezier.y)
         }
 
-
-        // console.log(this.p1Bezier)
-
         // Definition of the Second Parameter of Bezier Curve
 
 
@@ -712,9 +664,7 @@ class Agent {
       }
 
       this.movementDecision = true;
-      // this.bezierProfile = 1;
       this.bezierMoveExecutionAlternative(this.bezierProfile);
-      // console.log(`The length of the trajectory is: ${this.trajectoryMovementSamplePlayer.length}`)
 
 
     } else if (currentMovementType === 5) {
@@ -735,35 +685,6 @@ class Agent {
 
       if (this.predictability) {
 
-        // if (this.currentCuadrant < 3) {
-        //   this.currentCuadrant ++;
-        // } else if (this.currentCuadrant === 3) {
-        //   this.currentCuadrant = 0;
-        // }
-
-
-
-        // if (this.currentCuadrant === 0) {
-        //   this.endBezier = {
-        //     x: randIntervalFromIntervalInteger(0, (this.game.width / 2) - this.collisionRadius),
-        //     y: randIntervalFromIntervalInteger(0, (this.game.height / 2) - this.collisionRadius)
-        //   }
-        // } else if (this.currentCuadrant === 1) {
-        //   this.endBezier = {
-        //     x: randIntervalFromIntervalInteger((this.game.width/2), (this.game.width)- this.collisionRadius),
-        //     y: randIntervalFromIntervalInteger(0, (this.game.height / 2) - this.collisionRadius)
-        //   }
-        // } else if (this.currentCuadrant === 2) {
-        //   this.endBezier = {
-        //     x: randIntervalFromIntervalInteger(0, (this.game.width / 2) - this.collisionRadius),
-        //     y: randIntervalFromIntervalInteger((this.game.height / 2), (this.game.height)- this.collisionRadius)
-        //   }
-        // } else if (this.currentCuadrant === 3) {
-        //   this.endBezier = {
-        //     x: randIntervalFromIntervalInteger((this.game.width/2), (this.game.width)- this.collisionRadius),
-        //     y: randIntervalFromIntervalInteger((this.game.height / 2), (this.game.height)- this.collisionRadius)
-        //   }
-        // }
 
 
 
@@ -787,28 +708,6 @@ class Agent {
 
         this.currentCuadrant = randIntervalFromIntervalInteger(0, 3);
 
-
-        // if (this.currentCuadrant === 0) {
-        //   this.endBezier = {
-        //     x: randIntervalFromIntervalInteger(0, (this.game.width / 2) - this.collisionRadius),
-        //     y: randIntervalFromIntervalInteger(0, (this.game.height / 2) - this.collisionRadius)
-        //   }
-        // } else if (this.currentCuadrant === 1) {
-        //   this.endBezier = {
-        //     x: randIntervalFromIntervalInteger((this.game.width/2), (this.game.width)- this.collisionRadius),
-        //     y: randIntervalFromIntervalInteger(0, (this.game.height / 2) - this.collisionRadius)
-        //   }
-        // } else if (this.currentCuadrant === 2) {
-        //   this.endBezier = {
-        //     x: randIntervalFromIntervalInteger(0, (this.game.width / 2) - this.collisionRadius),
-        //     y: randIntervalFromIntervalInteger((this.game.height / 2), (this.game.height)- this.collisionRadius)
-        //   }
-        // } else if (this.currentCuadrant === 3) {
-        //   this.endBezier = {
-        //     x: randIntervalFromIntervalInteger((this.game.width/2), (this.game.width)- this.collisionRadius),
-        //     y: randIntervalFromIntervalInteger((this.game.height / 2), (this.game.height)- this.collisionRadius)
-        //   }
-        // }
 
         // Definition of the First Parameter of Bezier Curve
         this.p1Bezier = {
@@ -1140,18 +1039,6 @@ class Agent {
     } else {
       force = normalize(force.x, force.y);
 
-      // if (!this.competence) {
-      //   force.x = force.x * (this.agentDesiredSpeedX);
-      //   force.y = force.y * (this.agentDesiredSpeedY);
-      //   // console.log(`The desired speed is: ${this.agentDesiredSpeedX} and ${this.agentDesiredSpeedY}`)
-
-      //   // console.log(`The force is: ${force.x} and ${force.y}`)
-
-
-      // } else if(this.competence) {
-      //   force.x = force.x * this.maxSpeed;
-      //   force.y = force.y * this.maxSpeed;
-      // }
 
       force.x = force.x * this.maxSpeed;
       force.y = force.y * this.maxSpeed;
@@ -1272,12 +1159,6 @@ class Agent {
     this.degreesVariationX = this.degreesVariationX * Math.PI / 180;
     this.degreesVariationY = this.degreesVariationY * Math.PI / 180;
 
-    // if (force.x > 100) {
-    //   this.degreesVariation = 0;
-    // }
-    // console.log(`The change in direction is: ${(direction * 180 / Math.PI) + this.degreesVariation}`  + this.degreesVariation)
-
-    // console.log(`The forces alt are: ${Math.cos(direction) * easeInBounce(this.percentageFunction) * this.maxSpeed} and Y: ${Math.sin(direction) * easeInBounce(this.percentageFunction) * this.maxSpeed}`)
     if (!this.competence) {
       if (this.velocityFunctionProfile === 0) {
         if (Math.cos(direction) * easeInBounce(this.percentageFunction) * this.maxSpeed > this.maxSpeed || Math.cos(direction) * easeInBounce(this.percentageFunction) * this.maxSpeed < - this.maxSpeed || Math.sin(direction) * easeInBounce(this.percentageFunction) * this.maxSpeed > this.maxSpeed || Math.sin(direction) * easeInBounce(this.percentageFunction) * this.maxSpeed < -this.maxSpeed) {
@@ -1305,11 +1186,7 @@ class Agent {
         force.y = Math.sin(direction + this.degreesVariationY) * (easeInOutElastic(this.percentageFunction) * this.maxSpeed);
       }
     } else if (this.competence) {
-      // if (Math.cos(direction) * easeInOutSine(this.percentageFunction) * this.maxSpeed > this.maxSpeed || Math.cos(direction) * easeInOutSine(this.percentageFunction) * this.maxSpeed < - this.maxSpeed || Math.sin(direction) * easeInOutSine(this.percentageFunction) * this.maxSpeed > this.maxSpeed || Math.sin(direction) * easeInOutSine(this.percentageFunction) * this.maxSpeed < -this.maxSpeed) {
-      //   this.percentageFunction = 0;
-      // }
-      // force.x = Math.cos(direction) * easeInOutSine(this.percentageFunction) * this.maxSpeed;
-      // force.y = Math.sin(direction) * (easeInOutSine(this.percentageFunction) * this.maxSpeed);
+
       if (Math.cos(direction) * easeInSine(this.percentageFunction) * this.maxSpeed > this.maxSpeed || Math.cos(direction) * easeInSine(this.percentageFunction) * this.maxSpeed < - this.maxSpeed || Math.sin(direction) * easeInSine(this.percentageFunction) * this.maxSpeed > this.maxSpeed || Math.sin(direction) * easeInSine(this.percentageFunction) * this.maxSpeed < -this.maxSpeed) {
         this.percentageFunction = 0;
       }
@@ -1339,11 +1216,6 @@ class Agent {
       this.degreesVariationY -= 5;
     }
 
-    // console.log(`The angle variation in X: ${this.degreesVariationX} and Y: ${this.degreesVariationY}`)
-
-    // console.log(`The force alt are: ${force.x * easeInBounce(this.percentageFunction)} and Y: ${easeInBounce(force.y * this.percentageFunction)}`);
-    // console.log(`The normal forces are: ${force.x * this.maxSpeed} and Y: ${force.y * this.maxSpeed}`)
-
     return force;
 
   }
@@ -1358,67 +1230,12 @@ class Agent {
 
     force.x = force.x * this.maxSpeed;
     force.y = force.y * this.maxSpeed;
-    // if (!this.competence) {
-    //   force.x = force.x * (this.agentDesiredSpeedX);
-    //   force.y = force.y * (this.agentDesiredSpeedY);
-    //   // console.log(`The desired speed is: ${this.agentDesiredSpeedX} and ${this.agentDesiredSpeedY}`)
-
-    //   // force.x = force.x * (this.player.speedX * randIntervalFromIntervalInteger(1, 2));
-    //   // force.y = force.y * (this.player.speedY * randIntervalFromIntervalInteger(1, 2))
-
-
-    //   // console.log(`The force is: ${force.x} and ${force.y}`)
-
-
-    // } else if(this.competence){
-    //   // if (this.player.speedX / this.player.maxSpeed < 0) {
-    //   //   force.x = this.maxSpeed * (-randIntervalFromInterval(0, Math.abs((this.player.speedX / this.player.maxSpeed))))
-    //   //   // console.log(`A random number is: ${randIntervalFromInterval((this.player.speedX / this.player.maxSpeed), 0)}`)
-    //   // } else if(this.player.speedX / this.player.maxSpeed > 0) {
-    //   //   force.x = this.maxSpeed * (randIntervalFromInterval(0, (this.player.speedX / this.player.maxSpeed)))
-    //   // }
-
-    //   // if (this.player.speedY / this.player.maxSpeed < 0) {
-    //   //   force.y = this.maxSpeed * (-randIntervalFromInterval(0, Math.abs((this.player.speedY / this.player.maxSpeed))))
-    //   // } else if(this.player.speedY / this.player.maxSpeed > 0) {
-    //   //   force.y = this.maxSpeed * (randIntervalFromInterval(0, (this.player.speedY / this.player.maxSpeed)))
-    //   // }
-    //   // force.x = this.maxSpeed * ( randIntervalFromInterval(0, (this.player.speedX / this.player.maxSpeed)));
-    //   // force.y = this.maxSpeed * ( (this.player.speedY / this.player.maxSpeed));
-    //   // force.x = force.x * (linearInterpolation(1, this.maxSpeed, this.initialTrajectoryLength));
-    //   // force.y = force.y * (linearInterpolation(1, this.maxSpeed, this.initialTrajectoryLength));
-    //   force.x = force.x * this.maxSpeed;
-    //   force.y = force.y * this.maxSpeed;
-    //   // force.x = this.player.speedX * randIntervalFromInterval(0.1, 1);
-    //   // force.y = this.player.speedY * randIntervalFromInterval(0.1, 1);
-    //   // console.log(`The percentage of speed: ${this.player.speedX / this.player.maxSpeed} and Y: ${this.player.speedY / this.player.maxSpeed}`);
-    // }
-
-    // console.log(`The length of trajectory: ${this.initialTrajectoryLength}`)
-
-    // console.log(`Initial trajectory: ${this.initialTrajectoryLength}`)
-    // console.log(`The force is X: ${force.x} and Y: ${force.y}`)
-
-    // force.x = force.x * this.maxSpeed;
-    // force.y = force.y * this.maxSpeed;
 
     force = { x: force.x - this.speedX, y: force.y - this.speedY };
 
     return force;
 
-    // console.log(`The force is X: ${force.x} and Y: ${force.y}`)
 
-    // if (force.x > this.maxForce) {
-    //   force.x = this.maxForce;
-    // } else if (force.x < -this.maxForce) {
-    //   force.x = -this.maxForce;
-    // }
-
-    // if (force.y > this.maxForce) {
-    //   force.y = this.maxForce;
-    // } else if (force.y < -this.maxForce) {
-    //   force.y = -this.maxForce;
-    // }
   }
 
   getRandomJitter() {
@@ -1440,7 +1257,7 @@ class Agent {
   // MAYBE??
 
   getTargetValuesPlayer() {
-    // console.log(`The function entered at time: ${performance.now()}`)
+
 
     // this.trajectoryMovementSamplePlayer.push({x: this.player.collisionX, y: this.player.collisionY })
     // this.playerEndPoint.x = this.player.collisionX;
@@ -1583,19 +1400,16 @@ class Agent {
           this.paintMovementDecision = true;
           if (this.pendingEndBezier[0] === undefined) {
             this.addEndBezier()
-            // console.log(`ENTERED THIS FUNCTION CAREFUL`)
           }
-          // console.log(`The length of the bezier array is: ${this.pendingBezier.length}`)
+
           this.endBezier = this.pendingEndBezier[0];
           this.pendingEndBezier.shift();
           if (this.endBezier === undefined) {
-            // console.log(`PROBLEM FOLLOWER UNPRED!!!!!!!!!`)
           }
           this.decideMovement(4);
           // The movement is decided and the counter is increased
           this.movementDecision = true;
   
-          // this.bezierProfile = 2
           if (this.bezierProfile === 0) {
             this.initialTrajectoryLength += 0.05
           } else if (this.bezierProfile === 1) {
@@ -1605,17 +1419,6 @@ class Agent {
           } else if (this.bezierProfile === 3) {
             this.initialTrajectoryLength += 0.5
           }
-  
-  
-          // this.initialTrajectoryLength += 
-  
-          // OLD STUFF TO PUT SOMEWHERE ELSE
-  
-          // this.targetSamplePlayer.x = this.trajectoryMovementSamplePlayer[0].x;
-          // this.targetSamplePlayer.y = this.trajectoryMovementSamplePlayer[0].y;
-  
-          // this.hasArrivedSamplePlayer = false;
-          // this.velocityFunctionProfile = randIntervalFromIntervalInteger(0, 3);
   
   
         }
@@ -1716,39 +1519,6 @@ class Agent {
             this.movementDecision = false;
           }
           
-          
-          //  else if (this.trajectoryMovementSamplePlayer.length === 0 &&
-          //   this.collisionX - this.player.collisionX <= 20 && this.collisionY - this.player.collisionY <= 20) {
-  
-          //   // GUARANTEE SPEED, ACCELERATION AND OTHER FORCES ARE 0
-          //   this.accX = 0;
-          //   this.accY = 0;
-  
-          //   this.speedX = 0;
-          //   this.speedY = 0;
-  
-          //   this.prevCollisionX = this.collisionX;
-          //   this.prevCollisionY = this.collisionY;
-  
-          //   this.collisionX += this.speedX;
-          //   this.collisionY += this.speedY;
-  
-          //   this.prevRotation = this.rotation;
-  
-          //   this.rotation =
-          //     (Math.atan2(
-          //       this.collisionY - this.prevCollisionY,
-          //       this.collisionX - this.prevCollisionX
-          //     ) *
-          //       180.0) /
-          //     Math.PI;
-  
-          //   this.differenceRotation = this.rotation - this.prevRotation;
-  
-          //   this.prevAccX = this.accX;
-          //   this.prevAccY = this.accY;
-  
-          // }
   
           // There is still a target that the agent has to follow
         } else if (!this.hasArrivedSamplePlayer) {
@@ -2337,8 +2107,7 @@ class Agent {
   }
 
   addEndBezier() {
-    let direction = (Math.atan2(this.player.speedY, this.player.speedX));
-    // console.log(`The coordinate of endBezier in X: ${this.endBezier.x}`)
+  
     if (this.endBezier.x === this.game.width * 3 / 4) {
       this.pendingEndBezier.push({
         x: this.game.width / 4,
@@ -2355,13 +2124,6 @@ class Agent {
         y: this.game.height / 2,
       })
     }
-    
-    //this.pendingEndBezier.push({
-    // x: this.collisionX + (Math.cos(direction) * (5 * this.player.maxSpeed)),
-    // y: this.collisionY + (Math.sin(direction) * (5 * this.player.maxSpeed)),
-    // x: this.player.collisionX,
-    // y: this.player.collisionY, 
-    //})
   }
 
 
@@ -2371,13 +2133,8 @@ class Agent {
 
 
     // Decide competence for the movement
-    // if (this.competence) {
-    //   this.maxJitter = 0;
-    // } else {
-    //   this.maxJitter = 10;
-    // }
     this.maxJitter = 0;
-    // console.log(`The target is ${this.targetSamplePlayer.x} and ${this.targetSamplePlayer.y}`)
+
 
     if (!this.predictability) {
 
@@ -2385,7 +2142,6 @@ class Agent {
       if (!this.movementDecision) {
         this.paintMovementDecision = true;
         this.endBezier = this.pendingEndBezier[0];
-        // console.log(`End Bezier: ${this.endBezier.x} and Y: ${this.endBezier.y}`)
         this.pendingEndBezier.shift();
         if (this.endBezier === undefined) {
           // console.log(`PROBLEM LEADER UNPRED!!!!!!!!!`)
@@ -2393,13 +2149,6 @@ class Agent {
         this.decideMovement(5);
         // The movement is decided and the counter is increased
         this.movementDecision = true;
-        // this.movementCounter++;
-        // this.targetSamplePlayer = trajectoryMovementSamplePlayer[0];
-        // console.log(this.trajectory)
-        // this.targetSamplePlayer.x = this.trajectoryMovementSamplePlayer[0].x;
-        // this.targetSamplePlayer.y = this.trajectoryMovementSamplePlayer[0].y;
-        // this.hasArrivedSamplePlayer = false;
-        // this.velocityFunctionProfile = randIntervalFromIntervalInteger(0, 3);
       }
 
 
@@ -2440,17 +2189,6 @@ class Agent {
 
           this.hasArrivedSamplePlayer = false;
 
-          // if (!this.competence) {
-
-          //   this.agentDesiredSpeedX = randIntervalFromInterval(0, this.maxSpeed);
-          //   this.agentDesiredSpeedY = randIntervalFromInterval(0, this.maxSpeed);
-          //   // console.log(`THE AGENT SPEED SELECTION IS: ${this.agentDesiredSpeedX} and ${this.agentDesiredSpeedY}`)
-          //   this.slowRadiusAgent = randIntervalFromInterval(0, 50);
-          // } else if(this.competence) {
-          //   this.slowRadiusAgent = 50;
-          // }
-
-          // let steering = this.seek();
           let steering = 0;
 
           if (this.trajectoryMovementSamplePlayer.length > 1) {
@@ -2517,10 +2255,7 @@ class Agent {
           this.accY = 0;
 
 
-        } // else if (this.trajectoryMovementSamplePlayer.length === 0 && this.collisionX - this.player.collisionX > 20 && this.collisionY - this.player.collisionY > 20) {
-        // this.decideMovement(4);
-        // this.movementDecision = true;
-        //}
+        }
 
 
         // There is still a target that the agent has to follow
@@ -2613,18 +2348,10 @@ class Agent {
         this.endBezier = this.pendingEndBezier[0];
         this.pendingEndBezier.shift();
         if (this.endBezier === undefined) {
-          // console.log(`PROBLEM LEADER PRED!!!!!!!!!`)
         }
         this.decideMovement(4);
         // The movement is decided and the counter is increased
         this.movementDecision = true;
-        // this.movementCounter++;
-        // this.targetSamplePlayer = trajectoryMovementSamplePlayer[0];
-        // console.log(this.trajectory)
-        // this.targetSamplePlayer.x = this.trajectoryMovementSamplePlayer[0].x;
-        // this.targetSamplePlayer.y = this.trajectoryMovementSamplePlayer[0].y;
-        // this.hasArrivedSamplePlayer = false;
-        // this.velocityFunctionProfile = randIntervalFromIntervalInteger(0,3)
       }
 
       if (this.bezierProfile === 0) {
@@ -2644,18 +2371,6 @@ class Agent {
       ) {
         this.hasArrivedSamplePlayer = true;
       }
-
-
-      // CONDITION AGENT IS INCOMPETENT
-      // if (!this.competence) {
-      //   this.agentDesiredSpeedX = randIntervalFromInterval(0, this.maxSpeed);
-      //   this.agentDesiredSpeedY = randIntervalFromInterval(0, this.maxSpeed);
-      //   this.slowRadiusAgent = randIntervalFromInterval(0, 50);
-      //   // console.log(`The desired speed is: ${this.agentDesiredSpeedX} and ${this.agentDesiredSpeedY}`)
-      // // CONDITION AGENT IS COMPETENT
-      // } else if (this.competence) {
-      //   this.slowRadiusAgent = 50;
-      // }
 
 
       // CHANGE THE TARGET TO A NEW TARGET==========================================
@@ -2684,17 +2399,6 @@ class Agent {
 
           this.hasArrivedSamplePlayer = false;
 
-          // if (!this.competence) {
-
-          //   this.agentDesiredSpeedX = randIntervalFromInterval(0, this.maxSpeed);
-          //   this.agentDesiredSpeedY = randIntervalFromInterval(0, this.maxSpeed);
-          //   // console.log(`THE AGENT SPEED SELECTION IS: ${this.agentDesiredSpeedX} and ${this.agentDesiredSpeedY}`)
-          //   this.slowRadiusAgent = randIntervalFromInterval(0, 50);
-          // } else if(this.competence) {
-          //   this.slowRadiusAgent = 50;
-          // }
-
-          // let steering = this.seek();
           let steering = 0;
 
           if (this.trajectoryMovementSamplePlayer.length > 1) {
@@ -2757,10 +2461,7 @@ class Agent {
           this.accY = 0;
 
 
-        } // else if (this.trajectoryMovementSamplePlayer.length === 0 && this.collisionX - this.player.collisionX > 20 && this.collisionY - this.player.collisionY > 20) {
-        // this.decideMovement(4);
-        // this.movementDecision = true;
-        //}
+        }
 
 
         // There is still a target that the agent has to follow
@@ -2778,8 +2479,7 @@ class Agent {
           steering = this.seek();
         }
 
-        // let steering = this.movementAgent();
-        // console.log(`THE STEERING IS: ${steering.x} AND ${steering.y}`)
+
         this.applyForce(steering);
 
 

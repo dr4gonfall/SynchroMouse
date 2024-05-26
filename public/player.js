@@ -209,10 +209,6 @@ class Player {
             this.counterTestSpeed = 0;
         }
         
-        // console.log(`For the counter: ${this.counterTestSpeed} the value of function: ${ 10 * easeInSine(this.counterTestSpeed)}`)
-        
-        
-        // console.log(`The player collision in X: ${this.collisionX} and for Y: ${this.collisionY}`)
         this.rawMouseMoveX = moveX;
         this.rawMouseMoveY = moveY;
         this.timeCurrent = performance.now()
@@ -230,32 +226,17 @@ class Player {
 
         if (this.timerDecision >= 5) {
             this.movementDecision = false
-            // console.log(`The movement was registered as a stop.`)
         }
 
         this.prevMouseX = this.collisionX;
         this.prevMouseY = this.collisionY;
-        // console.log(`The collision in X: ${Math.round(this.collisionX + moveX * dt)} and Y: ${Math.round(this.collisionY + moveY * dt)}`)
+
         this.forcePlayerX = linearInterpolation(0, this.maxSpeed, Math.abs(moveX) / 300);
         this.forcePlayerY = linearInterpolation(0, this.maxSpeed, Math.abs(moveY) / 300);
         
         let forceX = linearInterpolation(0, this.maxSpeed, Math.abs(moveX)/300)
         let forceY = linearInterpolation(0, this.maxSpeed, Math.abs(moveY)/300)
 
-        // let forceX = moveX;
-        // let forceY = moveY;
-
-        // console.log(`The rotation and previous is: ${this.rotation} and ${this.prevRotation}`)
-        // console.log(`The rotation difference is: ${this.differenceRotation}`)
-
-        // if (forceX > 20 || forceX < -20) {
-        //     this.overSpeedX++
-        // }
-        // if (forceY > 20 || forceX < -20) {
-        //     this.overSpeedY++
-        // }
-
-        // console.log(`The amount of times it went over speed is: ${this.overSpeedX} and ${this.overSpeedY}`)
 
         if (moveX < 0) {
             forceX = - forceX;
@@ -283,74 +264,12 @@ class Player {
             forceY = -this.maxSpeed;
             this.forcePlayerY = this.maxSpeed;
         }
-
-        // console.log(`The forces are in X: ${forceX} and Y: ${forceY}`)
-
-        // this.collisionX += moveX;
-        // this.collisionY += moveY;
-
-       
+      
 
         this.collisionX += forceX
         this.collisionY += forceY
         
-        // this.collisionX = moveX;
-        // this.collisionY = 
-
-        // this.collisionX = Math.round(this.collisionX + moveX * dt);
-        // this.collisionY = Math.round(this.collisionY + moveY * dt);
-        // if (moveX !== 0) {
-        //     this.collisionX += moveX * dt
-        // } else if (moveX === NaN) {
-        //     this.collisionX = 200
-        //     console.log(`Entered Function NaN in X`)
-        // }
-
-        // if (moveY !== 0) {
-        //     this.collisionY += moveY * dt
-        // } else if (moveY === NaN) {
-        //     this.collisionY = 200
-        //     console.log(`Entered Function NaN in Y`)
-        // }
         
-
-        // this.collisionX += moveX * dt
-        // this.collisionY += moveY * dt
-
-        // this.collisionX += moveX * dt
-        // this.collisionY += moveY * dt
-        // if (moveX <=1 && moveX >=-1) {
-        //     moveX = 0;
-        // }
-
-        // if (moveY <= 1 && moveY >=-1) {
-        //     moveY = 0;
-        // }
-
-        // if (moveX >= this.maxSpeed) {
-        //     this.collisionX += this.maxSpeed  
-        // } else if (moveX < - this.maxSpeed) {
-        //     this.collisionX += - this.maxSpeed
-        // } else {
-        //     this.collisionX += moveX * dt;
-        // }
-
-        // if (moveY > this.maxSpeed) {
-        //     this.collisionY += this.maxSpeed  
-        // } else if (moveY < - this.maxSpeed) {
-        //     this.collisionY +=  - this.maxSpeed
-        // } else {
-        //     this.collisionY += moveY * dt;
-        // }
-
-
-
-
-        
-        // console.log(`The movement of the mouse in x: ${moveX} and in y: ${moveY}`)
-
-        // this.speedX = (this.collisionX - this.prevMouseX) / (this.timeCurrent - this.timePrev);
-        // this.speedY = (this.collisionY - this.prevMouseY) / (this.timeCurrent - this.timePrev);
 
         this.speedX = (this.collisionX - this.prevMouseX)
         this.speedY = (this.collisionY - this.prevMouseY)
@@ -366,61 +285,6 @@ class Player {
         this.timePrev = this.timeCurrent;
 
         this.differenceRotation = this.rotation - this.prevRotation;
-
-
-        // console.log(`The rotation is: ${this.rotation}`)
-
-        // console.log(`The rotation of the player is: ${this.rotation}`)
-
-        // console.log(`The speed in X: ${this.collisionX - this.prevMouseX} and in Y: ${this.collisionY - this.prevMouseY}`)
-
-
-
-
-        // this.collisionX += e.movementX;
-        // this.collisionY += e.movementY;
-
-
-        // this.speedX += this.accX
-        // this.speedY += this.accY
-
-        // this.prevAccX = this.accX
-        // this.prevAccY = this.accY
-
-        // if (this.game.mouse.x !== undefined) {
-        //     this.prevMouseX = this.game.mouse.x
-            
-        // }
-
-        // if (this.game.mouse.y !== undefined) {
-        //     this.prevMouseY = this.game.mouse.y
-        // }
-        
-
-        
-        // if (this.speedX > this.maxSpeed) {
-        //     this.speedX = this.maxSpeed
-        //     // console.log('Entered in Speed X')
-        // } else if (this.speedX < -this.maxSpeed){
-        //     this.speedX = -this.maxSpeed
-        // }
-
-        // if (this.speedY > this.maxSpeed) {
-        //     this.speedY = this.maxSpeed
-        //     // console.log('Entered in Speed Y')
-        // } else if (this.speedY < -this.maxSpeed){
-        //     this.speedY = -this.maxSpeed
-        // }
-
-        // this.collisionX += this.speedX;
-        // this.collisionY += this.speedY;
-
-        // this.accX = 0
-        // this.accY = 0
-
-        // console.log(`Speed in X is: ${this.speedX} and Speed in Y is: ${this.speedY}`)
-        // this.collisionX += this.speedX;
-        // this.collisionY += this.speedY;
 
         // Detect Side Walls
         if (this.collisionX + this.collisionRadius > this.game.width) {

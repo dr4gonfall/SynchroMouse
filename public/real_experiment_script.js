@@ -14,10 +14,10 @@ class ExperimentScript {
 
     // let variations = randomSelectionVariations(numberArrayVariations, 8)
 
-    let variations = [2,5,3,4,6,7,8,1]
+    let variations = [0,1,2,3,4,5,6,7]
 
     let currentGameProfile = variations[roundNumber]
-
+    console.log(`The game profile is: ${currentGameProfile} and the round is ${roundNumber}`)
     let progressBarExperiment = document.getElementById("experimentBar")
 
     console.log(variations)
